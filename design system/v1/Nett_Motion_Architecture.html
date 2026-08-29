@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Nett — Motion Architecture</title>
+<style>
+:root{--bg:#0C0D10;--card:rgba(255,255,255,.03);--hair:rgba(255,255,255,.09);--tx:#ECECF1;--mut:#8E8E9C;--dim:#6B6B78;--bone:#C9C3B2;--gold:#D9B96A;--pos:#3ED598;--neg:#E08A8A;--lav:#BDB3F6}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--tx);font-family:-apple-system,'SF Pro Text',Inter,'Segoe UI',Roboto,sans-serif;line-height:1.6;padding:52px 26px 90px;max-width:900px;margin:0 auto}
+.ser{font-family:'New York','Iowan Old Style',Georgia,serif;letter-spacing:-.5px;font-weight:600}
+h1{font-size:34px;letter-spacing:-.9px;font-weight:650}
+h2{font-size:21px;margin-top:46px;letter-spacing:-.4px}
+p{margin-top:10px;font-size:14.5px}
+.lb{font-size:10px;letter-spacing:1.7px;font-weight:600;color:var(--dim);text-transform:uppercase}
+.mut{color:var(--mut)}.dim{color:var(--dim)}
+.cd{border:1px solid var(--hair);border-radius:18px;background:var(--card);padding:18px 20px;margin-top:16px}
+table{width:100%;border-collapse:collapse;margin-top:12px;font-size:12.5px}
+th{text-align:left;color:var(--dim);font-size:10px;letter-spacing:1.4px;padding:8px 10px;border-bottom:1px solid var(--hair);text-transform:uppercase}
+td{padding:9px 10px;border-bottom:1px solid rgba(255,255,255,.05);vertical-align:top}
+code{font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:12px;background:rgba(255,255,255,.05);border-radius:6px;padding:1px 6px;color:var(--bone)}
+.dont{border-left:2px solid var(--neg);padding-left:14px;margin-top:12px}
+.do{border-left:2px solid var(--pos);padding-left:14px;margin-top:12px}
+.wload{display:inline-flex;gap:5px;align-items:flex-end;height:16px;margin-left:10px;vertical-align:middle}
+.wload i{width:5px;height:6px;background:linear-gradient(180deg,rgba(189,179,246,.9),rgba(189,179,246,.35));border-radius:3px;animation:wr 1s ease-in-out infinite}
+.wload i:nth-child(2){animation-delay:.15s}.wload i:nth-child(3){animation-delay:.3s}
+@keyframes wr{0%,100%{height:6px}50%{height:16px}}
+.vessel{display:inline-block;width:22px;height:34px;border:1.5px solid var(--hair);border-radius:6px 6px 8px 8px;position:relative;overflow:hidden;vertical-align:middle;margin-left:10px}
+.vfill{position:absolute;left:0;right:0;bottom:0;height:60%;background:linear-gradient(180deg,rgba(62,213,152,.5),rgba(62,213,152,.25));animation:vf 3s ease infinite}
+@keyframes vf{0%,100%{height:20%}50%{height:75%}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</head>
+<body>
+<p class="lb" style="color:var(--gold);">NETT · MOTION ARCHITECTURE · FOR THE TEAM</p>
+<h1 class="ser">Water moves.<br>Interfaces don't bounce.</h1>
+<p class="mut">Every animation in Nett is water doing something water does: rising, drifting, filling, settling. If a proposed animation can't be described that way, it doesn't belong.</p>
+
+<h2 class="ser">1 · Philosophy — three laws</h2>
+<div class="cd">
+  <p><b>Law 1 — Motion is meaning.</b> Something moves only when its <i>state</i> changed: a view surfaced, a day progressed, Arth started thinking, water rose. Decoration-motion is banned; if nothing changed, nothing moves.</p>
+  <p><b>Law 2 — Motion is honest.</b> Loaders exist because a wait is real (the 5-minute AA read, Arth composing). We name the wait, show its progress truthfully, and release the user when we can. Motion never fakes speed and never manufactures delay for drama.</p>
+  <p><b>Law 3 — Motion is calm.</b> Water has no bounce, no spring, no overshoot. Easings are <code>ease</code> / <code>ease-out</code> / <code>ease-in-out</code>. Anything elastic reads as a game; this is someone's money.</p>
+</div>
+
+<h2 class="ser">2 · The inventory — every animation that exists</h2>
+<div class="cd">
+  <p class="lb">IDENTITY MOMENTS (~1s · once per session)</p>
+  <table>
+    <tr><th>Name</th><th>What it is</th><th>Where</th></tr>
+    <tr><td><code>sprise / wsink / wsway / wglow</code></td><td>App splash: water rises, wordmark settles half-submerged, the line glows and sways once</td><td>App open</td></tr>
+    <tr><td><code>rise + vfillup</code></td><td>"Arth is making your day…" — water rises in the card, vessel fills ~78% in 0.95s</td><td>CRM sign-in → board</td></tr>
+  </table>
+  <p class="lb" style="margin-top:18px;">TRANSITIONS (0.3–0.45s · every state change)</p>
+  <table>
+    <tr><th><code>surface</code> (CRM) / <code>gsurface, up, pgin, wipeup</code> (app)</th><th>Views rise from ~12px below with a fade — everything surfaces from under the waterline. 0.38s ease.</th></tr>
+  </table>
+  <p class="lb" style="margin-top:18px;">AMBIENT (7–9s loops · barely there)</p>
+  <table>
+    <tr><th><code>drift</code></th><th>The gold waterline under titles and on the consent gate drifts laterally — still water is dead water. So subtle that noticing it takes effort; that's the calibration.</th></tr>
+    <tr><th><code>bob</code></th><th>The below-the-waterline lock breathes vertically ±2px, like something resting under water.</th></tr>
+  </table>
+  <p class="lb" style="margin-top:18px;">PROGRESS &amp; THINKING</p>
+  <table>
+    <tr><th>Element</th><th>Rule</th></tr>
+    <tr><td><b>Water loader</b><span class="wload"><i></i><i></i><i></i></span></td><td><code>wrise</code> — three droplet bars rising in sequence (1s loop, 150ms stagger, lavender). The ONLY "thinking" indicator, used exclusively when Arth is composing (ask bar, suggested replies). 480ms debounce so it never flickers.</td></tr>
+    <tr><td><b>Vessel fill</b><span class="vessel"><span class="vfill"></span></span></td><td><code>nfill / vfill</code> — the day's progress as water level, 0.6s ease per change. Progress is a level, never a percentage ring.</td></tr>
+    <tr><td><b>Scan / prepare steps</b></td><td>Long real waits (the ~5-min AA read) show named steps ticking off with real timestamps — and release the user with a promise to notify. Demo compresses time; production never lies about it.</td></tr>
+  </table>
+</div>
+
+<h2 class="ser">3 · When to use what — the decision table</h2>
+<div class="cd">
+  <table>
+    <tr><th>Situation</th><th>Motion</th></tr>
+    <tr><td>New view / sheet opens</td><td><code>surface</code> — always, automatically. Never a slide-from-side, never a zoom.</td></tr>
+    <tr><td>Arth is thinking</td><td>Water loader. Never a spinner, never "..." dots.</td></tr>
+    <tr><td>Work completed</td><td>Vessel level rises. A toast confirms in words + one ✓. No confetti, no fireworks — completing money tasks is dignity, not a slot machine.</td></tr>
+    <tr><td>Identity moment (open, sign-in)</td><td>The one place motion gets a full second. Once per session, then out of the way.</td></tr>
+    <tr><td>Error appears</td><td><b>No animation.</b> Errors arrive still — motion on a failure reads as alarm. The toast slides in on the standard transition only.</td></tr>
+    <tr><td>Numbers change (scores, money)</td><td>No count-up tickers. The number is the truth; it appears as the truth.</td></tr>
+  </table>
+</div>
+
+<h2 class="ser">4 · Rules that never bend</h2>
+<div class="cd">
+  <div class="do"><b>Do</b> — honor <code>prefers-reduced-motion</code>: every animation off, no exceptions. This is shipped and audit-checked on both surfaces.</div>
+  <div class="do"><b>Do</b> — keep loops long (7s+) and amplitudes tiny for anything ambient. If a user can describe the animation, it's too loud.</div>
+  <div class="do"><b>Do</b> — pair every loader with words that say what's actually happening ("Reading 24 months of bank flows…"), never a bare spinner.</div>
+  <div class="dont"><b>Don't</b> — bounce, spring, overshoot, parallax, shake, pulse-for-attention, or animate color. Water does none of these.</div>
+  <div class="dont"><b>Don't</b> — animate serious states: errors, compliance flags, mis-sell warnings, NO DATA. Stillness is the signal that this matters.</div>
+  <div class="dont"><b>Don't</b> — add a new keyframe without sign-off. The inventory above is the complete, closed set; extending it is a Design System change with a release note, not a CSS commit.</div>
+</div>
+
+<p class="dim" style="margin-top:44px;">Nett Motion Architecture · companions: Design System · UX Architecture · living source: the <code>@keyframes</code> blocks in nett-app.html and nett-crm.html — this document must match them, and the release audit says whether it does.</p>
+</body>
+</html>

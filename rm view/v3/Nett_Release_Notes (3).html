@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Nett — Release Notes</title>
+<style>
+:root{--bg:#0C0D10;--tx:#ECECF1;--mut:#8E8E9C;--dim:#6B6B78;--pos:#3ED598;--amb:#D9B96A;--neg:#E08A8A;--hair:rgba(255,255,255,.09);--card:rgba(255,255,255,.03)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--tx);font-family:-apple-system,'SF Pro Text',Inter,'Segoe UI',Roboto,sans-serif;padding:48px 24px;max-width:860px;margin:0 auto;line-height:1.55}
+h1{font-size:30px;letter-spacing:-.8px;font-weight:650}
+h2{font-size:19px;letter-spacing:-.4px;margin-top:8px}
+.sub{color:var(--mut);font-size:13.5px;margin-top:6px}
+.ver{border:1px solid var(--hair);border-radius:18px;padding:22px 24px;margin-top:26px;background:var(--card)}
+.vh{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px}
+.badge{font-size:10px;letter-spacing:1.6px;font-weight:600;border:1px solid var(--hair);border-radius:999px;padding:4px 11px;color:var(--dim)}
+.badge.cur{color:var(--pos);border-color:rgba(62,213,152,.45)}
+.dt{color:var(--dim);font-size:12.5px}
+table{width:100%;border-collapse:collapse;margin-top:14px;font-size:13px}
+th{text-align:left;color:var(--dim);font-size:10.5px;letter-spacing:1.4px;font-weight:600;padding:8px 10px 6px;border-bottom:1px solid var(--hair)}
+td{padding:9px 10px;border-bottom:1px solid rgba(255,255,255,.05);vertical-align:top;color:var(--tx)}
+td.id{color:var(--amb);white-space:nowrap;font-weight:600}
+td.sc{color:var(--mut)}
+.note{font-size:12.5px;color:var(--mut);margin-top:12px}
+.note b{color:var(--tx)}
+.open{margin-top:12px;font-size:12.5px;color:var(--mut)}
+.open span{color:var(--amb)}
+.val{font-size:12px;color:var(--pos);margin-top:10px}
+.hr{height:1px;background:var(--hair);margin:34px 0 6px}
+</style>
+</head>
+<body>
+<h1>Nett — Release Notes</h1>
+<p class="sub">App design version history · each release ships three artifacts on the same version: <b style="color:var(--tx)">nett-app.html · Nett_Dev_Flow_Doc.xlsx · this file</b> — plus <b style="color:var(--tx)">nett-crm.html</b> on its own CRM version track. If versions don't match across the three, stop and ask. Latest release always sits on top; every release carries date and time (IST).</p>
+
+<!--CRMTRACK--><div class="ver">
+  <div class="vh"><h2>CRM v2.10 <span class="badge cur">CURRENT — CRM</span></h2><span class="dt">30 Jul 2026 · 12:35 AM IST · nett-crm.html</span></div>
+  <table>
+    <tr><th>ID</th><th>Change</th><th>Screens affected</th><th>Flows affected</th></tr>
+    <tr><td class="id">CRM-48</td><td>Client background: new Profile tab — education (institution named, abroad visible), profession, interests, family with ages — plus a lavender "HOW ARTH USES THIS" card carrying the personal angles and the guard line: background is never a shortcut past suitability.</td><td class="sc">v-c360 Profile tab</td><td class="sc">—</td></tr>
+    <tr><td class="id">CRM-49</td><td>PERSONAL ANGLES in Arth's Before-you-talk: two background-derived talk angles per client, both-sided where honesty demands — Rahul (IT): sector fluency as the door AND the concentration caution; Meera (Carnegie Mellon, USD income): the intl-allocation gap in her own language + child-edu-abroad LRS/TCS prep; Sanjay (retired banker, son in Canada): one page not options, cross-border thought parked not pitched; Neha: parents-dependent reframes the lapse as the family's safety net.</td><td class="sc">Arth panel</td><td class="sc">—</td></tr>
+    <tr><td class="id">CRM-50</td><td>Data tab completed: CASHFLOW · THE MONTH IN FULL (income lines incl. RSU, EMIs, card interest, SIPs, subscriptions — signed and colored, savings rate) and INSIGHTS · LIVE ON THEIR APP (every fired insight with its band pill — same rules, same bands the client sees). Structural gate verified: FINX exists only on consented clients.</td><td class="sc">v-c360 data tab</td><td class="sc">—</td></tr>
+  </table>
+  <p class="val">Validation: syntax clean · 5 patch steps asserted (one anchor corrected pre-write) · BG complete for all 8 (edu/prof/interests/family/2 angles each) · FINX on exactly the 5 consented clients, zero on unconsented · profile tab + angles + both data cards present · suitability guard line confirmed · ALL 14 audit blocks green, full output reviewed.</p><p class="note"><b>Process failure disclosed & fixed:</b> a v2.0 audit check had been silently failing since v2.5 — a copy change ("Behaviour hidden" → "In-app behaviour hidden") staled the check string, and tail-cropped audit output hid the false failure for five releases. Functionality was verified intact (the consent gate code never changed). Fixes: check made copy-tolerant + a code-level gate check added, and the process rule is now full audit output every run, never cropped.</p>
+</div>
+
+<div class="ver">
+  <div class="vh"><h2>CRM v2.9 <span class="badge">CRM</span></h2><span class="dt">30 Jul 2026 · 12:10 AM IST · nett-crm.html</span></div>
+  <table>
+    <tr><th>ID</th><th>Change</th><th>Screens affected</th><th>Flows affected</th></tr>
+    <tr><td class="id">FIX</td><td>Branding corrected to canon: "nett · crm" retired — the product is Nett, one name, one mark. Login and sidebar now carry the exact app Waterline wordmark (Direction C: lower-third submerged via .wtop/.wsub clip-paths) with the app's exact tokens (--bone:#C9C3B2, --water:#8FB2EE — my earlier gradient treatment used guessed colors and is removed). Browser title = Nett. Audit enforces: zero "crm" suffix, zero non-canon wordmark CSS residue, exactly 2 canonical wordmarks.</td><td class="sc">Login · sidebar · title</td><td class="sc">—</td></tr>
+  </table>
+  <p class="val">Validation: syntax clean · 6 patch steps asserted (two anchor probes corrected pre-write, zero dirty states) · canonical wordmark ×2 · exact app tokens verified · non-canon residue zero · full v1.0–v2.8 stack green.</p>
+</div>
+
+<div class="ver">
+  <div class="vh"><h2>CRM v2.8 <span class="badge">CRM</span></h2><span class="dt">29 Jul 2026 · 11:55 PM IST · nett-crm.html</span></div>
+  <table>
+    <tr><th>ID</th><th>Change</th><th>Screens affected</th><th>Flows affected</th></tr>
+    <tr><td class="id">CRM-43</td><td>Working chat: Chats view with client + team threads, composer, and Arth's suggested reply (+reasoning, Use-this-reply). Client threads = the in-app thread; sends log to the comms trail. Team chat desk-to-desk (Swapnil ↔ Supriya coordinating Rahul's Friday call is the live demo). Admin sees all, read-only on client threads. Waiting-chat moments, 360 and lead Chat buttons now open the real thread.</td><td class="sc">v-chat (new) · moments · 360 · lead</td><td class="sc">Chat</td></tr>
+    <tr><td class="id">CRM-44</td><td>Product copilot: ask Arth "pms" / "pms for kavita" / "mf" / "bonds" / "insurance" / "aif" → suitability verdict first, three qualifying questions, the shelf with facts, and the guard rule. Fit replay-validated: Kavita+PMS blocked (₹34.8L < ₹50L), Meera+PMS suitable, Arjun+PMS blocked (no verified data), Neha+growth-MF blocked (waterfall).</td><td class="sc">Ask Arth</td><td class="sc">—</td></tr>
+    <tr><td class="id">CRM-45</td><td>Sales ledger: CONVERTED block in Incentives — client, product, category, amount, terms (NCD name · 8.4% YTM · maturity; premium; trail %), date, revenue. Attribution sums machine-verified against monthly earnings to the rupee (₹38,400 / ₹41,200).</td><td class="sc">v-earn · Ask</td><td class="sc">—</td></tr>
+    <tr><td class="id">CRM-46</td><td>Mis-sell guard, two layers: pre-sale fitCheck blocks unsuitable suggestions in the copilot; post-sale flags surface in Admin's COMPLIANCE section — demo case: Rohan → Neha smallcap ₹6L while her cover lapses (HIGH · open review), visible on the sale line as FLAGGED and in the admin compliance list with the rule broken.</td><td class="sc">Ask · v-earn · v-lb (admin)</td><td class="sc">—</td></tr>
+    <tr><td class="id">CRM-47</td><td>Admin RM performance: per-RM cards under the leaderboard — trend, overdue, silent clients, conversion, attention flag. Rohan carries ATTENTION (red border); the floor's state readable in ten seconds.</td><td class="sc">v-lb (admin)</td><td class="sc">—</td></tr>
+  </table>
+  <p class="val">Validation: syntax clean · 12 patch steps asserted · revenue sums exact per desk · suitability replay 4/4 correct · thread scoping replay (Swapnil 4 threads / Supriya 3, no cross-desk client leakage, shared team thread visible to both) · admin read-only guard present · full v1.0–v2.7 stack green. Provisional canon flagged for sign-off: house suitability rules, seeded mis-sell case, chat bubble pattern (app .msg/.msg.arth replicated).</p>
+</div>
+
+<div class="ver">
+  <div class="vh"><h2>CRM v2.7 <span class="badge">CRM</span></h2><span class="dt">29 Jul 2026 · 11:30 PM IST · nett-crm.html</span></div>
+  <table>
+    <tr><th>ID</th><th>Change</th><th>Screens affected</th><th>Flows affected</th></tr>
+    <tr><td class="id">CRM-38</td><td>Profile-open everywhere: explicit Profile chip on moments, kanban leads, follow-ups, calendar entries and the lead-detail header — action does the work, Profile opens the person (DS-canon cta2, no invented link styles).</td><td class="sc">All card surfaces</td><td class="sc">—</td></tr>
+    <tr><td class="id">CRM-39</td><td>Last touch now carries the MESSAGE: channel icon + what was actually said — e.g. Rahul's WhatsApp nudge text, Neha's unopened renewal email, Vikram's unanswered quote intro — shown in Arth's read (and consistent with the Source tab record).</td><td class="sc">Arth panel</td><td class="sc">—</td></tr>
+    <tr><td class="id">CRM-40</td><td>Client geo/profile: city · last-login location · preferred language on the 360 header (Tabler icons). Neha's last login = Dubai, 19 days — the silence explained; Sanjay's = branch kiosk today.</td><td class="sc">v-c360 header</td><td class="sc">—</td></tr>
+    <tr><td class="id">CRM-41</td><td>SUPPORT PULSE in Arth's read: Happy / Not happy / Next from support conversations — e.g. Rahul praised fee transparency but was burnt by June's AA sync (don't relitigate); Meera's fee question is a buying signal — plus a red open-ticket warning: "resolve before any pitch."</td><td class="sc">Arth panel</td><td class="sc">—</td></tr>
+    <tr><td class="id">CRM-42</td><td>Ticket history: Support tab per client (id · topic · status pill · opened · last state, 5 seeded tickets) and open tickets findable from the board — sixth SUPPORT module (n open, taps into Ask) and Ask Arth "tickets" listing open first with Open-profile buttons. Role-scoped, replay-validated: Swapnil sees T-1080, Supriya T-1077, Admin both.</td><td class="sc">v-c360 Support tab · board · Ask</td><td class="sc">—</td></tr>
+  </table>
+  <p class="val">Validation: syntax clean · 19 patch steps asserted (one anchor caught pre-write) · GEO + LMSG complete for all 8 clients · all tickets resolve to real clients · open-ticket visibility replay PASS per role · 6 Profile affordances confirmed (one checker regex corrected, code unchanged) · full v1.0–v2.6 stack green.</p>
+</div>
+
+<div class="ver">
+  <div class="vh"><h2>CRM v2.6 <span class="badge">CRM</span></h2><span class="dt">29 Jul 2026 · 11:00 PM IST · nett-crm.html</span></div>
+  <table>
+    <tr><th>ID</th><th>Change</th><th>Screens affected</th><th>Flows affected</th></tr>
+    <tr><td class="id">CRM-37</td><td>Login flow before desk selection: mobile number → 6-digit OTP (app canon) with Resend and Get-on-WhatsApp fallbacks · alternative QR sign-in — scan from the Nett app (Profile → Sign in on desktop), no OTP needed; QR carries the canonical Arth waterline mark at center; demo simulates the scan (~2.6s → "Scanned ✓"). Desk picker stays hidden until verification succeeds; then splash → Arth board as before.</td><td class="sc">Login</td><td class="sc">CRM auth (new)</td></tr>
+  </table>
+  <p class="val">Validation: syntax clean · 4 patch steps asserted · OTP exactly 6 digits (canon) · role block gated until verify · QR mark uses app lavender #BDB3F6 · WhatsApp fallback copy says 6-digit · full v1.0–v2.5 stack green.</p>
+</div>
+
+<div class="ver">
+  <div class="vh"><h2>CRM v2.5 <span class="badge">CRM</span></h2><span class="dt">29 Jul 2026 · 10:40 PM IST · nett-crm.html</span></div>
+  <table>
+    <tr><th>ID</th><th>Change</th><th>Screens affected</th><th>Flows affected</th></tr>
+    <tr><td class="id">CRM-36</td><td>Last touch moved into Arth's read: the Before-you-talk panel's third column is now "Last touch · where their head is" — the client's last channel/page/time (lavender, always visible) merged with their in-app exploration (consent-gated) into one interest read that shapes the talk angle. E.g. Rahul: "WhatsApp · CRM nudge (dropped order) — app → /report · yesterday 9:14 PM" followed by his insurance-exploration read. Source tab remains the full record; single source object (ACQ), never duplicated data.</td><td class="sc">v-c360 Arth panel</td><td class="sc">—</td></tr>
+  </table>
+  <p class="val">Validation: syntax clean · single-step patch asserted · merged column present, old column absent · Arth prep confirmed reading from ACQ · full v1.0–v2.4 stack green.</p>
+</div>
+
+<div class="ver">
+  <div class="vh"><h2>CRM v2.4 <span class="badge">CRM</span></h2><span class="dt">29 Jul 2026 · 10:20 PM IST · nett-crm.html</span></div>
+  <table>
+    <tr><th>ID</th><th>Change</th><th>Screens affected</th><th>Flows affected</th></tr>
+    <tr><td class="id">FIX</td><td>Arth mark corrected to canon (violation, self-inflicted in v2.3): the canonical mark is the app's waterline circle (upper half filled lavender, --lav:#BDB3F6 exactly as the app token) — the droplet was my invention and is retired from all five surfaces (rail, Before-you-talk, splash, pill, tour). Rule written into the DS doc: the design system is the only source; nothing new without sign-off.</td><td class="sc">All Arth surfaces</td><td class="sc">—</td></tr>
+    <tr><td class="id">CRM-33</td><td>First-login tour: five stops (rail → modules → tide with dot meanings → relevance → Glossary), skippable, relaunchable from the menu and from Ask Arth ("help"). Triggers once per role per session after the sign-in splash.</td><td class="sc">Tour overlay · board</td><td class="sc">First-run</td></tr>
+    <tr><td class="id">CRM-34</td><td>Glossary: every dot, pill, band and line decoded — moment colors, consent pills, stage-vs-communication axes, scores and "the line", the water metaphors, trace IDs, Error ≠ NO DATA. Always in the menu; Ask Arth answers "what does the red dot mean" with the quick legend + a Glossary button.</td><td class="sc">v-gloss (new)</td><td class="sc">—</td></tr>
+    <tr><td class="id">CRM-35</td><td>Source tab on client 360: lead source, first touch (source · campaign · landing page · time · full UTM — immutable), last touch (channel · page · time — live), journey summary. Visible pre-consent (acquisition metadata is ours). Complete records for all 8 clients — e.g. Rahul: Google organic via the hidden-fees blog → last touch WhatsApp nudge; Sanjay: branch walk-in → WhatsApp consent link.</td><td class="sc">v-c360</td><td class="sc">—</td></tr>
+  </table>
+  <p class="val">Validation: syntax clean · 18 patch steps asserted (one anchor mismatch caught pre-write) · zero droplet residue · 5 canonical SVG marks confirmed · --lav matches app token exactly · ACQ complete for all 8 clients (first/last/UTM/source each) · tour trigger + ask intents wired · full v1.0–v2.3 stack green.</p>
+</div>
+
+<div class="ver">
+  <div class="vh"><h2>CRM v2.3 <span class="badge">CRM</span></h2><span class="dt">29 Jul 2026 · 09:50 PM IST · nett-crm.html</span></div>
+  <table>
+    <tr><th>ID</th><th>Change</th><th>Screens affected</th><th>Flows affected</th></tr>
+    <tr><td class="id">CRM-30</td><td>Global back: view-history stack — every navigation (menu, Arth answer buttons, moment acts, calendar entries) is reversible via a Back chip at the top of the content; login resets history. History replay validated (day→signals→360→lead pops correctly).</td><td class="sc">Shell · all views</td><td class="sc">—</td></tr>
+    <tr><td class="id">CRM-31</td><td>Arth mark: lavender tile + filled droplet on every Arth surface — rail header, Before-you-talk panel, sign-in splash, mobile pill. Exclusive to Arth, like the lavender itself (DS addition).</td><td class="sc">Rail · v-c360 · splash · pill</td><td class="sc">—</td></tr>
+    <tr><td class="id">CRM-32</td><td>Water motion layer (DS v1.1): surface transition on every view change (rise-from-below), water loader (three rising droplets) while Arth thinks — with input debounce, and "Arth is making your day…" sign-in splash with filling vessel. All motion disabled under prefers-reduced-motion.</td><td class="sc">All views · rail · login</td><td class="sc">—</td></tr>
+    <tr><td class="id">FIX</td><td>Latent runtime bug (self-caught during validation): v2.2 retry handler referenced <code style="color:var(--amb);">cur</code> — an app-file variable that doesn't exist in CRM — which would have thrown on rail-retry from the data tab. Corrected to the CRM's own view tracker; a residue check now guards against app-variable leakage.</td><td class="sc">Retry handler</td><td class="sc">—</td></tr>
+  </table>
+  <p class="val">Validation: syntax clean · 10 patch steps asserted · history push/pop replay PASS · Arth marks present on all three static surfaces + pill · water keyframes present exactly once each · reduced-motion kill-switch intact · full v1.0–v2.2 stack green.</p>
+</div>
+
+<div class="ver">
+  <div class="vh"><h2>CRM v2.2 <span class="badge">CRM</span></h2><span class="dt">29 Jul 2026 · 09:25 PM IST · nett-crm.html</span></div>
+  <table>
+    <tr><th>ID</th><th>Change</th><th>Screens affected</th><th>Flows affected</th></tr>
+    <tr><td class="id">CRM-27</td><td>Arth relocated: board-top block → persistent right rail (narration + Ask + answers) visible on every view; mobile collapses to a floating Arth pill opening a sheet. Board's day content (modules, relevance, calendar, tide) takes the primary eye-line.</td><td class="sc">Shell · v-day · all views</td><td class="sc">—</td></tr>
+    <tr><td class="id">CRM-28</td><td>Consent made findable on the list: CONSENT filter row with live counts (Consented 5 · Link sent 1 · No consent 2), stacking with relevance sort and admin filters.</td><td class="sc">v-clients</td><td class="sc">—</td></tr>
+    <tr><td class="id">CRM-29 / DS-2</td><td>Error-state system added to the Design System (both surfaces) and implemented in CRM: inline rail-failure row in the freshness strip (live demo: Neha's credit-bureau rail — failed 09:12, showing last-good 14 Jun, Retry recovers and logs to the same trace), error toast with trace ID + Retry (live demo: Neha's report PDF fails first attempt), ERRLOG with NVY-xxxx traces, and Arth answers "errors" with the recent log. Principles: never blank, never silent · last-good data always shown with its timestamp · one Retry · Error ≠ NO DATA. App-side adoption flagged as next app-track change (candidate C11).</td><td class="sc">v-c360 data tab · toast · DS doc</td><td class="sc">—</td></tr>
+  </table>
+  <p class="val">Validation: syntax clean · 15 patch steps asserted (three anchor mismatches caught by assertions before any write — zero dirty states) · rail confirmed outside the views container (persistent) and Ask bar confirmed removed from v-day · consent split replay 5/1/2 · error flag on exactly one rail · errors intent wired · full v1.0–v2.1 stack green.</p>
+</div>
+
+<div class="ver">
+  <div class="vh"><h2>CRM v2.1 <span class="badge">CRM</span></h2><span class="dt">29 Jul 2026 · 08:55 PM IST · nett-crm.html · Arth Board</span></div>
+  <table>
+    <tr><th>ID</th><th>Change</th><th>Screens affected</th><th>Flows affected</th></tr>
+    <tr><td class="id">CRM-22</td><td>My day → ARTH BOARD: single cockpit. Arth narrates the made day (moment count, pipeline value, score drag), five tappable modules surface every key area (work health, progress vessel, today's ₹ tide, rank vs peers, calendar) with one-tap drill-in — section-hopping is now optional, not required.</td><td class="sc">v-day rebuilt · nav relabelled</td><td class="sc">RM journey</td></tr>
+    <tr><td class="id">CRM-23</td><td>ASK ARTH: natural-language bar + hint chips. "today's follow-ups", "who gave consent", "who wants to talk", "my incentive", "leaderboard", "calendar", "drop-offs", or any client's first name → one-line read + list + navigation buttons. Unknown asks return capability chips instead of a dead end.</td><td class="sc">Arth board</td><td class="sc">—</td></tr>
+    <tr><td class="id">CRM-24</td><td>Relevance-first: client list default sort = Relevance (latest consent > waiting chat > timed follow-up > booking > silence); MOST RELEVANT NOW strip on the board with reason chips. Order replay-validated: Sanjay → Rahul → Meera.</td><td class="sc">v-clients · board</td><td class="sc">—</td></tr>
+    <tr><td class="id">CRM-25</td><td>CALENDAR: week board (today gold-highlighted) merging client app-bookings (with their data-sharing choice) and timed follow-ups; role-scoped; admin sees owner per entry; board carries a today-strip + module.</td><td class="sc">v-cal (new) · board</td><td class="sc">—</td></tr>
+    <tr><td class="id">CRM-26</td><td>Persona rename: Supriya Narkar → Supriya Narkar across all 30 occurrences (roles, clients, leads, moments, peers, earnings, calendar). Audit script canon updated in the same pass.</td><td class="sc">All data</td><td class="sc">—</td></tr>
+  </table>
+  <p class="val">Validation: syntax clean · 11 patch steps asserted · zero "Priya" residue · REL covers all 8 clients · relevance order replay PASS (sanjay, rahul on top) · calendar owners valid, Swapnil sees exactly 2 today · Ask-Arth handler present with delegation-native navigation · full v1.0–v2.0 audit stack re-run green.</p>
+</div>
+
+<div class="ver">
+  <div class="vh"><h2>CRM v2.0 <span class="badge">CRM</span></h2><span class="dt">29 Jul 2026 · 08:15 PM IST · nett-crm.html · journey-first IA</span></div>
+  <table>
+    <tr><th>ID</th><th>Change</th><th>Screens affected</th><th>Flows affected</th></tr>
+    <tr><td class="id">CRM-17</td><td>IA inverted from list-first to journey-first: sign-in lands on MY DAY — RM Work Health score (depth gauge + band + "what lifts it today"), water-vessel day progress, and THE TIDE: Arth-ordered moment queue (consent events, waiting chats, follow-ups, drop-offs, preps) each carrying why + incentive value + one-tap act. Done-today section answers done-vs-pending at a glance.</td><td class="sc">v-day (new landing) · sidebar reordered</td><td class="sc">RM daily journey (new)</td></tr>
+    <tr><td class="id">CRM-18</td><td>SIGNALS view: consent-just-given, wants-to-talk (Bring-Swapnil-in taps), exploring/interested, drop-offs — each with act button; book-level funnel shows where users drop most (Order → KYC is the cliff). Behaviour visible only with client RM-visibility; aggregate otherwise.</td><td class="sc">v-signals (new)</td><td class="sc">—</td></tr>
+    <tr><td class="id">CRM-19</td><td>LEADERBOARD: peers ranked by work health (not raw revenue), moments done, month incentive; self highlighted; weekly reset.</td><td class="sc">v-lb (new)</td><td class="sc">—</td></tr>
+    <tr><td class="id">CRM-20</td><td>INCENTIVES: earned month/FY, "in today's tide" pipeline (per-moment attribution, arithmetic-validated ₹20,200 = 12,500+4,200+3,500), service split, perimeter statement (numbers never write the advice).</td><td class="sc">v-earn (new)</td><td class="sc">—</td></tr>
+    <tr><td class="id">CRM-21</td><td>ARTH · BEFORE YOU TALK on every client page (lavender panel — canon-legal since it IS an Arth surface): what to talk, potential, value if it lands, live in-app behaviour — behaviour line hidden without RM visibility, prep falls back to conversation-derived (see Arjun).</td><td class="sc">v-c360</td><td class="sc">—</td></tr>
+  </table>
+  <p class="val">Validation: syntax clean · all 11 patch steps asserted · moment ownership replay (Swapnil 5 / Priya 3, every moment visible to its owner) · every signal/moment/lead reference resolves · every client has an Arth prep · behaviour privacy gate confirmed in code · funnel monotonic · pipeline arithmetic PASS · full v1.0–1.3 audit stack re-run green. Process note: a checker variable collision with the earlier duplicated layer was found and fixed (f4→f5), not suppressed.</p>
+</div>
+
+<div class="ver">
+  <div class="vh"><h2>CRM v1.3 <span class="badge">CRM</span></h2><span class="dt">29 Jul 2026 · 07:30 PM IST · nett-crm.html</span></div>
+  <table>
+    <tr><th>ID</th><th>Change</th><th>Screens affected</th><th>Flows affected</th></tr>
+    <tr><td class="id">CRM-14</td><td>Canon violation fixed (self-caught): lead-stage pills used lavender, which canon reserves exclusively for Arth surfaces. Pills moved to gold-tint; lavender token removed from the CRM entirely so the rule is structural.</td><td class="sc">Pills, tokens</td><td class="sc">—</td></tr>
+    <tr><td class="id">CRM-15</td><td>Second canon drift fixed: app canon uses Tabler icons; CRM v1.0–1.2 used emojis. All action buttons, channel icons, log icons and the mobile menu now Tabler.</td><td class="sc">All views</td><td class="sc">—</td></tr>
+    <tr><td class="id">CRM-16</td><td>Waterline identity carried through the CRM: deep-water ambient gradient on the shell, submerged wordmark with a drifting waterline (login + sidebar), water-rise animation on sign-in, "Your line" depth gauge on every consented client 360 (same gauge the client sees in-app), bobbing below-the-waterline consent lock with gold border-line. Reduced-motion users get all animation disabled.</td><td class="sc">Shell, login, v-c360, consent gate</td><td class="sc">—</td></tr>
+    <tr><td class="id">DS-1</td><td>Design System Desk-extension proposed (pending founder sign-off): sidebar shell, list table, kanban, status pills, consent-gate lock, waterline divider, depth gauge — plus two water tints (deep-water rgba(46,74,106,.20), submerged-steel #7A8AA0), the only additions outside existing tokens.</td><td class="sc">DS doc</td><td class="sc">—</td></tr>
+  </table>
+  <p class="val">Validation: full audit stack green across v1.0–1.3 (visibility matrix, consent gate, AUM sums, follow-up buckets) · zero emoji residue · zero lavender usage, token absent · water elements present exactly once each · v1.2 features regression-checked intact. Process disclosure: a duplicated patch layer from an earlier step was found already applied; every line was reviewed post-hoc and the audit stack extended before accepting the state.</p>
+</div>
+
+<div class="ver">
+  <div class="vh"><h2>CRM v1.2 <span class="badge">CRM</span></h2><span class="dt">29 Jul 2026 · 07:05 PM IST · nett-crm.html</span></div>
+  <table>
+    <tr><th>ID</th><th>Change</th><th>Screens affected</th><th>Flows affected</th></tr>
+    <tr><td class="id">CRM-10</td><td>Statements & reports in CRM — same documents as the in-app Reports screen (Monthly statement, CA-ready capital gains FY 25–26, Tax pack 80C/ELSS, Fee & commission report), per-row Download + WhatsApp-to-client, consent-gated, every share logged.</td><td class="sc">v-c360 data tab</td><td class="sc">—</td></tr>
+    <tr><td class="id">CRM-11</td><td>Lead & call status made explicitly actionable — chips relabelled "tap to update" (they were live in v1.0 but read as static; affordance fixed).</td><td class="sc">v-lead</td><td class="sc">—</td></tr>
+    <tr><td class="id">CRM-12</td><td>Call logging upgraded: channel (Call/WhatsApp/Chat/Email) + remark + optional next-follow-up date. Logging with a date sets the lead's follow-up, flips comm status to Follow-up due, updates next action.</td><td class="sc">v-lead</td><td class="sc">—</td></tr>
+    <tr><td class="id">CRM-13</td><td>Follow-ups view: Overdue/pending · Today · Upcoming buckets, role-scoped, Won/Lost excluded, sidebar badge = overdue+today. Every dated log lands here automatically.</td><td class="sc">v-fu (new) · sidebar</td><td class="sc">—</td></tr>
+  </table>
+  <p class="val">Validation: syntax clean · all 20 patch steps asserted · every lead carries a follow-up date · bucket replay: Swapnil sees no overdue (L5 is Priya's), today = L3+L6, upcoming = L1+L2; Priya sees L5 overdue · v1.0/v1.1 audits re-run green (visibility, consent gate, AUM sums).</p>
+</div>
+
+<div class="ver">
+  <div class="vh"><h2>CRM v1.1 <span class="badge">CRM</span></h2><span class="dt">29 Jul 2026 · 06:40 PM IST · nett-crm.html</span></div>
+  <table>
+    <tr><th>ID</th><th>Change</th><th>Screens affected</th><th>Flows affected</th></tr>
+    <tr><td class="id">CRM-7</td><td>Data & portfolio tab rebuilt for consented clients: source-freshness strip (AA / MF Central / bureau, each with last-updated), Holdings, Liabilities (balance · rate · EMI) and Cashflow (income / spends / SIPs / surplus) cards. New locked canon for Rahul: card ₹52,600 @ 42% · home loan ₹48.2L @ 8.9%, EMI ₹43,500 · income ₹2.4L / surplus ₹47,000. Holdings sums arithmetic-validated against AUM for all five consented clients.</td><td class="sc">v-c360 data tab</td><td class="sc">—</td></tr>
+    <tr><td class="id">CRM-8</td><td>Wealth Health Report in CRM: view inline, download PDF, send to the client on WhatsApp — client's verified number only, every share logged. Report mirrors the in-app report exactly.</td><td class="sc">v-c360 data tab</td><td class="sc">—</td></tr>
+    <tr><td class="id">CRM-9</td><td>WhatsApp as a first-class channel: button on client 360 and lead detail beside Chat/Call/Email; wa channel type in the comms trail; Sanjay's consent link now shows its WhatsApp delivery state (delivered ✓✓, not opened).</td><td class="sc">v-c360 · v-lead · comms</td><td class="sc">—</td></tr>
+    <tr><td class="id">FIX</td><td>Correction of a v1.0 error (self-caught): briefing line said "₹22,000 clears it, saves ₹22,080/yr" — internally inconsistent; ₹22,080/yr at 42% implies ~₹52,600 balance. Line corrected and balance locked as canon.</td><td class="sc">Rahul briefing</td><td class="sc">—</td></tr>
+  </table>
+  <p class="val">Validation: syntax clean · visibility matrix unchanged and re-verified · fin data exists only on consented clients (structural gate holds) · holdings-vs-AUM sums PASS ×5 · all new handlers wired · old inconsistent line confirmed absent.</p>
+</div>
+
+<div class="ver">
+  <div class="vh"><h2>CRM v1.0 <span class="badge cur">NEW ARTIFACT</span></h2><span class="dt">29 Jul 2026 · 06:10 PM IST · nett-crm.html · 7 views</span></div>
+  <table>
+    <tr><th>ID</th><th>Change</th><th>Screens affected</th><th>Flows affected</th></tr>
+    <tr><td class="id">CRM-1</td><td>New RM/sales surface (separate file, own version track): role sign-in (Swapnil RM-Wealth · Supriya Narkar Insurance · Admin), client list with sort by Created / Updated / Last chat / Recent-chat-first and admin assignee filter, client 360 with Chat/Call/Email + full communication trail and bookings.</td><td class="sc">login · v-clients · v-c360</td><td class="sc">CRM (new track)</td></tr>
+    <tr><td class="id">CRM-2</td><td>Consent-gated dual view — the signature: Briefing and Data tabs render "below the waterline" (blurred + locked) until the client grants consent; contact, bookings and comms stay visible. Unconsented clients structurally carry zero portfolio data.</td><td class="sc">v-c360 locked state</td><td class="sc">—</td></tr>
+    <tr><td class="id">CRM-3</td><td>RM-ready briefing per consented client: what's good / what needs action / what to talk about — perimeter-safe language (observations, numbers, comparisons, routes; never advice scripts).</td><td class="sc">v-c360 briefing tab</td><td class="sc">—</td></tr>
+    <tr><td class="id">CRM-4</td><td>Service leads: kanban New → Contacted → Qualified → In progress → Won (+ Lost/Dormant), service filter; lead status and communication status (Awaiting reply / Replied / Follow-up due / Overdue) tracked as separate axes; lead-wise comms log with append; next-action field. Lead creation from client 360.</td><td class="sc">v-leads · v-lead</td><td class="sc">—</td></tr>
+    <tr><td class="id">CRM-5</td><td>Roles & visibility: assignee sees only clients with ≥1 service assigned to them, but sees ALL services + assignees + last-talk on those clients (no double-calling); Admin sees everyone, filters by assignee; reassignment admin-only, service-wise.</td><td class="sc">All views</td><td class="sc">—</td></tr>
+    <tr><td class="id">CRM-6</td><td>Assisted onboarding: RM creates client + first service lead; consent via link to client's phone (pending until approved) or assisted on-device where the client enters their own OTP — RM can never action consent; channel + timestamp stored for audit.</td><td class="sc">v-addclient</td><td class="sc">—</td></tr>
+  </table>
+  <p class="val">Validation: script syntax clean · all 7 views present · visibility matrix replayed (Swapnil 4 / Priya 4 / Admin 8, Rohan-only client invisible to both desks) · unconsented clients carry no portfolio fields · all leads map to real clients with valid stages. Desktop-first, responsive to mobile with collapsible sidebar. Demo roster of 8 clients now locked canon alongside Rahul Mehra.</p>
+</div>
+
+<div class="ver">
+  <div class="vh"><h2>v1.3 <span class="badge cur">CURRENT</span></h2><span class="dt">29 Jul 2026 · 05:43 PM IST · 63 screens</span></div>
+  <table>
+    <tr><th>ID</th><th>Change</th><th>Screens affected</th><th>Flows affected</th></tr>
+    <tr><td class="id">C9</td><td>New "Report preparing" state after scan — AA fetch + insight generation takes ~5 min in production. New screen with live 3-step progress; user released to explore; Home carries a preparing banner that flips to "Report ready — open it" with a notification. Demo compresses 5 min to 12s (demo-only, documented).</td><td class="sc">s-preparing (new) · s-scanning (exit changed) · s-home (banner) · s-health (new entry route)</td><td class="sc">FLOW-0, 1, 2, 3 (bureau-notify and report-notify are separate mechanisms — see flow doc)</td></tr>
+    <tr><td class="id">C10</td><td>OTP standardised to 6 digits everywhere (was 4). OTP boxes resized 47→44px to fit six in frame. "4-digit" copy in WhatsApp toast corrected.</td><td class="sc">s-otp · s-kyc3 · s-login · global .otp CSS</td><td class="sc">FLOW-0, FLOW-5 (KYC), FLOW-9b (relogin)</td></tr>
+  </table>
+  <p class="val">Validation: all 63 sections present · every nav target resolves · script syntax clean · OTP fit 304px of 314px · 3 OTP blocks × 6 digits confirmed.</p>
+</div>
+
+<div class="ver">
+  <div class="vh"><h2>v1.2</h2><span class="dt">29 Jul 2026 · 05:20 PM IST · 62 screens</span></div>
+  <table>
+    <tr><th>ID</th><th>Change</th><th>Screens affected</th><th>Flows affected</th></tr>
+    <tr><td class="id">C8</td><td>Re-login flow for reinstall / fresh device: mobile number + OTP only — <b>no Google/Apple login by decision</b>. After login, biometric enrolment prompt (enable or skip). Same device thereafter goes straight to Face ID as before. Launch with ?flow=relogin.</td><td class="sc">s-login (new) · s-bioset (new) · s-splash (3-way routing)</td><td class="sc">FLOW-9 (branched) · FLOW-9b (new)</td></tr>
+    <tr><td class="id">BACK</td><td>Back-control audit across all screens. Added: s-entry (standard back), s-kyc10 ("Go to home — order stays saved"). Deliberately not added: pg2 / osuccess (existing "Not now"/"Done" are the back-equivalents; a second back could re-enter completed payment), tab roots (tab bar is the navigation), scanning (own recovery panel).</td><td class="sc">s-entry · s-kyc10</td><td class="sc">FLOW-5</td></tr>
+  </table>
+  <p class="val">Validation: 62 sections present · nav targets resolve · syntax clean.</p>
+</div>
+
+<div class="ver">
+  <div class="vh"><h2>v1.1</h2><span class="dt">29 Jul 2026 · 05:05 PM IST · 60 screens</span></div>
+  <table>
+    <tr><th>ID</th><th>Change</th><th>Screens affected</th><th>Flows affected</th></tr>
+    <tr><td class="id">C2</td><td>Demo jump bar (Scan journey / Report / Island / Home / RM) hidden by default — it is a demo navigator, not app UI. Shows only with ?demo=1.</td><td class="sc">Global header</td><td class="sc">All (demo nav only)</td></tr>
+    <tr><td class="id">C4</td><td>Full MF/KYC onboarding: single demo screen replaced by gate + 10-step flow — PAN+DOB, personal (incl. father/mother), email OTP, DigiLocker address, occupation/income/FATCA/PEP, bank via reverse ₹1 penny drop with live states, documents (PAN/selfie/signature), nominee with relationship + % + ID, review, verified status. Saved order resumes automatically after KYC (FLOW-5 promise preserved; ORD state survives the detour).</td><td class="sc">s-mfonboard (repurposed as gate) · s-kyc1…s-kyc10 (new)</td><td class="sc">FLOW-5 and any mf/add order path</td></tr>
+    <tr><td class="id">C5</td><td>Outcome × Category filter matrix: impossible combos hidden (not empty-stated), invalid cross-selection auto-resets to All. Derived live from catalogue; production must derive from PRODMASTER, never hardcode.</td><td class="sc">s-listing · s-explore</td><td class="sc">Any flow through Explore</td></tr>
+    <tr><td class="id">C6</td><td>Invest CTA pre-KYC specified (no code change): label stays "Invest"; tap intercepts, saves order, routes to KYC gate.</td><td class="sc">s-fund · order sheet (spec only)</td><td class="sc">FLOW-5</td></tr>
+    <tr><td class="id">C3</td><td>Theme decision signed off: dark only for beta. Light theme = Phase 2 (second token set + full band-contrast re-validation). Documented in flow doc READ ME.</td><td class="sc">None (decision record)</td><td class="sc">—</td></tr>
+    <tr><td class="id">C1</td><td>Dev flow doc created (Nett_Dev_Flow_Doc.xlsx): all screens, full click map, 11 flows, filter matrix, state gates.</td><td class="sc">Document</td><td class="sc">—</td></tr>
+  </table>
+  <p class="val">Validation: 60 sections present · nav targets resolve · syntax clean · filter matrix logic replay both directions pass.</p>
+  <p class="note"><b>Process note:</b> a mid-run patch failure applied two changes to the wrong file state; caught by size-arithmetic validation, corrected, full audit re-run green. Assertion discipline held.</p>
+</div>
+
+<div class="ver">
+  <div class="vh"><h2>v1.0 <span class="badge">BASELINE</span></h2><span class="dt">Approved design → handed to dev · 28 Jul 2026 · 50 screens</span></div>
+  <p class="note">Approved Nett app prototype on Design System v1.0 canon tokens, Waterline (Direction C) identity. 50 screens, 11 demo flows, Rahul Mehra persona locked. This is the state dev feedback rounds were applied against.</p>
+</div>
+
+<div class="hr"></div>
+<p class="open"><b style="color:var(--tx)">Open items (carried, not blockers):</b> <span>Figma decision</span> — on hold, HTML is design source of truth · <span>KYC rails</span> — Nett UI vs partner (Choice) SDK, pending Yogesh sir · <span>index.html demo launcher</span> — needs &demo=1 params + relogin & preparing flow tiles when file is shared · <span>PRODMASTER owner + DEMAT integration method</span> — pre-existing build blockers.</p>
+</body>
+</html>

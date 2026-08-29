@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Nett — App Release Notes</title>
+<style>
+:root{--bg:#0C0D10;--tx:#ECECF1;--mut:#8E8E9C;--dim:#6B6B78;--pos:#3ED598;--amb:#D9B96A;--neg:#E08A8A;--hair:rgba(255,255,255,.09);--card:rgba(255,255,255,.03)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--tx);font-family:-apple-system,'SF Pro Text',Inter,'Segoe UI',Roboto,sans-serif;padding:48px 24px;max-width:860px;margin:0 auto;line-height:1.55}
+h1{font-size:30px;letter-spacing:-.8px;font-weight:650}
+h2{font-size:19px;letter-spacing:-.4px;margin-top:8px}
+.sub{color:var(--mut);font-size:13.5px;margin-top:6px}
+.ver{border:1px solid var(--hair);border-radius:18px;padding:22px 24px;margin-top:26px;background:var(--card)}
+.vh{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px}
+.badge{font-size:10px;letter-spacing:1.6px;font-weight:600;border:1px solid var(--hair);border-radius:999px;padding:4px 11px;color:var(--dim)}
+.badge.cur{color:var(--pos);border-color:rgba(62,213,152,.45)}
+.dt{color:var(--dim);font-size:12.5px}
+table{width:100%;border-collapse:collapse;margin-top:14px;font-size:13px}
+th{text-align:left;color:var(--dim);font-size:10.5px;letter-spacing:1.4px;font-weight:600;padding:8px 10px 6px;border-bottom:1px solid var(--hair)}
+td{padding:9px 10px;border-bottom:1px solid rgba(255,255,255,.05);vertical-align:top;color:var(--tx)}
+td.id{color:var(--amb);white-space:nowrap;font-weight:600}
+td.sc{color:var(--mut)}
+.note{font-size:12.5px;color:var(--mut);margin-top:12px}
+.note b{color:var(--tx)}
+.open{margin-top:12px;font-size:12.5px;color:var(--mut)}
+.open span{color:var(--amb)}
+.val{font-size:12px;color:var(--pos);margin-top:10px}
+.hr{height:1px;background:var(--hair);margin:34px 0 6px}
+</style>
+</head>
+<body>
+<h1>Nett — App Release Notes</h1>
+<p class="sub">Consumer app design version history · each release ships three artifacts on the same version: <b style="color:var(--tx)">nett-app.html · Nett_App_Flow_Doc.xlsx · this file</b>. The CRM/desk surface has its own separate track (Nett_CRM_Release_Notes.html). Handbook (DOCS) entries are mirrored in both notes — edit both. Latest on top; every release carries date and time (IST).</p>
+
+<div class="ver">
+  <div class="vh"><h2>v1.6 <span class="badge cur">CURRENT — APP</span></h2><span class="dt">30 Jul 2026 · 05:20 PM IST · 65 screens · nett-app.html</span></div>
+  <table>
+    <tr><th>ID</th><th>Change</th><th>Screens affected</th><th>Flows affected</th></tr>
+    <tr><td class="id">C1</td><td><b>Case 1 — reinstall, AA on file:</b> intro → "I have an account" → mobile + OTP → Face ID re-arm → Home. Verified intact end-to-end (was already correct in v1.5; now machine-checked as its own case).</td><td class="sc">s-entry · s-login · s-bioset</td><td class="sc">relogin</td></tr>
+    <tr><td class="id">C2</td><td><b>Case 2 — account exists, permissions pending:</b> rewired. After OTP + Face ID the user now lands on the <b>zero-state Home</b> (the existing s-home0, per your call — no new hero invented) with its "See my number" card; tapping it routes through the new <b>s-pan</b> screen — PAN + DOB <b>prefilled from account records</b> (provenance stated, clearable per spec) — then the AA consent flow → scan → wealth health. Previously the nc-branch jumped straight to consent, skipping Home.</td><td class="sc">s-home0 · s-pan (new) · s-consent</td><td class="sc">relogin-nc</td></tr>
+    <tr><td class="id">C3</td><td><b>Case 3 — registration:</b> the scan screen's mobile / PAN / DOB were read-only drawings — mobile and PAN are now real inputs (tel + caps keyboards, autofill), DOB is the named-month wheel-picker affordance ("14 Mar 1988", chevron — slash-format retired per spec Rule 1), with the why-line: "PAN + date of birth unlock the credit side." Post-OTP chain unchanged: OTP → Face ID → AA consent → scan.</td><td class="sc">s-scan</td><td class="sc">FLOW-0</td></tr>
+  </table>
+  <p class="val">Validation: appcheck 49 points across v1.4/1.5/1.6 blocks — ALL PASS, including per-case route checks (C1 path intact · C2 lands on home0 not consent, branches via PENDPERM, s-pan → consent · C3 real inputs + named-month DOB + slash-date absent from scan). 65 sections. Two stale checker expectations updated to v1.6 truth (disclosed; code untouched by those edits). Scan-slice scoping used where anchors were ambiguous (DOB string exists in KYC too — KYC untouched, verified).</p>
+</div>
+
+<div class="ver">
+  <div class="vh"><h2>v1.5 <span class="badge">APP</span></h2><span class="dt">30 Jul 2026 · 04:10 PM IST · 64 screens · nett-app.html</span></div>
+  <table>
+    <tr><th>ID</th><th>Change</th><th>Screens affected</th><th>Flows affected</th></tr>
+    <tr><td class="id">FB-1a</td><td>Login flow completed: mobile is a real tel input (correct keyboard, autofill — spec-contract Rule 1), Get OTP → 6-digit boxes with Resend · Voice call · <b>Get it on WhatsApp</b>; after verify the route branches — consent on file → Face ID re-arm → Home; consent missing → consent page first (?flow=relogin-nc demos it). Context line states why the screen appears: Face ID unset (new install / cleared data).</td><td class="sc">s-login · s-bioset</td><td class="sc">Relogin · relogin-nc (new)</td></tr>
+    <tr><td class="id">FB-1b</td><td>Biometric enrollment joined onboarding: scan OTP verify now routes OTP → <b>Face ID/fingerprint enrollment</b> → consent — the account is created at OTP, so the device lock is offered immediately, skippable. One bioset screen serves both journeys via route context.</td><td class="sc">s-otp · s-bioset · s-consent</td><td class="sc">FLOW-0 onboarding</td></tr>
+    <tr><td class="id">FB-2</td><td>Alert system completed + canonized: error <b>dialog</b> (arrives still — no animation, per motion law; last-good + date, trace NVY-7C21, Retry/Close; opens from the wealth errrow), toast error variant, and the four-rung interruption ladder written into the Design System (new §5).</td><td class="sc">s-wealth · DS doc</td><td class="sc">Error state</td></tr>
+    <tr><td class="id">FB-3</td><td>Scenario-wise visibility: per-source consent matrix — MF · EQ (demat) · BUREAU · AA chips in the demo bar toggle each source off, swapping its blocks (wealth MF/stocks/credit-card, home Flow, cashflow page) for a below-the-waterline <b>lock card</b>: dashed border, NO DATA chip, what stays hidden, one Connect, totals-exclude note. Full-data and zero-data now bracket a matrix, not a binary.</td><td class="sc">s-wealth · s-home · s-cashflow</td><td class="sc">All data flows</td></tr>
+    <tr><td class="id">FB-4</td><td>Exit-intent decision sheet: backing out at order-confirm or payment (once per session) surfaces a bottom sheet — "A year's delay on this SIP costs ≈ ₹4.1L at the finish" + the ~14-month loan-runway effect; Finish / Leave anyway (leaving saves a draft). <b>Honest math only; the peer-comparison variant is NOT shipped — flagged for Yogesh sir's sign-off in the register.</b></td><td class="sc">s-oconfirm · s-pg2</td><td class="sc">FLOW-5 abandonment</td></tr>
+    <tr><td class="id">FB-5</td><td>Bottom sheet + dialog canonized as components (sheet: 26px top radius, grabber, up-motion; dialog: 20px, 340px, still-on-error) — specs in DS §5, live instances in-app.</td><td class="sc">DS doc · components</td><td class="sc">—</td></tr>
+  </table>
+  <p class="val">Validation: appcheck extended to 37 points, ALL PASS — including: real tel input · WhatsApp option present · consent branch logic · bioset routes by context (no hard-coded home) · 5 source tags / 4 chips / lock-card engine · exit-intent once-flag + math-first copy (peer-line absence machine-checked) · error dialog stillness rule enforced in CSS · 64 sections intact. Diff-verified vs v1.4.</p>
+</div>
+
+<div class="ver">
+  <div class="vh"><h2>DOCS-4 <span class="badge cur">TEAM HANDBOOK</span></h2><span class="dt">30 Jul 2026 · 04:10 PM IST · Design System</span></div>
+  <table>
+    <tr><th>ID</th><th>Change</th><th>Doc</th><th>Why</th></tr>
+    <tr><td class="id">DS§5</td><td>New section "Alerts, dialogs, sheets &amp; partial consent": the four-rung interruption ladder (inline errrow → toast → dialog → bottom sheet) with component specs; the stillness rule for error dialogs; exit-intent guardrails (honest math only · once per session · never blocking · <b>peer-comparison lines require compliance sign-off</b>); and the per-source scenario-visibility rule (below-the-waterline lock cards, totals-exclude note). Governance renumbered to §6.</td><td class="sc">Design System</td><td class="sc">Team feedback: alert/sheet/popup patterns and partial-consent scenarios existed in neither the flow nor the DS</td></tr>
+  </table>
+  <p class="val">Mirrored in both release-note files per the track rule.</p>
+</div>
+
+<div class="ver">
+  <div class="vh"><h2>v1.4 <span class="badge">APP</span></h2><span class="dt">30 Jul 2026 · 01:40 PM IST · 64 screens · nett-app.html</span></div>
+  <table>
+    <tr><th>ID</th><th>Change</th><th>Screens affected</th><th>Flows affected</th></tr>
+    <tr><td class="id">G9</td><td>Four-band parity restored: canonical tokens --watch:#E0B45C / --attn:#E8935C added; ATTENTION pills ×3 recolored from amber-gold to canon attn; "Fair" band now renders in WATCH color; WATCH + NO DATA both gain honest visual presence (glossary legend + NO DATA chip in the partial banner). Same state, same color, both surfaces.</td><td class="sc">s-health · s-stocks · s-liab · s-gloss</td><td class="sc">All report flows</td></tr>
+    <tr><td class="id">G1</td><td>Error states arrive in the app: .errrow component, rail-failure demo on Wealth (Credit bureau · failed 09:12 — showing 14 Jul · Retry · NVY-7C21), retry recovers with the trace logged. Error ≠ NO DATA now demonstrated, not just documented.</td><td class="sc">s-wealth</td><td class="sc">FLOW-1/2 refresh</td></tr>
+    <tr><td class="id">G3</td><td>PARTIAL state: report banner — "Built from 2 of 3 sources · confidence 74% · MF folios ≈ ₹18.4L unpriced · NO DATA: MF Central · Connect." Confidence-formula ownership flagged to Rule Book.</td><td class="sc">s-health</td><td class="sc">FLOW-0 variants</td></tr>
+    <tr><td class="id">G2*</td><td>Nudges empty state ("Nothing needs you right now — that's the goal working" + report CTA). *Scope revised with disclosure: the audit's "zero empties" claim was WRONG — s-home0 / s-wealth0 / s-health0 / s-limited already existed as designed zero-states; my grep missed the 0-suffix pattern. Only nudges lacked one.</td><td class="sc">s-nudges</td><td class="sc">—</td></tr>
+    <tr><td class="id">G4</td><td>Payment spinner retired: s-pg2 now shows named steps (Approved on rail ✓ → Bank confirming ≈5s → Units allotted next); @keyframes spin deleted — the motion inventory is genuinely closed again.</td><td class="sc">s-pg2</td><td class="sc">FLOW-5 payment</td></tr>
+    <tr><td class="id">G5</td><td>Glossary screen (bands + NO-DATA/error rule + your line + island + Arth/lavender) reachable from the report "?" chip and Data &amp; privacy; 4-stop first-run tour on first report arrival, skippable, relaunchable from the glossary.</td><td class="sc">s-gloss (new) · s-health · s-privacy</td><td class="sc">First-run</td></tr>
+    <tr><td class="id">G6</td><td>⚠ text glyphs ×2 → ti-alert-triangle (Tabler-only rule enforced).</td><td class="sc">s-stocks · s-delete</td><td class="sc">—</td></tr>
+    <tr><td class="id">DEMO</td><td>States demo control in the ?demo=1 jump bar: Normal · Empty · Partial · Error — flips the demo presentation without breaking Rahul's complete-scan canon. Production conditions documented in NETT_CHANGES.md.</td><td class="sc">Jump bar</td><td class="sc">Demo only</td></tr>
+  </table>
+  <p class="val">Validation: 22-point permanent app audit (appcheck.js, new) ALL PASS — 64 sections · every data-nav/data-go target resolves · single-instance guards on all new elements · zero spinner/glyph residue · OTP & canon intact · diff-proof integrity vs v1.3 (13 removed lines, all accounted). Disclosures: G2 audit overclaim corrected above; a misleading byte-count print in my patch tooling was caught by diff verification — the diff, not the print, is the authority.</p>
+</div>
+
+
+<div class="ver">
+  <div class="vh"><h2>DOCS-3 <span class="badge cur">TEAM HANDBOOK</span></h2><span class="dt">30 Jul 2026 · 01:40 PM IST · Motion Architecture</span></div>
+  <table>
+    <tr><th>ID</th><th>Change</th><th>Doc</th><th>Why</th></tr>
+    <tr><td class="id">G11</td><td>Vessel timing corrected: vfillup (CRM, one-shot .95s) and nfill (app, ambient 1.7s loop) described separately and accurately — the old "0.6s per change" matched neither file.</td><td class="sc">Motion</td><td class="sc">Doc error found by docs-vs-code audit</td></tr>
+    <tr><td class="id">G12</td><td>railon added to the inventory (report-rail entrance, .5s ease, .8s stagger) — a closed set must be complete.</td><td class="sc">Motion</td><td class="sc">Shipped but undocumented</td></tr>
+    <tr><td class="id">G10</td><td>drift entry updated to its single new home (CRM consent gate, 8s), re-homing history stated.</td><td class="sc">Motion</td><td class="sc">Claim went stale when v2.9 retired its host</td></tr>
+  </table>
+  <p class="val">The Motion doc's "living source" promise holds again: every keyframe in both files is documented, and every documented keyframe has a consumer. G8 (gold token) remains the single open register item — founder decision.</p>
+</div>
+
+
+<div class="ver">
+  <div class="vh"><h2>DOCS-2 <span class="badge cur">TEAM HANDBOOK</span></h2><span class="dt">30 Jul 2026 · 11:20 AM IST · gap review vs ux-spec-prompt.md</span></div>
+  <table>
+    <tr><th>ID</th><th>Change</th><th>Doc</th><th>Why it was missing</th></tr>
+    <tr><td class="id">DOC-4</td><td>New §5 "From design to build — the spec contract": affordance-from-value rule + control canon table (wheel/calendar/segmented/menu/search/stepper/OTP), five-states-per-screen contract (EMPTY with fixing action · LOADING with duration · ERROR with exit · PARTIAL with confidence % and ₹ cost · DONE), RANGE vs RULE ("prevent the impossible, explain the disallowed"), validation timing defaults, input error copy = name-the-fix, PREFILL provenance, UNSPECIFIED-never-blank discipline, the five questions.</td><td class="sc">UX Architecture</td><td class="sc">Docs were written from the prototype, and the prototype only draws read-only values — a box that never accepts input never forces the control, validation, or empty/partial questions. Demo data is always complete and never fails. The dev team's spec prompt exposed the gap exactly where it lives: between the picture and the build.</td></tr>
+    <tr><td class="id">DOC-5</td><td>Physical canon row (44pt targets, sticky liquid-glass tab bar, equal heights in a row, placeholder-never-a-label, autofill + keyboard types, iOS-parity on Android) + a new first Do: input affordances decided from the value, never the prototype's picture.</td><td class="sc">Design System</td><td class="sc">First release documented web prototypes; the build target is native mobile — physical rules never entered the web-drawn canon.</td></tr>
+    <tr><td class="id">DOC-6</td><td>Swipe-back added to the transition inventory: surface transition run in reverse, tracking the finger, both platforms.</td><td class="sc">Motion Architecture</td><td class="sc">Web canon knew only button/stack back; the gesture is native-only.</td></tr>
+    <tr><td class="id">DOC-7</td><td>Reconciliation note stated in both docs: DS "reuse components" and spec-prompt "never inherit from the prototype" are both right at different layers — visual canon carries, input mode is decided from the value. The two documents can no longer be read as conflicting.</td><td class="sc">DS + UX</td><td class="sc">Two true rules, written in isolation, looked contradictory side by side.</td></tr>
+  </table>
+  <p class="val">Review verdict on ux-spec-prompt.md: adopt as-is — it is fully canon-consistent (copy law, persona lock, regulatory perimeter, NO-DATA rule, disclosure format all match) and fills a real structural hole. Credit: PM desk. All four gaps now live in the permanent docs so web and app design answer them up front.</p>
+</div>
+
+
+<div class="ver">
+  <div class="vh"><h2>DOCS <span class="badge cur">TEAM HANDBOOK</span></h2><span class="dt">30 Jul 2026 · 12:55 AM IST · 3 files</span></div>
+  <table>
+    <tr><th>ID</th><th>Deliverable</th><th>Contents</th><th>Audience</th></tr>
+    <tr><td class="id">DOC-1</td><td>Nett_Design_System.html</td><td>The Waterline concept and how it was reached (Direction C) · why dark, and the four color-selection rules · every token with its rationale and its never-rules (lavender = Arth only; bone vs water; band colors locked to Rule Book states) · type/shape/space canon · do's &amp; don'ts drawn from real violations · governance: how new design enters the system. Honest flag included: app/CRM gold-token discrepancy, decision owner founder.</td><td class="sc">Whole team</td></tr>
+    <tr><td class="id">DOC-2</td><td>Nett_UX_Architecture.html</td><td>The ten behavior principles (journey-first · Arth narrates humans decide · one truth two views · consent as architecture · relevance floats · number-or-action copy law · nothing unexplained · always a way back · honest failure · gates still gate) · IA maps of both surfaces · navigation model · THE CHANGE PROTOCOL: restate → cross-check → confirm with impact → ship with audit → canonize.</td><td class="sc">Design + product + dev</td></tr>
+    <tr><td class="id">DOC-3</td><td>Nett_Motion_Architecture.html</td><td>Three laws (motion is meaning · honest · calm) · complete animation inventory with timings (identity ~1s, transitions .38s, ambient 7s+, water loader, vessel) · decision table (when what) · never-rules: no bounce, no animation on errors/compliance, reduced-motion absolute, keyframe set is closed. Live demos of loader + vessel embedded in the doc itself.</td><td class="sc">Design + frontend</td></tr>
+  </table>
+  <p class="val">All three files are written in the Nett canon and self-demonstrate it. Tokens quoted verbatim from the code, not memory. Purpose per founder: (1) team understands how the design was reached, (2) new pages follow the system — no new colors, themes, or components without the protocol, (3) conflicting instructions get cross-checked, confirmed, and impact-shared before any change.</p>
+</div>
+
+
+<div class="ver">
+  <div class="vh"><h2>v1.3 <span class="badge">APP</span></h2><span class="dt">29 Jul 2026 · 05:43 PM IST · 63 screens</span></div>
+  <table>
+    <tr><th>ID</th><th>Change</th><th>Screens affected</th><th>Flows affected</th></tr>
+    <tr><td class="id">C9</td><td>New "Report preparing" state after scan — AA fetch + insight generation takes ~5 min in production. New screen with live 3-step progress; user released to explore; Home carries a preparing banner that flips to "Report ready — open it" with a notification. Demo compresses 5 min to 12s (demo-only, documented).</td><td class="sc">s-preparing (new) · s-scanning (exit changed) · s-home (banner) · s-health (new entry route)</td><td class="sc">FLOW-0, 1, 2, 3 (bureau-notify and report-notify are separate mechanisms — see flow doc)</td></tr>
+    <tr><td class="id">C10</td><td>OTP standardised to 6 digits everywhere (was 4). OTP boxes resized 47→44px to fit six in frame. "4-digit" copy in WhatsApp toast corrected.</td><td class="sc">s-otp · s-kyc3 · s-login · global .otp CSS</td><td class="sc">FLOW-0, FLOW-5 (KYC), FLOW-9b (relogin)</td></tr>
+  </table>
+  <p class="val">Validation: all 63 sections present · every nav target resolves · script syntax clean · OTP fit 304px of 314px · 3 OTP blocks × 6 digits confirmed.</p>
+</div>
+
+
+<div class="ver">
+  <div class="vh"><h2>v1.2</h2><span class="dt">29 Jul 2026 · 05:20 PM IST · 62 screens</span></div>
+  <table>
+    <tr><th>ID</th><th>Change</th><th>Screens affected</th><th>Flows affected</th></tr>
+    <tr><td class="id">C8</td><td>Re-login flow for reinstall / fresh device: mobile number + OTP only — <b>no Google/Apple login by decision</b>. After login, biometric enrolment prompt (enable or skip). Same device thereafter goes straight to Face ID as before. Launch with ?flow=relogin.</td><td class="sc">s-login (new) · s-bioset (new) · s-splash (3-way routing)</td><td class="sc">FLOW-9 (branched) · FLOW-9b (new)</td></tr>
+    <tr><td class="id">BACK</td><td>Back-control audit across all screens. Added: s-entry (standard back), s-kyc10 ("Go to home — order stays saved"). Deliberately not added: pg2 / osuccess (existing "Not now"/"Done" are the back-equivalents; a second back could re-enter completed payment), tab roots (tab bar is the navigation), scanning (own recovery panel).</td><td class="sc">s-entry · s-kyc10</td><td class="sc">FLOW-5</td></tr>
+  </table>
+  <p class="val">Validation: 62 sections present · nav targets resolve · syntax clean.</p>
+</div>
+
+
+<div class="ver">
+  <div class="vh"><h2>v1.1</h2><span class="dt">29 Jul 2026 · 05:05 PM IST · 60 screens</span></div>
+  <table>
+    <tr><th>ID</th><th>Change</th><th>Screens affected</th><th>Flows affected</th></tr>
+    <tr><td class="id">C2</td><td>Demo jump bar (Scan journey / Report / Island / Home / RM) hidden by default — it is a demo navigator, not app UI. Shows only with ?demo=1.</td><td class="sc">Global header</td><td class="sc">All (demo nav only)</td></tr>
+    <tr><td class="id">C4</td><td>Full MF/KYC onboarding: single demo screen replaced by gate + 10-step flow — PAN+DOB, personal (incl. father/mother), email OTP, DigiLocker address, occupation/income/FATCA/PEP, bank via reverse ₹1 penny drop with live states, documents (PAN/selfie/signature), nominee with relationship + % + ID, review, verified status. Saved order resumes automatically after KYC (FLOW-5 promise preserved; ORD state survives the detour).</td><td class="sc">s-mfonboard (repurposed as gate) · s-kyc1…s-kyc10 (new)</td><td class="sc">FLOW-5 and any mf/add order path</td></tr>
+    <tr><td class="id">C5</td><td>Outcome × Category filter matrix: impossible combos hidden (not empty-stated), invalid cross-selection auto-resets to All. Derived live from catalogue; production must derive from PRODMASTER, never hardcode.</td><td class="sc">s-listing · s-explore</td><td class="sc">Any flow through Explore</td></tr>
+    <tr><td class="id">C6</td><td>Invest CTA pre-KYC specified (no code change): label stays "Invest"; tap intercepts, saves order, routes to KYC gate.</td><td class="sc">s-fund · order sheet (spec only)</td><td class="sc">FLOW-5</td></tr>
+    <tr><td class="id">C3</td><td>Theme decision signed off: dark only for beta. Light theme = Phase 2 (second token set + full band-contrast re-validation). Documented in flow doc READ ME.</td><td class="sc">None (decision record)</td><td class="sc">—</td></tr>
+    <tr><td class="id">C1</td><td>Dev flow doc created (Nett_Dev_Flow_Doc.xlsx): all screens, full click map, 11 flows, filter matrix, state gates.</td><td class="sc">Document</td><td class="sc">—</td></tr>
+  </table>
+  <p class="val">Validation: 60 sections present · nav targets resolve · syntax clean · filter matrix logic replay both directions pass.</p>
+  <p class="note"><b>Process note:</b> a mid-run patch failure applied two changes to the wrong file state; caught by size-arithmetic validation, corrected, full audit re-run green. Assertion discipline held.</p>
+</div>
+
+
+<div class="ver">
+  <div class="vh"><h2>v1.0 <span class="badge">BASELINE</span></h2><span class="dt">Approved design → handed to dev · 28 Jul 2026 · 50 screens</span></div>
+  <p class="note">Approved Nett app prototype on Design System v1.0 canon tokens, Waterline (Direction C) identity. 50 screens, 11 demo flows, Rahul Mehra persona locked. This is the state dev feedback rounds were applied against.</p>
+</div>
+
+
+<div class="hr"></div>
+<p class="open"><b style="color:var(--tx)">Open items (carried, not blockers):</b> <span>Figma decision</span> — on hold, HTML is design source of truth · <span>KYC rails</span> — Nett UI vs partner (Choice) SDK, pending Yogesh sir · <span>index.html demo launcher</span> — needs &demo=1 params + relogin & preparing flow tiles when file is shared · <span>PRODMASTER owner + DEMAT integration method</span> — pre-existing build blockers.</p>
+</body>
+</html>

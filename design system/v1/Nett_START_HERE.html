@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Nett — START HERE · Build Handoff</title>
+<style>
+:root{
+  --bg:#0C0D10; --surface:#121318; --card:rgba(255,255,255,.022);
+  --tx:#ECECF1; --mut:#8E8E9C; --dim:#6B6B78;
+  --bone:#C9C3B2; --amb:#D9B96A;
+  --pos:#3ED598; --neg:#E08A8A;
+  --lav:#BDB3F6; --water:#8FB2EE; --deep1:#152440;
+  --hair:rgba(255,255,255,.09); --hair2:rgba(255,255,255,.05);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--tx);font-family:-apple-system,'SF Pro Text',Inter,'Segoe UI',Roboto,sans-serif;line-height:1.62;padding:52px 26px 100px;max-width:920px;margin:0 auto;-webkit-font-smoothing:antialiased}
+.ser{font-family:'New York','Iowan Old Style',Georgia,serif;letter-spacing:-.5px;font-weight:600}
+h1{font-size:36px;letter-spacing:-1px;font-weight:650;line-height:1.08}
+h2{font-size:22px;margin-top:50px;letter-spacing:-.4px}
+h3{font-size:15.5px;margin-top:28px}
+p{margin-top:10px;font-size:14.5px}
+.lb{font-size:10px;letter-spacing:1.7px;font-weight:600;color:var(--dim);text-transform:uppercase}
+.mut{color:var(--mut)}.dim{color:var(--dim)}
+.cd{border:1px solid var(--hair);border-radius:18px;background:var(--card);padding:20px 22px;margin-top:16px}
+.wl{height:2px;background:linear-gradient(90deg,transparent,rgba(217,185,106,.55),transparent);margin:16px 0}
+code{font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:12.5px;background:rgba(255,255,255,.05);border-radius:6px;padding:2px 7px;color:var(--bone)}
+pre{font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:12px;background:rgba(255,255,255,.04);border:1px solid var(--hair2);border-radius:12px;padding:14px 16px;margin-top:12px;overflow-x:auto;line-height:1.7;color:var(--bone)}
+.do{border-left:2px solid var(--pos);padding-left:14px;margin-top:12px}
+.dont{border-left:2px solid var(--neg);padding-left:14px;margin-top:12px}
+.step{border-left:2px solid var(--water);padding-left:16px;margin-top:16px}
+.step b{color:var(--tx)}
+table{width:100%;border-collapse:collapse;margin-top:12px;font-size:13px}
+th{text-align:left;color:var(--dim);font-size:10px;letter-spacing:1.4px;padding:8px 10px;border-bottom:1px solid var(--hair);text-transform:uppercase}
+td{padding:10px;border-bottom:1px solid var(--hair2);vertical-align:top}
+.flag{border:1px solid rgba(217,185,106,.4);background:rgba(217,185,106,.06);border-radius:14px;padding:15px 17px;margin-top:16px;font-size:13.5px}
+.arth{border:1px solid rgba(189,179,246,.4);border-radius:16px;background:rgba(189,179,246,.05);padding:16px 18px;margin-top:16px}
+.arth .lb{color:var(--lav)}
+.file{display:flex;gap:12px;align-items:baseline;padding:11px 0;border-bottom:1px solid var(--hair2)}
+.file code{flex-shrink:0}
+.wmark{position:relative;display:inline-block;font-weight:650;letter-spacing:-1.5px;line-height:1;font-size:44px}
+.wmark .wtop{color:var(--bone);clip-path:inset(0 0 38% 0)}
+.wmark .wsub{position:absolute;left:3px;top:3px;color:var(--water);opacity:.55;clip-path:inset(62% 0 0 0)}
+ol{margin-top:10px;padding-left:20px}li{font-size:14px;margin-top:7px}
+@media(prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</head>
+<body>
+
+<p class="lb" style="color:var(--amb)">NETT · START HERE · THE ONLY FILE YOU OPEN FIRST</p>
+<div class="wmark" style="margin-top:18px"><span class="wtop">Nett</span><span class="wsub" aria-hidden="true">Nett</span></div>
+<h1 class="ser" style="margin-top:20px">Build the next screen<br>in the language we already have.</h1>
+<p class="mut" style="max-width:660px">This file exists so no one designs Nett twice. The look, the flow, the type, the motion, the copy — all decided, all documented. Your job is never to invent a new direction; it is to extend one that is already coherent. Read this file top to bottom once. Then follow it.</p>
+<div class="wl"></div>
+<p class="dim">One promise governs everything: <b class="mut">"Grow what you own. Clear what you owe."</b> · Product: <b class="mut">Nett</b> (app) · AI: <b class="mut">Arth</b> · Human RM: <b class="mut">Swapnil</b> · Identity: <b class="mut">Waterline (Direction C)</b>.</p>
+
+<h2 class="ser">1 · The four canon files — and which is law</h2>
+<p>There are four specification files. They are not equal. This one routes you; the design system is the constitution; the other two govern behaviour and motion. <b>When any two disagree, the code wins, then the Design System v3.1, then the others.</b></p>
+<div class="cd">
+  <div class="file"><code>nett-design-system-v3_1.html</code><span class="sm"><b>THE CONSTITUTION.</b> Tokens, color logic, type, shape, spacing, the Arth glyph, the N-loader, engineering rules, the defect register, the desktop chapter. Every hex, radius and rule lives here. This is the single source of truth — v1/v2/v3.0 are retired.</span></div>
+  <div class="file"><code>Nett_UX_Architecture.html</code><span class="sm"><b>HOW IT THINKS.</b> The ten principles, the information architecture (63 app screens · CRM), navigation model, and the change protocol for when instructions conflict.</span></div>
+  <div class="file"><code>Nett_Motion_Architecture.html</code><span class="sm"><b>HOW IT MOVES.</b> The three laws of motion, the closed inventory of every animation, and the decision table for when to use which.</span></div>
+  <div class="file"><code>nett-app.html &nbsp;+&nbsp; nett-crm.html</code><span class="sm"><b>THE LIVING TRUTH.</b> The actual shipped code. If a document and the code disagree, the code is reality and the document is the bug — fix the document, not your memory.</span></div>
+</div>
+<div class="flag"><b>Read order for a new team member:</b> this file → Design System v3.1 (all of it, once) → UX Architecture → Motion Architecture → then open <code>nett-app.html</code> and read the <code>:root</code> block and three real screens before writing a line.</div>
+
+<h2 class="ser">2 · How we got here — so you don't re-litigate settled decisions</h2>
+<p>Every rule below was paid for. Knowing the history stops you from "improving" something back into a mistake we already made and fixed.</p>
+<div class="cd">
+  <table>
+    <tr><th>Stage</th><th>What it was</th><th>What it taught the system</th></tr>
+    <tr><td class="sm"><b>Roshni (B30)</b></td><td class="sm">First product — mass-market, Hinglish, brighter. A 3D "wealth tree", then a valley, then an island.</td><td class="sm">The iceberg/island idea was born here: assets above a line, liabilities below.</td></tr>
+    <tr><td class="sm"><b>Roshni-premium v1–v4</b></td><td class="sm">The register shift to T30 affluent. Serif retired for a while; palette pulled to ink + one neutral family + mint; graphical strips replaced prose; the island became a generated, data-driven object.</td><td class="sm">The core visual DNA: dark-is-depth, color=state, numbers-or-actions copy law, the report over the dashboard.</td></tr>
+    <tr><td class="sm"><b>Felix (T30 pivot)</b></td><td class="sm">"Both sides of the balance sheet." Full drill-downs, transaction perimeter (only MF end-to-end), family view, referral, international/RSU module, the profile "lens".</td><td class="sm">The product scope and the perimeter that keeps us a distributor, not an adviser.</td></tr>
+    <tr><td class="sm"><b>Nuvyra</b></td><td class="sm">Brand rename. Marketing site with the waterline split. Chat became an executing assistant.</td><td class="sm">The waterline earned its place as the whole identity, not one screen.</td></tr>
+    <tr><td class="sm"><b>Nett + Arth (now)</b></td><td class="sm">App named Nett; AI named Arth; RM Swapnil. Direction C locked: submerged wordmark. The system was formalized into the four canon files with an audit-enforced governance protocol.</td><td class="sm">Three deliberate corrections to the premium era: <b>serif restored</b> (the human voice), <b>four state-bands</b> (GOOD/WATCH/ATTENTION/CRITICAL), and <b>lavender collapsed to Arth-only</b>.</td></tr>
+  </table>
+  <p class="sm mut" style="margin-top:14px">The pre-canon prototypes (<code>felix-final.html</code>, <code>nuvyra-app.html</code>) are <b>reference for scope, not for style</b>. They predate the lavender-scarcity rule, use the retired all-sans headlines, and ship a banned spinner. Build against <code>nett-app.html</code>, never against those.</p>
+</div>
+
+<h2 class="ser">3 · The non-negotiables — memorize these six</h2>
+<p>If you remember nothing else, remember these. Each has been violated at least once and is now audit-blocked.</p>
+<div class="cd">
+  <div class="dont"><b>1 · Lavender is Arth, and only Arth.</b> <code>--lav #BDB3F6</code> and the waterline glyph appear only where the AI is speaking. On a link, a chart segment, or a state pill, it is a review blocker. (Broken 4× historically — stage pills, allocation bar, island empty-state, report "Missing" rows. All fixed.)</div>
+  <div class="dont"><b>2 · Color is state, never decoration.</b> <code>--pos/--watch/--attn/--neg</code> mean GOOD/WATCH/ATTENTION/CRITICAL, locked to the Rule Book bands. Anything "highlighted" without a state takes <b>bone</b> at low opacity. NO DATA must never look like a passing state; ERROR must never look like NO DATA. Cost items cap at ATTENTION — never CRITICAL.</div>
+  <div class="dont"><b>3 · No new tokens, fonts, icons, or themes.</b> Tabler icons only, no emojis. One accent (bone). No light theme in beta. A raw hex outside the token sheet is a review blocker.</div>
+  <div class="dont"><b>4 · Motion is water: no bounce, spring, overshoot, spinner, or count-up.</b> Views <code>surface</code> (rise + fade). Arth thinking = the N-loader. Errors and NO DATA get <b>no animation</b> — stillness is the signal. <code>prefers-reduced-motion</code> kills all of it.</div>
+  <div class="dont"><b>5 · Every line carries a number or ends in an action.</b> "Your portfolio needs attention" is banned. "Card at 42% leaks ₹1,840/mo — clear it, save ₹22,080/yr" is the house voice. App speaks <i>to</i> the client (second person); the CRM speaks <i>about</i> the client (third person).</div>
+  <div class="dont"><b>6 · One <code>.cta</code> per screen.</b> Reuse an existing component before drawing anything. The inventory is in the Design System §4 — cards, rows, pills, CTAs, fields, OTP boxes, depth gauge, vessel, consent gate, waterline divider, chat bubbles, kanban, Arth rail.</div>
+</div>
+
+<h2 class="ser">4 · Copy this block into any new build — the tokens are law</h2>
+<p>No raw hex in component code. Ever. Start every new file with exactly this.</p>
+<pre>:root{
+  /* surfaces */   --bg:#0C0D10; --surface:#121318; --card:rgba(255,255,255,.022);
+  /* text */       --tx:#ECECF1; --mut:#8E8E9C; --dim:#6B6B78;
+  /* brand */      --bone:#C9C3B2; --amb:#D9B96A;
+  /* money */      --pos:#3ED598; --pos-deep:#2E7A5C; --neg:#E08A8A; --neg-deep:#8A4E4E;
+  /* agent+water*/ --lav:#BDB3F6;  /* Arth ONLY */  --water:#8FB2EE; --deep1:#152440; --deep2:#0B1220;
+  /* structure */  --hair:rgba(255,255,255,.07); --hair2:rgba(255,255,255,.045);
+  /* radii */      --r-pill:999px; --r-sheet:26px; --r-card:20px; --r-btn:16px; --r-fld:15px;
+  /* spacing */    --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:24px; --sp-6:32px; --sp-7:48px;
+  /* motion */     --ease:cubic-bezier(.2,.8,.3,1); --t-tap:.12s; --t-enter:.55s; --t-fill:1s; --t-surface:1.2s;
+}
+/* type: system sans everywhere; .ser (New York/Iowan/Georgia) for headline moments &amp; Arth only */
+/* every money element: font-variant-numeric:tabular-nums */
+/* page transition (the ONLY entrance): */
+.zs.on{display:flex;animation:pgin .24s var(--ease) both}
+@keyframes pgin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}</pre>
+<p class="sm mut">The full shipped CSS (N-loader, water-wipe, waterline wordmark) is in Design System §13.3 — copy it, never rewrite it.</p>
+
+<h2 class="ser">5 · The build procedure — every request, every time</h2>
+<p>This is the change protocol from the UX Architecture, condensed to the steps you actually perform. Follow it even when the request comes from leadership, even when it seems trivial.</p>
+<div class="arth">
+  <p class="lb">FROM REQUEST TO SHIP</p>
+  <div class="step"><b>1 · Restate.</b> Write the request back in one line. If it is ambiguous, ask before anything else.</div>
+  <div class="step"><b>2 · Classify.</b> Reuse existing component (build it) · variant of existing (build, note it) · genuinely new token/component/pattern (<b>STOP</b>).</div>
+  <div class="step"><b>3 · Cross-check.</b> Does it conflict with a token, a component, or one of the ten UX principles? Name the exact rule — "it feels off" is not a citation.</div>
+  <div class="step"><b>4 · If it conflicts, STOP and confirm.</b> Present the conflict, 2–3 options that honour the system, and the impact (screens touched, flows affected, one surface or both). The requester decides with full information. Never a silent change.</div>
+  <div class="step"><b>5 · Build with assertions,</b> then run the full ship sequence below. Never crop the audit output.</div>
+  <div class="step"><b>6 · Bump all artifacts together</b> — design file · flow doc · release note, same version number, IST timestamp, latest on top. Disclose every mistake you caught yourself, in the release note.</div>
+  <div class="step"><b>7 · Canonize.</b> Anything genuinely new that survived sign-off gets written into the Design System in the same release. The system only grows through the front door.</div>
+</div>
+
+<h3>5.1 · The ship sequence (from Design System §13.2 — do not skip a step)</h3>
+<pre>1. Patch with explicit assertions (the anchor you edit must exist, or fail loudly)
+2. Section-presence check — ALL screen IDs present (63 app / 13 console). A missing
+   section is the failure mode that shipped silently before; this check is mandatory.
+3. Handler reachability — every t.id=='x' branch maps to a real, tappable element
+4. Runtime smoke test — execute the whole script against a stubbed DOM; no ReferenceErrors
+5. Copy to outputs only after 1–4 pass, full audit output shown</pre>
+<div class="do"><b>Delegation rule:</b> the click selector must keep covering all tap classes — <code>.tap,.lnk,.seg span,[data-*]</code>. New interactive components <b>register a data attribute</b>; they never invent their own handler. This is why a new button "just works" — don't break it.</div>
+
+<h2 class="ser">6 · What is still open — do not treat these as decided</h2>
+<p>Honesty travels with the system. These are unresolved in v3.1; if your work touches one, it needs sign-off, not a guess.</p>
+<div class="cd">
+  <table>
+    <tr><th>Open item</th><th>Owner / status</th></tr>
+    <tr><td class="sm"><b>Gold reconciliation.</b> App aliases <code>--gold→bone</code>; CRM carries <code>--gold #D9B96A</code>. New work uses bone until decided.</td><td class="sm">Founder decision</td></tr>
+    <tr><td class="sm"><b>White / Black light themes.</b> Proposed token remaps exist; not signed off. No build until approved — themes are token remaps only.</td><td class="sm">Ankit / Yogesh sir</td></tr>
+    <tr><td class="sm"><b>WATCH band.</b> Either retire it or define the threshold that fires it.</td><td class="sm">Rule Book</td></tr>
+    <tr><td class="sm"><b>Defects D1–D7</b> in Design System §13.4 — legacy Felix artwork on intro, lavender breaches, the spinner, a cost item banded CRITICAL (D6, compliance-relevant).</td><td class="sm">Fixes pending authorization</td></tr>
+    <tr><td class="sm"><b>Name clearance</b> — trademark/domain on Nett / Nett Wealth, 20-person spell-back test, and the 32-screen rename sweep.</td><td class="sm">Not started</td></tr>
+  </table>
+</div>
+
+<h2 class="ser">7 · The one-paragraph brief for a fresh AI session</h2>
+<div class="cd">
+  <p class="sm" style="line-height:1.85">You are extending <b>Nett</b>, a premium Indian wealth app (AI companion <b>Arth</b>, human RM <b>Swapnil</b>) built on the <b>Waterline</b> identity — wealth is water with a level that rises, drains and leaks; the wordmark sits half-submerged. The design system is fixed and lives in <code>nett-design-system-v3_1.html</code> (constitution), with <code>Nett_UX_Architecture.html</code> and <code>Nett_Motion_Architecture.html</code> governing behaviour and motion; the shipped code in <code>nett-app.html</code> / <code>nett-crm.html</code> is the source of truth. Use only the canon tokens (dark base #0C0D10, one neutral text family, bone brand accent, four state colors for GOOD/WATCH/ATTENTION/CRITICAL, and lavender <b>reserved exclusively for Arth</b>). Serif for headline moments and Arth's voice; system sans elsewhere; tabular numerals on money. Motion is water — views <code>surface</code>, Arth thinks via the N-loader, errors and NO DATA never animate, reduced-motion is respected. Every line of copy carries a number or ends in an action; one CTA per screen; reuse components before drawing new ones; Tabler icons, no emojis. Do not invent tokens, fonts, icons, themes, or a "nicer" version of an existing element — if a request conflicts with the canon, stop and confirm with options rather than changing silently. Ship via the mandatory sequence: assertions → section-presence (all screen IDs) → handler reachability → runtime smoke test → outputs, and bump the design file, flow doc and release note together.</p>
+</div>
+
+<p class="dim" style="margin-top:46px">Nett — Start Here · the front door to the canon · this file routes, the Design System v3.1 rules, the code decides · never design Nett twice.</p>
+</body>
+</html>

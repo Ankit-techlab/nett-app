@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Nett — Design System</title>
+<style>
+:root{--bg:#0C0D10;--srf:#12141A;--card:rgba(255,255,255,.03);--hair:rgba(255,255,255,.09);--tx:#ECECF1;--mut:#8E8E9C;--dim:#6B6B78;--bone:#C9C3B2;--gold:#D9B96A;--pos:#3ED598;--amb:#E0B45C;--attn:#E8935C;--neg:#E08A8A;--lav:#BDB3F6;--water:#8FB2EE;--deep1:#152440}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--tx);font-family:-apple-system,'SF Pro Text',Inter,'Segoe UI',Roboto,sans-serif;line-height:1.6;padding:52px 26px 90px;max-width:900px;margin:0 auto}
+.ser{font-family:'New York','Iowan Old Style',Georgia,serif;letter-spacing:-.5px;font-weight:600}
+h1{font-size:34px;letter-spacing:-.9px;font-weight:650}
+h2{font-size:21px;margin-top:46px;letter-spacing:-.4px}
+h3{font-size:15px;margin-top:26px}
+p{margin-top:10px;font-size:14.5px}
+.lb{font-size:10px;letter-spacing:1.7px;font-weight:600;color:var(--dim);text-transform:uppercase}
+.mut{color:var(--mut)}.dim{color:var(--dim)}
+.cd{border:1px solid var(--hair);border-radius:18px;background:var(--card);padding:18px 20px;margin-top:16px}
+.wl{height:2px;background:linear-gradient(90deg,transparent,rgba(217,185,106,.6),transparent);margin:14px 0}
+.sw{display:flex;gap:12px;align-items:flex-start;margin-top:12px}
+.chip{width:44px;height:44px;border-radius:12px;border:1px solid var(--hair);flex-shrink:0}
+code{font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:12.5px;background:rgba(255,255,255,.05);border-radius:6px;padding:2px 7px;color:var(--bone)}
+.do{border-left:2px solid var(--pos);padding-left:14px;margin-top:12px}
+.dont{border-left:2px solid var(--neg);padding-left:14px;margin-top:12px}
+table{width:100%;border-collapse:collapse;margin-top:12px;font-size:13px}
+th{text-align:left;color:var(--dim);font-size:10px;letter-spacing:1.4px;padding:8px 10px;border-bottom:1px solid var(--hair);text-transform:uppercase}
+td{padding:9px 10px;border-bottom:1px solid rgba(255,255,255,.05);vertical-align:top}
+.wmark{position:relative;display:inline-block;font-weight:650;letter-spacing:-1.5px;line-height:1;font-size:40px}
+.wmark .wtop{color:var(--bone);clip-path:inset(0 0 38% 0)}
+.wmark .wsub{position:absolute;left:3px;top:3px;color:var(--water);opacity:.55;clip-path:inset(62% 0 0 0)}
+.flag{border:1px solid rgba(224,180,92,.45);background:rgba(224,180,92,.06);border-radius:14px;padding:14px 16px;margin-top:14px;font-size:13.5px}
+</style>
+</head>
+<body>
+<p class="lb" style="color:var(--gold);">NETT · DESIGN SYSTEM · FOR THE TEAM</p>
+<h1 class="ser">Waterline.<br>Why the product looks like this.</h1>
+<p class="mut">This is the thinking, not just the tokens. Read it once end-to-end before designing a single new screen. The rule that governs everything else: <b style="color:var(--tx);">the design system is the only source — nothing new without sign-off.</b></p>
+
+<h2 class="ser">1 · The concept</h2>
+<div class="cd">
+  <div class="wmark"><span class="wtop">Nett</span><span class="wsub" aria-hidden="true">Nett</span></div>
+  <div class="wl"></div>
+  <p><b>Wealth is water.</b> It has a level. It rises, it drains, it leaks. Nett's one promise — <i>"Grow what you own. Clear what you owe."</i> — is a promise about where your line sits, so the entire visual language is built on one image: <b>the waterline</b>.</p>
+  <p style="margin-top:12px;"><b>Direction C</b> (the chosen identity): the wordmark's lower third sits submerged — refracted 3 units, water-toned, at 55% opacity. Above the line = what's surfaced, visible, yours to act on. Below the line = what's submerged — potential, or hidden until shared. This single metaphor then does real work everywhere:</p>
+  <p style="margin-top:10px;" class="mut">· The <b style="color:var(--tx);">depth gauge</b> ("Your line") shows a score as a level, not a number in a box.<br>
+  · The <b style="color:var(--tx);">consent gate</b> renders unshared data literally below the waterline — blurred, waiting.<br>
+  · The <b style="color:var(--tx);">vessel</b> fills as the day's work completes.<br>
+  · Views <b style="color:var(--tx);">surface</b> — they rise from below when they open.</p>
+  <p style="margin-top:12px;">Nothing in the UI is decorated with water. Things <i>behave</i> like water. That's the difference between a theme and an identity.</p>
+</div>
+
+<h2 class="ser">2 · Why dark, and how the colors were chosen</h2>
+<div class="cd">
+  <p><b>The color objective, stated plainly:</b> money UIs usually shout — red/green tickers, badges, urgency. Nett's user is anxious about money already. The palette's job is to <b>lower the heart rate and raise the signal</b>. Every color decision followed four rules:</p>
+  <p style="margin-top:10px;" class="mut">1. <b style="color:var(--tx);">Dark is depth, not style.</b> A near-black base (#0C0D10, never pure black) makes the interface feel like still water at night — calm, deep, focused. It also lets tiny amounts of color carry huge meaning.<br>
+  2. <b style="color:var(--tx);">One neutral family, three volumes.</b> Text speaks at three loudnesses only — tx / mut / dim. If you need a fourth grey, the hierarchy is wrong, not the palette.<br>
+  3. <b style="color:var(--tx);">Color = state, never decoration.</b> Green/amber/orange/red exist solely to mean GOOD / WATCH / ATTENTION / CRITICAL. A color used decoratively steals meaning from every state pill in the product.<br>
+  4. <b style="color:var(--tx);">Muted, warm, desaturated.</b> Every accent is pulled back from its pure hue (green is #3ED598, not #00FF88) so states inform without alarming. Nothing neon. Ever.</p>
+</div>
+
+<h3>The palette, token by token</h3>
+<div class="cd">
+  <div class="sw"><span class="chip" style="background:#0C0D10;"></span><div><code>--bg #0C0D10</code><p class="mut" style="margin-top:2px;">Night water. Never #000 — pure black kills depth layering.</p></div></div>
+  <div class="sw"><span class="chip" style="background:#ECECF1;"></span><div><code>--tx #ECECF1</code> · <code>--mut #8E8E9C</code> · <code>--dim #6B6B78</code><p class="mut" style="margin-top:2px;">The three text volumes. Off-white, never #FFF — pure white glares on dark.</p></div></div>
+  <div class="sw"><span class="chip" style="background:#C9C3B2;"></span><div><code>--bone #C9C3B2</code><p class="mut" style="margin-top:2px;">The wordmark above the line, and the app-canon accent. Warm bone, not gold-bling: wealth as something aged and steady, not shiny.</p></div></div>
+  <div class="sw"><span class="chip" style="background:#8FB2EE;"></span><div><code>--water #8FB2EE</code><p class="mut" style="margin-top:2px;">Only for the submerged: the wordmark's lower third, deep-water surfaces. Never a text color.</p></div></div>
+  <div class="sw"><span class="chip" style="background:#3ED598;"></span><span class="chip" style="background:#E0B45C;"></span><span class="chip" style="background:#E8935C;"></span><span class="chip" style="background:#E08A8A;"></span><div><code>--pos / --watch / --attn / --neg(--crit)</code><p class="mut" style="margin-top:2px;">The four-band state system: GOOD · WATCH · ATTENTION · CRITICAL. These are semantic, product-wide, and locked to the Rule Book bands. Two hard rules travel with them: <b style="color:var(--tx);">NO DATA must never look like a passing state</b>, and <b style="color:var(--tx);">ERROR must never look like NO DATA</b>.</p></div></div>
+  <div class="sw"><span class="chip" style="background:#BDB3F6;"></span><div><code>--lav #BDB3F6</code> — <b>Arth only. No exceptions.</b><p class="mut" style="margin-top:2px;">Lavender marks exactly one thing: Arth is speaking. Its power is its scarcity — the moment lavender appears on a pill or a chart, users stop knowing when the AI is talking. This rule has been violated once (stage pills, CRM v1.0) and is now audit-enforced.</p></div></div>
+  <div class="sw"><span class="chip" style="background:#152440;"></span><div><code>--deep1 #152440 / --deep2 #0B1220</code><p class="mut" style="margin-top:2px;">Deep-water ambients — background gradients only, never surfaces or text.</p></div></div>
+</div>
+
+<div class="flag"><b>Open reconciliation (honest flag):</b> the app canon aliases <code>--gold → var(--bone)</code> (#C9C3B2); the CRM carries an independent <code>--gold #D9B96A</code>. One of the two must win before dev handoff hardens it. Decision owner: founder. Until decided: new work uses <b>bone</b> as the accent, per app canon.</div>
+
+<h2 class="ser">3 · Type, shape, space</h2>
+<div class="cd">
+  <table>
+    <tr><th>Layer</th><th>Rule</th></tr>
+    <tr><td><b>Display</b></td><td>Serif (<code>.ser</code> — New York / Iowan / Georgia) for headline moments only: screen titles, Arth's big statements, numbers that deserve weight. Serif = the human, editorial voice.</td></tr>
+    <tr><td><b>Everything else</b></td><td>System sans (SF Pro / Inter / Segoe / Roboto). Negative letter-spacing on large sizes.</td></tr>
+    <tr><td><b>Labels</b></td><td><code>.lb</code> — 10px, +1.6px tracking, uppercase, dim. The only uppercase in the product.</td></tr>
+    <tr><td><b>Radii</b></td><td>Canon scale: pill 999 · card 20 · button 16 · field 15 · sheet 26. Desk surfaces run one notch tighter (card 16–18). Never sharp corners, never fully round cards.</td></tr>
+    <tr><td><b>Spacing</b></td><td>4-based scale: 4 / 8 / 12 / 16 / 24 / 32 / 48. Off-scale spacing is a review comment, not a preference.</td></tr>
+    <tr><td><b>Hairlines</b></td><td>Borders are white at 4.5–9% opacity — structure you feel, not lines you see.</td></tr>
+    <tr><td><b>Icons</b></td><td><b>Tabler only.</b> No emojis in UI (violated once, fixed, audit-enforced). The Arth mark is not an icon — it's the waterline circle, exclusive to Arth surfaces, exact SVG in canon.</td></tr>
+  </table>
+</div>
+
+<h2 class="ser">4 · Do's &amp; Don'ts</h2>
+<div class="cd">
+  <div class="do"><b>Do</b> — reuse an existing component before drawing anything. The inventory: cards, rows, tags, pills, CTAs (solid/outline/ghost), fields, OTP boxes (6-digit), depth gauge, vessel, consent gate, waterline divider, moment cards, chat bubbles (<code>.msg/.msg.arth</code>), kanban, list table, sidebar shell, Arth rail.</div>
+  <div class="do"><b>Do</b> — let every state color mean its band. If something is "highlighted" but has no state, it takes bone, at low opacity.</div>
+  <div class="do"><b>Do</b> — show last-good data with its timestamp when something fails, with exactly one action: Retry. Every error carries a trace ID.</div>
+  <div class="do"><b>Do</b> — write copy that carries a number or ends in an action. Both surfaces, no exceptions.</div>
+  <div class="dont"><b>Don't</b> — add a color, a font, a theme, or an icon set. There is no light theme in beta by decision. There is no second accent.</div>
+  <div class="dont"><b>Don't</b> — use lavender or the Arth mark anywhere Arth isn't speaking.</div>
+  <div class="dont"><b>Don't</b> — invent a "nicer" version of an existing element. The droplet-instead-of-waterline-mark and the gradient wordmark both happened, both were canon violations, both are now blocked by automated audit.</div>
+  <div class="dont"><b>Don't</b> — let NO DATA look green, or let an error look like NO DATA. One asks for consent; the other promises recovery.</div>
+</div>
+
+<h2 class="ser">5 · Governance — how change enters the system</h2>
+<div class="cd">
+  <p>When anyone (including leadership) asks for something that conflicts with this document, the answer is not "yes" and not "no" — it's the protocol:</p>
+  <p style="margin-top:10px;" class="mut">1. <b style="color:var(--tx);">Classify</b> the request: reuse (build it) · variant of existing (build, note it) · genuinely new token/component/pattern (STOP).<br>
+  2. <b style="color:var(--tx);">Cross-check</b> against this file + the UX Architecture. Name the exact principle it touches.<br>
+  3. <b style="color:var(--tx);">Confirm before acting</b>: present the conflict, the options, and the impact (screens, flows, both surfaces). No silent changes — ever.<br>
+  4. On approval: patch with assertions → run the audit → <b style="color:var(--tx);">version bump all three artifacts together</b> (design file · flow doc · release note, same number, latest on top, IST timestamp).<br>
+  5. New canon (tokens, components, marks) gets written back into this document in the same release.</p>
+  <p style="margin-top:12px;" class="dim">The audit is not optional ceremony — it has caught real regressions, wrong-file writes, and canon drift. If a check fails, the release doesn't ship.</p>
+</div>
+
+<p class="dim" style="margin-top:44px;">Nett Design System · companion files: UX Architecture · Motion Architecture · source of truth: nett-app.html + nett-crm.html · never this PDF's memory over the code's reality.</p>
+</body>
+</html>

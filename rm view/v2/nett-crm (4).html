@@ -1,0 +1,1288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Nett</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+<!-- Nett CRM v1.0 · Waterline canon · desktop-first, responsive -->
+<style>
+:root{
+  --bg:#0C0D10;--srf:#12141A;--card:rgba(255,255,255,.03);--hair:rgba(255,255,255,.09);
+  --tx:#ECECF1;--mut:#8E8E9C;--dim:#6B6B78;
+  --gold:#D9B96A;--pos:#3ED598;--amb:#E0B45C;--neg:#E08A8A;--lav:#BDB3F6;/* Arth surfaces ONLY */--bone:#C9C3B2;--water:#8FB2EE;/* wordmark tokens — exact app-canon values */
+  --good:#3ED598;--watch:#E0B45C;--attn:#E8935C;--crit:#E08A8A;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{background:var(--bg);color:var(--tx);font-family:-apple-system,'SF Pro Text',Inter,'Segoe UI',Roboto,sans-serif;font-size:14px;line-height:1.5;overflow:hidden}
+.ser{font-family:'New York','Iowan Old Style',Georgia,serif;letter-spacing:-.4px;font-weight:600}
+.lb{font-size:10px;letter-spacing:1.6px;font-weight:600;color:var(--dim);text-transform:uppercase}
+.sm{font-size:12.5px;color:var(--mut)}
+.dm{color:var(--dim)}
+.tap{cursor:pointer;user-select:none}
+.tap:active{opacity:.7}
+button{all:unset;cursor:pointer}
+/* ---------- shell ---------- */
+#app{display:flex;height:100%}
+#side{width:216px;min-width:216px;border-right:1px solid var(--hair);background:var(--srf);display:flex;flex-direction:column;padding:18px 12px}
+.nav{margin-top:14px;display:flex;flex-direction:column;gap:2px}
+.nv{padding:9px 10px;border-radius:10px;color:var(--mut);font-size:13.5px;display:flex;justify-content:space-between;align-items:center}
+.nv.on{background:rgba(255,255,255,.06);color:var(--tx)}
+.nv .ct{font-size:11px;color:var(--dim)}
+#who{margin-top:auto;border-top:1px solid var(--hair);padding-top:12px}
+.rolechip{padding:8px 10px;border-radius:10px;border:1px solid var(--hair);font-size:12.5px;color:var(--mut);margin-top:6px}
+.rolechip.on{border-color:rgba(217,185,106,.5);color:var(--tx)}
+#main{flex:1;overflow-y:auto;padding:26px 30px 60px}
+#arthrail{width:308px;min-width:308px;border-left:1px solid rgba(185,168,232,.25);background:linear-gradient(180deg,rgba(185,168,232,.05),rgba(185,168,232,.02));padding:22px 18px;overflow-y:auto;position:relative;z-index:1}
+#arthpill{display:none;position:fixed;right:14px;bottom:14px;z-index:70;background:rgba(189,179,246,.14);border:1px solid rgba(189,179,246,.5);color:var(--lav);border-radius:999px;padding:11px 18px;font-size:14px;font-weight:600;backdrop-filter:blur(8px)}
+@media(max-width:1080px){
+  #arthrail{display:none;position:fixed;right:0;top:0;bottom:0;width:min(340px,92vw);z-index:65;border-left:1px solid rgba(185,168,232,.4);background:#12141A;box-shadow:-18px 0 40px rgba(0,0,0,.5)}
+  #arthrail.open{display:block}
+  #arthpill{display:flex;align-items:center;gap:7px}
+}
+.viewttl{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap}
+h1{font-size:24px;letter-spacing:-.6px;font-weight:650}
+h2{font-size:16px;letter-spacing:-.3px;font-weight:600}
+/* ---------- components ---------- */
+.cd{border:1px solid var(--hair);border-radius:16px;background:var(--card);padding:16px 18px}
+.rw{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+.rw:last-child{border-bottom:none}
+.tag{display:inline-block;font-size:11.5px;border:1px solid var(--hair);border-radius:999px;padding:4px 11px;color:var(--mut)}
+.tag.on{color:var(--tx);border-color:rgba(236,236,241,.4)}
+.pill{display:inline-block;font-size:10.5px;letter-spacing:.6px;font-weight:600;border-radius:999px;padding:3px 9px}
+.p-good{background:rgba(62,213,152,.13);color:var(--good)}
+.p-watch{background:rgba(224,180,92,.13);color:var(--watch)}
+.p-attn{background:rgba(232,147,92,.13);color:var(--attn)}
+.p-crit{background:rgba(224,138,138,.13);color:var(--crit)}
+.p-mut{background:rgba(255,255,255,.06);color:var(--mut)}
+.p-stage{background:rgba(217,185,106,.12);color:var(--gold)} /* lavender stays reserved for Arth surfaces only */
+.cta{display:inline-block;background:var(--tx);color:#0C0D10;font-weight:600;font-size:13px;border-radius:12px;padding:10px 16px;text-align:center}
+.cta2{display:inline-block;border:1px solid var(--hair);color:var(--tx);font-size:13px;border-radius:12px;padding:9px 15px;text-align:center}
+.ghost{color:var(--dim);font-size:12.5px;text-decoration:underline;text-underline-offset:3px}
+table.ls{width:100%;border-collapse:collapse;margin-top:14px}
+table.ls th{text-align:left;font-size:10px;letter-spacing:1.4px;font-weight:600;color:var(--dim);text-transform:uppercase;padding:8px 10px;border-bottom:1px solid var(--hair)}
+table.ls td{padding:12px 10px;border-bottom:1px solid rgba(255,255,255,.05);vertical-align:middle;cursor:pointer}
+table.ls tr:hover td{background:rgba(255,255,255,.025)}
+.avatar{width:32px;height:32px;border-radius:50%;background:rgba(217,185,106,.15);color:var(--gold);display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:650;margin-right:10px;vertical-align:middle}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+/* consent gate — the signature */
+.gate{position:relative;overflow:hidden;border-radius:16px}
+.gate .under{filter:blur(9px) saturate(.6);opacity:.5;pointer-events:none;user-select:none}
+.gate .lock{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;background:linear-gradient(180deg,rgba(12,13,16,.25),rgba(12,13,16,.86));padding:20px}
+.waterline{height:2px;background:linear-gradient(90deg,transparent,rgba(217,185,106,.7),transparent);margin:2px 0 14px}
+/* kanban */
+.board{display:grid;grid-template-columns:repeat(5,minmax(180px,1fr));gap:12px;margin-top:16px;overflow-x:auto}
+.col{border:1px solid var(--hair);border-radius:14px;background:var(--card);padding:12px;min-height:120px}
+.leadcd{border:1px solid var(--hair);border-radius:12px;padding:11px 12px;background:rgba(255,255,255,.03);margin-top:10px;cursor:pointer}
+.leadcd:hover{border-color:rgba(255,255,255,.2)}
+/* two-col detail */
+.grid2{display:grid;grid-template-columns:1.5fr 1fr;gap:16px;margin-top:18px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--hair);margin-top:18px}
+.tb{padding:9px 14px;font-size:13px;color:var(--mut);border-bottom:2px solid transparent;cursor:pointer}
+.tb.on{color:var(--tx);border-bottom-color:var(--gold)}
+.comm{display:flex;gap:12px;padding:11px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+.comm:last-child{border-bottom:none}
+.cic{width:30px;height:30px;border-radius:10px;background:rgba(255,255,255,.05);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+input,select,textarea{background:rgba(255,255,255,.04);border:1px solid var(--hair);border-radius:11px;color:var(--tx);font-size:13.5px;padding:10px 12px;width:100%;font-family:inherit;outline:none}
+input:focus,select:focus,textarea:focus{border-color:rgba(217,185,106,.5)}
+.frow{margin-top:12px}
+.frow>.lb{display:block;margin-bottom:6px}
+.views>section{display:none}
+.views>section.on{display:block}
+#toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(80px);background:#1C1E26;border:1px solid var(--hair);border-radius:12px;padding:11px 18px;font-size:13px;transition:transform .3s;z-index:99;max-width:90vw}
+#toast.on{transform:translateX(-50%) translateY(0)}
+.crumb{color:var(--dim);font-size:12.5px;margin-bottom:6px}
+.crumb span{cursor:pointer}
+.crumb span:hover{color:var(--tx)}
+.vessel{width:34px;height:52px;border:1.5px solid var(--hair);border-radius:8px 8px 11px 11px;position:relative;overflow:hidden}
+.vfill{position:absolute;left:0;right:0;bottom:0;background:linear-gradient(180deg,rgba(62,213,152,.5),rgba(62,213,152,.25));transition:height .6s ease}
+.mom{border:1px solid var(--hair);border-radius:14px;background:var(--card);padding:14px 16px;margin-top:10px;display:flex;justify-content:space-between;gap:14px;align-items:center;flex-wrap:wrap}
+.mom.done{opacity:.5}
+.mom .k{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.sigrow{display:flex;gap:12px;align-items:flex-start;border:1px solid var(--hair);border-radius:13px;background:var(--card);padding:12px 14px;margin-top:9px;flex-wrap:wrap}
+.fbar{display:flex;align-items:center;gap:10px;margin-top:7px}
+.fbar .ft{width:120px;font-size:12px;color:var(--mut)}
+.fbar .fb{height:9px;border-radius:999px;background:linear-gradient(90deg,rgba(62,213,152,.5),rgba(62,213,152,.28))}
+.fbar .fp{font-size:11.5px;color:var(--dim)}
+.arth{border:1px solid rgba(185,168,232,.4);border-radius:16px;background:rgba(185,168,232,.05);padding:16px 18px}
+.arth .lb{color:#B9A8E8}
+.errrow{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(224,138,138,.45);background:rgba(224,138,138,.06);border-radius:11px;padding:6px 11px;font-size:12px;color:var(--crit)}
+.errrow .lnk{color:var(--tx);text-decoration:underline;text-underline-offset:2px;cursor:pointer}
+.msg{border:1px solid var(--hair);border-radius:13px;padding:10px 13px;margin-top:9px;max-width:78%;font-size:13.5px}
+.msg.me{margin-left:auto;background:rgba(255,255,255,.06)}
+.msg.arth{border-left:2px solid var(--lav);background:rgba(189,179,246,.08)}
+.msg .mt{font-size:11px;color:var(--dim);margin-top:4px}
+.thd{border:1px solid var(--hair);border-radius:12px;padding:10px 12px;margin-top:8px;cursor:pointer}
+.thd.on{border-color:rgba(217,185,106,.5)}
+.thd .dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--gold);margin-left:6px}
+#toast.err{border-color:rgba(224,138,138,.55);background:#231518}
+.arthic{width:26px;height:26px;border-radius:9px;background:rgba(189,179,246,.14);border:1px solid rgba(189,179,246,.5);display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+.views>section.on{animation:surface .38s ease}
+.tourhl{outline:2px solid var(--lav);outline-offset:4px;border-radius:14px;position:relative;z-index:76}
+#tour.on{display:flex}
+@keyframes surface{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.wload{display:inline-flex;gap:5px;align-items:flex-end;height:16px;padding:10px 2px}
+.wload i{width:5px;height:6px;background:linear-gradient(180deg,rgba(185,168,232,.9),rgba(185,168,232,.35));border-radius:3px;animation:wrise 1s ease-in-out infinite}
+.wload i:nth-child(2){animation-delay:.15s}.wload i:nth-child(3){animation-delay:.3s}
+@keyframes wrise{0%,100%{height:6px}50%{height:16px}}
+#wsplash{position:fixed;inset:0;background:var(--bg);z-index:80;display:none;align-items:center;justify-content:center;flex-direction:column;gap:16px}
+#wsplash.on{display:flex}
+#wsplash .vessel{width:46px;height:72px}
+#wsplash.on .vfill{height:0;animation:vfillup .95s ease forwards}
+@keyframes vfillup{from{height:0}to{height:78%}}
+#gback{display:none;margin-bottom:14px;align-items:center;gap:6px}
+.otpx{display:flex;gap:8px;margin-top:12px}
+.otpx b{width:46px;height:52px;border:1px solid var(--hair);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:650;background:rgba(255,255,255,.03)}
+.qrbox{width:168px;height:168px;border:1px solid var(--hair);border-radius:16px;background:#fff;padding:12px;margin:14px auto 0;position:relative}
+.qrbox svg{width:100%;height:100%}
+.qrmark{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+.qrmark span{background:#fff;border-radius:10px;padding:5px;display:flex}
+/* login */
+#login{position:fixed;inset:0;background:var(--bg);z-index:50;display:flex;align-items:center;justify-content:center}
+.logcd{width:min(420px,92vw);border:1px solid var(--hair);border-radius:22px;background:var(--srf);padding:30px}
+.rolebig{border:1px solid var(--hair);border-radius:14px;padding:15px 16px;margin-top:10px;cursor:pointer;display:flex;justify-content:space-between;align-items:center}
+.rolebig:hover{border-color:rgba(217,185,106,.5)}
+/* responsive */
+#burger{display:none;position:fixed;top:14px;left:14px;z-index:60;border:1px solid var(--hair);border-radius:10px;padding:7px 11px;background:var(--srf);font-size:16px}
+@media(max-width:900px){
+  .grid2,.grid3{grid-template-columns:1fr}
+  .board{grid-template-columns:repeat(5,220px)}
+  #side{position:fixed;left:-236px;top:0;bottom:0;z-index:55;transition:left .25s}
+  #side.open{left:0}
+  #burger{display:block}
+  #main{padding:58px 16px 60px}
+}
+/* ---------- water identity (Waterline canon) ---------- */
+body{background:radial-gradient(1100px 480px at 50% -120px,rgba(46,74,106,.20),transparent 62%),var(--bg)}
+/* Waterline wordmark — Direction C (app canon, exact) */
+.wmark{position:relative;display:inline-block;font-weight:650;letter-spacing:-1.5px;line-height:1}
+.wmark .wtop{color:var(--bone);clip-path:inset(0 0 38% 0)}
+.wmark .wsub{position:absolute;left:3px;top:3px;color:var(--water);opacity:.55;clip-path:inset(62% 0 0 0)}
+#login .wmark{font-size:30px}
+#side .wmark{font-size:24px;margin:4px 10px 14px;display:block}
+@keyframes drift{0%,100%{transform:translateX(-10%)}50%{transform:translateX(10%)}}
+.logcd{animation:rise .55s ease-out}
+@keyframes rise{from{transform:translateY(16px);opacity:0}to{transform:translateY(0);opacity:1}}
+.lock .lb{animation:bob 4.5s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
+.gate .lock{border-top:1.5px solid transparent;border-image:linear-gradient(90deg,transparent,rgba(217,185,106,.6),transparent) 1}
+.depth{margin-top:12px;position:relative;height:30px;max-width:420px}
+.dline{position:absolute;top:13px;left:0;right:0;height:2px;border-radius:2px;background:linear-gradient(90deg,rgba(224,138,138,.55),rgba(224,180,92,.55),rgba(62,213,152,.6))}
+.dmark{position:absolute;top:4px;width:2px;height:20px;background:var(--gold)}
+.dmark::after{content:'';position:absolute;top:-4px;left:-3px;width:8px;height:8px;border-radius:50%;background:var(--gold);box-shadow:0 0 10px rgba(217,185,106,.6)}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+
+<div id="login">
+  <div class="logcd">
+    <div class="wmark"><span class="wtop">Nett</span><span class="wsub" aria-hidden="true">Nett</span></div>
+    <div id="authblock">
+      <p class="lb" style="margin-top:18px;color:var(--gold);">SIGN IN</p>
+      <h2 class="ser" style="margin-top:8px;">Your number is<br>your key.</h2>
+      <div class="frow"><span class="lb">MOBILE NUMBER</span><input id="crmmob" value="+91 98330 ···· 45"></div>
+      <span class="cta tap" id="crmotp" style="margin-top:12px;display:block;text-align:center;">Get OTP</span>
+      <div id="crmotpb" style="display:none;">
+        <p class="sm" style="margin-top:14px;">OTP — reads automatically</p>
+        <div class="otpx"><b>7</b><b>3</b><b>0</b><b>8</b><b>4</b><b>1</b></div>
+        <p class="sm dm" style="margin-top:10px;">Didn’t get it? <span class="lnk tap" id="crmres" style="color:var(--tx);">Resend</span> · <span class="lnk tap" id="crmwa" style="color:var(--tx);">Get it on WhatsApp</span></p>
+        <span class="cta tap" id="crmver" style="margin-top:14px;display:block;text-align:center;">Verified — continue</span>
+      </div>
+      <p class="ghost tap" id="crmqr" style="margin-top:14px;text-align:center;">Or scan a QR with your Nett app</p>
+      <div id="crmqrb" style="display:none;text-align:center;">
+        <div class="qrbox"><svg viewBox="0 0 29 29" shape-rendering="crispEdges"><rect width="29" height="29" fill="#fff"/><path fill="#0C0D10" d="M0 0h7v7H0zM22 0h7v7h-7zM0 22h7v7H0zM2 2h3v3H2zM24 2h3v3h-3zM2 24h3v3H2zM9 0h2v2H9zM13 0h1v3h-1zM16 1h2v1h-2zM19 0h1v2h-1zM9 3h1v2H9zM11 3h2v1h-2zM15 3h1v2h-1zM17 4h3v1h-3zM8 6h2v1H8zM12 5h1v2h-1zM14 6h2v1h-2zM18 6h1v1h-1zM20 5h1v2h-1zM0 9h2v1H0zM3 8h1v2H3zM5 9h2v1H5zM8 8h1v2H8zM10 9h3v1h-3zM14 8h1v1h-1zM16 9h1v2h-1zM18 8h2v1h-2zM21 9h1v1h-1zM23 8h1v2h-1zM25 9h2v1h-2zM28 8h1v2h-1zM1 12h1v2H1zM3 11h2v1H3zM6 12h2v1H6zM9 11h1v3H9zM11 12h2v1h-2zM14 11h2v1h-2zM17 12h1v2h-1zM19 11h1v1h-1zM21 12h2v1h-2zM24 11h1v2h-1zM26 12h2v1h-2zM0 15h1v2H0zM2 15h2v1H2zM5 14h1v2H5zM7 15h2v1H7zM10 14h1v2h-1zM12 15h2v1h-2zM15 14h1v3h-1zM18 15h2v1h-2zM21 14h1v2h-1zM23 15h2v1h-2zM26 14h1v2h-1zM28 15h1v2h-1zM1 18h2v1H1zM4 17h1v2H4zM6 18h2v1H6zM9 17h1v2H9zM11 18h3v1h-3zM16 17h1v2h-1zM18 18h1v1h-1zM20 17h2v1h-2zM23 18h1v1h-1zM25 17h1v2h-1zM27 18h2v1h-2zM9 21h2v1H9zM12 20h1v2h-1zM14 21h2v1h-2zM17 20h1v2h-1zM19 21h2v1h-2zM22 21h1v1h-1zM9 23h1v2H9zM11 24h2v1h-2zM14 23h1v2h-1zM16 24h2v1h-2zM19 23h1v2h-1zM21 24h2v1h-2zM24 23h1v2h-1zM26 24h2v1h-2zM10 27h2v1h-2zM13 26h1v2h-1zM15 27h3v1h-3zM19 26h1v2h-1zM21 27h2v1h-2zM24 26h1v2h-1zM27 27h2v1h-2z"/></svg>
+          <div class="qrmark"><span><svg width="26" height="26" viewBox="0 0 40 40"><path d="M20 4 A16 16 0 0 1 36 20 H4 A16 16 0 0 1 20 4 Z" fill="#BDB3F6" opacity=".9"/><circle cx="20" cy="20" r="16" fill="none" stroke="#BDB3F6" stroke-width="2.5"/><line x1="2" y1="20" x2="38" y2="20" stroke="#BDB3F6" stroke-width="2.5"/></svg></span></div>
+        </div>
+        <p class="sm dm" style="margin-top:10px;">Open the Nett app → Profile → <b style="color:var(--tx);">Sign in on desktop</b> — point the camera here. No OTP needed.</p>
+        <p class="sm" id="crmqrst" style="margin-top:8px;color:var(--amb);">Waiting for scan…</p>
+        <p class="ghost tap" id="crmqrx" style="margin-top:6px;">Back to OTP</p>
+      </div>
+    </div>
+    <div id="roleblock" style="display:none;">
+    <p class="lb" style="margin-top:18px;color:var(--pos);">SIGNED IN ✓ · CHOOSE DESK (DEMO)</p>
+    <div class="rolebig tap" data-role="swapnil"><div><b>Swapnil</b><p class="sm">RM · Wealth desk</p></div><span class="dm">→</span></div>
+    <div class="rolebig tap" data-role="priya"><div><b>Supriya Narkar</b><p class="sm">Service desk · Insurance</p></div><span class="dm">→</span></div>
+    <div class="rolebig tap" data-role="admin"><div><b>Admin</b><p class="sm">All clients · all assignees</p></div><span class="dm">→</span></div>
+    <p class="sm dm" style="margin-top:16px;">Role decides visibility: you see only clients with a service assigned to you. Admin sees everyone. Portfolio &amp; insights open only after the client's consent.</p>
+    </div>
+  </div>
+</div>
+
+<span id="burger" class="tap"><i class="ti ti-menu-2"></i></span>
+<div id="app" style="display:none;">
+  <aside id="side">
+    <div class="wmark"><span class="wtop">Nett</span><span class="wsub" aria-hidden="true">Nett</span></div>
+    <div class="nav">
+      <div class="nv tap on" data-view="day">Arth board <span class="ct" id="ctday"></span></div>
+      <div class="nv tap" data-view="signals">Signals <span class="ct" id="ctsig" style="color:var(--gold);"></span></div>
+      <div class="nv tap" data-view="chat">Chats <span class="ct" id="ctch" style="color:var(--gold);"></span></div>
+      <div class="nv tap" data-view="cal">Calendar</div>
+      <div class="nv tap" data-view="clients">Clients <span class="ct" id="ctcl"></span></div>
+      <div class="nv tap" data-view="leads">Pipeline <span class="ct" id="ctld"></span></div>
+      <div class="nv tap" data-view="fu">Follow-ups <span class="ct" id="ctfu" style="color:var(--crit);"></span></div>
+      <div class="nv tap" data-view="lb">Leaderboard</div>
+      <div class="nv tap" data-view="earn">Incentives</div>
+      <div class="nv tap" data-view="addclient">+ Add client</div>
+      <div class="nv tap" data-view="gloss">Glossary</div>
+      <div class="nv tap" id="tourgo" style="color:var(--dim);">Take the tour</div>
+    </div>
+    <div id="who">
+      <p class="lb">SIGNED IN</p>
+      <div class="rolechip on" id="whochip"></div>
+      <p class="ghost tap" id="switchrole" style="margin-top:10px;display:inline-block;">Switch role</p>
+    </div>
+  </aside>
+
+  <main id="main">
+    <span class="cta2 tap" id="gback"><i class="ti ti-chevron-left"></i> Back</span>
+    <div class="views" id="views">
+
+      <!-- ============ MY DAY (landing) ============ -->
+      <section id="v-day">
+        
+        <div class="grid3" id="dmods" style="margin-top:14px;"></div>
+        <div class="depth" style="max-width:520px;"><div class="dline"></div><div class="dmark" id="ddm"></div></div>
+        <p class="sm dm" id="dscsub" style="margin-top:4px;"></p>
+        <div class="filters" id="dlift" style="margin-top:10px;"></div>
+        <p class="lb" style="margin-top:22px;color:var(--gold);">MOST RELEVANT NOW · LATEST CONSENT &amp; CHAT FIRST</p>
+        <div class="filters" id="drel" style="margin-top:8px;"></div>
+        <p class="lb" style="margin-top:22px;">TODAY ON THE CALENDAR</p>
+        <div id="dcal"></div>
+        <p class="lb" style="margin-top:24px;color:var(--gold);">THE TIDE · WHAT MOVES TODAY</p>
+        <div id="dq"></div>
+        <p class="lb" style="margin-top:24px;color:var(--pos);">DONE TODAY</p>
+        <div id="ddone"></div>
+      </section>
+
+      <!-- ============ SIGNALS ============ -->
+      <section id="v-signals">
+        <div class="viewttl">
+          <div><p class="lb" style="color:var(--gold);">SIGNALS</p><h1 class="ser">What clients are telling you<br>without calling.</h1></div>
+        </div>
+        <div class="filters" id="sigf">
+          <span class="tag tap on" data-sk="all">All</span>
+          <span class="tag tap" data-sk="consent">Consent just given</span>
+          <span class="tag tap" data-sk="talk">Wants to talk</span>
+          <span class="tag tap" data-sk="explore">Exploring / interested</span>
+          <span class="tag tap" data-sk="drop">Drop-offs</span>
+        </div>
+        <div id="sigbody"></div>
+        <div class="cd" style="margin-top:18px;">
+          <p class="lb">WHERE USERS DROP · YOUR BOOK, THIS WEEK</p>
+          <div id="funnel" style="margin-top:10px;"></div>
+          <p class="sm dm" style="margin-top:8px;">Biggest drop is Order → KYC — clients stall at account setup, not at intent. Assisted onboarding is the counter-move.</p>
+        </div>
+        <p class="sm dm" style="margin-top:12px;">Behaviour signals show only for clients who granted RM visibility — the same switch that opens their portfolio. Others appear in aggregate only.</p>
+      </section>
+
+      <!-- ============ CHATS ============ -->
+      <section id="v-chat">
+        <div class="viewttl"><div><p class="lb" style="color:var(--gold);">CHATS</p><h1 class="ser">Same thread, both sides.</h1></div></div>
+        <div class="grid2" style="grid-template-columns:250px 1fr;">
+          <div>
+            <p class="lb">CLIENTS</p><div id="chcl"></div>
+            <p class="lb" style="margin-top:16px;">TEAM</p><div id="chtm"></div>
+          </div>
+          <div class="cd" style="display:flex;flex-direction:column;min-height:420px;">
+            <div class="rw" style="border-bottom:1px solid var(--hair);"><b id="chwho">Pick a thread</b><span class="sm dm" id="chsub"></span></div>
+            <div id="chmsgs" style="flex:1;overflow-y:auto;padding:6px 0;"></div>
+            <div id="charth"></div>
+            <div style="display:flex;gap:8px;margin-top:10px;">
+              <input id="chin" placeholder="Write a reply…" style="flex:1;">
+              <span class="cta tap" id="chsend">Send</span>
+            </div>
+          </div>
+        </div>
+        <p class="sm dm" style="margin-top:12px;">Client threads are the same thread the client sees in-app — “Bring Swapnil in” lands here. Every send logs to the client trail. Team threads are internal, desk to desk.</p>
+      </section>
+
+      <!-- ============ CALENDAR ============ -->
+      <section id="v-cal">
+        <div class="viewttl">
+          <div><p class="lb" style="color:var(--gold);">CALENDAR</p><h1 class="ser">The week, as booked.</h1></div>
+        </div>
+        <div class="board" id="calbody" style="grid-template-columns:repeat(5,minmax(175px,1fr));"></div>
+        <p class="sm dm" style="margin-top:12px;">Client bookings from the app land here with their data-sharing choice attached. Timed follow-ups sit alongside — one week, one truth.</p>
+      </section>
+
+      <!-- ============ LEADERBOARD ============ -->
+      <section id="v-lb">
+        <div class="viewttl">
+          <div><p class="lb" style="color:var(--gold);">LEADERBOARD</p><h1 class="ser">The week, side by side.</h1></div>
+        </div>
+        <div id="lbbody"></div>
+        <p class="sm dm" style="margin-top:12px;">Resets Monday. Rank follows work health — not raw revenue — so discipline beats luck. Incentive shown for context.</p>
+      </section>
+
+      <!-- ============ INCENTIVES ============ -->
+      <section id="v-earn">
+        <div class="viewttl">
+          <div><p class="lb" style="color:var(--gold);">INCENTIVES</p><h1 class="ser">What the work is worth.</h1></div>
+        </div>
+        <div class="grid3" id="earntop"></div>
+        <div class="grid2">
+          <div class="cd"><p class="lb">ATTRIBUTION · WHERE IT CAME FROM</p><div id="earnsplit"></div></div>
+          <div class="cd"><p class="lb">IN TODAY’S TIDE · IF IT CONVERTS</p><div id="earnpipe"></div></div>
+        </div>
+        <div class="cd" style="margin-top:16px;"><p class="lb">CONVERTED · WHAT YOU’VE SOLD</p><div id="salesbox"></div></div>
+        <p class="sm dm" style="margin-top:12px;">Incentives attach to execution and distribution work only. Briefings and talking points stay observation-led — the number never writes the advice.</p>
+      </section>
+
+      <!-- ============ CLIENT LIST ============ -->
+      <section id="v-clients" class="on">
+        <div class="viewttl">
+          <div><p class="lb" style="color:var(--gold);">CLIENTS</p><h1 class="ser" id="clhead">Your book</h1></div>
+          <span class="cta tap" data-view="addclient">+ Add client</span>
+        </div>
+        <div class="filters" id="sortrow">
+          <span class="lb" style="align-self:center;">SORT</span>
+          <span class="tag tap on" data-sort="rel">Relevance</span>
+          <span class="tag tap" data-sort="updated">Updated</span>
+          <span class="tag tap" data-sort="created">Created</span>
+          <span class="tag tap" data-sort="lastchat">Last chat</span>
+          <span class="tag tap" data-sort="recent">Recent chat first</span>
+        </div>
+        <div class="filters" id="conrow">
+          <span class="lb" style="align-self:center;">CONSENT</span>
+          <span class="tag tap on" data-con="all">All</span>
+          <span class="tag tap" data-con="granted" style="color:var(--pos);">Consented</span>
+          <span class="tag tap" data-con="pending" style="color:var(--watch);">Link sent</span>
+          <span class="tag tap" data-con="none">No consent</span>
+        </div>
+        <div class="filters" id="asgrow" style="display:none;">
+          <span class="lb" style="align-self:center;">ASSIGNEE</span>
+          <span class="tag tap on" data-asg="all">All</span>
+          <span class="tag tap" data-asg="Swapnil">Swapnil</span>
+          <span class="tag tap" data-asg="Supriya Narkar">Supriya Narkar</span>
+          <span class="tag tap" data-asg="Rohan D.">Rohan D.</span>
+        </div>
+        <table class="ls"><thead><tr>
+          <th>Client</th><th>Consent</th><th>Services · assignees</th><th>Last talk</th><th>Updated</th>
+        </tr></thead><tbody id="cltb"></tbody></table>
+        <p class="sm dm" style="margin-top:12px;" id="clnote"></p>
+      </section>
+
+      <!-- ============ CLIENT 360 ============ -->
+      <section id="v-c360">
+        <p class="crumb"><span data-view="clients">Clients</span> / <b id="cname2" style="color:var(--tx);"></b></p>
+        <div class="viewttl">
+          <div style="display:flex;align-items:center;gap:14px;">
+            <span class="avatar" id="cav" style="width:46px;height:46px;font-size:16px;"></span>
+            <div><h1 class="ser" id="cname"></h1><p class="sm" id="cmeta"></p><p class="sm dm" id="cgeo" style="margin-top:3px;"></p></div>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <span class="cta2 tap" id="actchat"><i class="ti ti-message-circle"></i> Chat</span>
+            <span class="cta2 tap" id="actcall"><i class="ti ti-phone"></i> Call</span>
+            <span class="cta2 tap" id="actwa"><i class="ti ti-brand-whatsapp"></i> WhatsApp</span>
+            <span class="cta2 tap" id="actemail"><i class="ti ti-mail"></i> Email</span>
+            <span class="cta tap" id="actlead">+ New service lead</span>
+          </div>
+        </div>
+        <div id="consentbar" style="margin-top:14px;"></div>
+        <div id="arthprep" style="margin-top:12px;"></div>
+        <div class="tabs" id="ctabs">
+          <span class="tb on" data-ct="brief">Briefing</span>
+          <span class="tb" data-ct="data">Data &amp; portfolio</span>
+          <span class="tb" data-ct="leads">Leads</span>
+          <span class="tb" data-ct="comms">Communications</span>
+          <span class="tb" data-ct="svc">Services &amp; assignees</span>
+          <span class="tb" data-ct="src">Source</span>
+          <span class="tb" data-ct="sup">Support</span>
+        </div>
+        <div id="cbody" style="margin-top:16px;"></div>
+      </section>
+
+      <!-- ============ LEADS BOARD ============ -->
+      <section id="v-leads">
+        <div class="viewttl">
+          <div><p class="lb" style="color:var(--gold);">SERVICE LEADS</p><h1 class="ser">Pipeline</h1></div>
+        </div>
+        <div class="filters" id="svcrow">
+          <span class="lb" style="align-self:center;">SERVICE</span>
+          <span class="tag tap on" data-svc="all">All</span>
+          <span class="tag tap" data-svc="Wealth">Wealth</span>
+          <span class="tag tap" data-svc="Insurance">Insurance</span>
+          <span class="tag tap" data-svc="Bonds">Bonds</span>
+          <span class="tag tap" data-svc="PMS">PMS</span>
+        </div>
+        <div class="board" id="board"></div>
+        <p class="sm dm" style="margin-top:12px;">Lead status and communication status travel separately — a lead can be Qualified and still Overdue on follow-up. Overdue is the first thing to clear each morning.</p>
+      </section>
+
+      <!-- ============ LEAD DETAIL ============ -->
+      <section id="v-lead">
+        <p class="crumb"><span data-view="leads">Service leads</span> / <b id="lttl" style="color:var(--tx);"></b></p>
+        <div class="viewttl">
+          <div><h1 class="ser" id="lhead"></h1><p class="sm" id="lmeta"></p></div>
+          <div style="display:flex;gap:8px;"><span class="cta2 tap" id="lprof"><i class="ti ti-user"></i> Profile</span><span class="cta2 tap" id="lchat"><i class="ti ti-message-circle"></i> Chat</span><span class="cta2 tap" id="lcall"><i class="ti ti-phone"></i> Call</span><span class="cta2 tap" id="lwa"><i class="ti ti-brand-whatsapp"></i> WhatsApp</span><span class="cta2 tap" id="lemail"><i class="ti ti-mail"></i> Email</span></div>
+        </div>
+        <div class="grid2">
+          <div class="cd">
+            <p class="lb">LEAD COMMUNICATION LOG</p>
+            <div id="llog"></div>
+            <div class="frow"><span class="lb">CHANNEL</span><select id="lch"><option>Call</option><option>WhatsApp</option><option>Chat</option><option>Email</option></select></div>
+            <div class="frow"><span class="lb">REMARK</span><textarea id="lnote" rows="2" placeholder="What was said, what was promised…"></textarea></div>
+            <div class="frow"><span class="lb">NEXT FOLLOW-UP DATE (OPTIONAL)</span><input id="lfudate" placeholder="e.g. 2 Aug · 4:00 PM, or Today · 6 PM"></div>
+            <span class="cta tap" id="laddlog" style="margin-top:12px;">Log call &amp; set follow-up</span>
+          </div>
+          <div>
+            <div class="cd">
+              <p class="lb">LEAD STATUS · TAP TO UPDATE</p>
+              <div class="filters" id="lstg" style="margin-top:10px;"></div>
+              <div class="waterline"></div>
+              <p class="lb">CALL / COMMUNICATION STATUS · TAP TO UPDATE</p>
+              <div class="filters" id="lcst" style="margin-top:10px;"></div>
+            </div>
+            <div class="cd" style="margin-top:12px;">
+              <p class="lb">NEXT ACTION</p>
+              <p class="sm" id="lnext" style="margin-top:8px;color:var(--tx);"></p>
+              <div class="waterline"></div>
+              <p class="lb">NEXT FOLLOW-UP</p>
+              <p class="sm" id="lfu" style="margin-top:8px;color:var(--tx);"></p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ FOLLOW-UPS ============ -->
+      <section id="v-fu">
+        <div class="viewttl">
+          <div><p class="lb" style="color:var(--gold);">FOLLOW-UPS</p><h1 class="ser">What needs a touch</h1></div>
+        </div>
+        <div id="fubody"></div>
+        <p class="sm dm" style="margin-top:12px;">Overdue clears first, Today before evening, Upcoming is tomorrow’s list. Every logged call with a follow-up date lands here automatically.</p>
+      </section>
+
+      <!-- ============ GLOSSARY ============ -->
+      <section id="v-gloss">
+        <div class="viewttl"><div><p class="lb" style="color:var(--gold);">GLOSSARY</p><h1 class="ser">Every dot, pill and line — decoded.</h1></div></div>
+        <div class="grid2">
+          <div>
+            <div class="cd"><p class="lb">MOMENT &amp; SIGNAL DOTS</p>
+              <div class="rw"><span class="sm"><span class="k" style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--pos);margin-right:8px;"></span>Green — fresh consent, just approved</span></div>
+              <div class="rw"><span class="sm"><span class="k" style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--gold);margin-right:8px;"></span>Gold — client wants to talk, waiting on you</span></div>
+              <div class="rw"><span class="sm"><span class="k" style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--attn);margin-right:8px;"></span>Orange — follow-up due</span></div>
+              <div class="rw"><span class="sm"><span class="k" style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--crit);margin-right:8px;"></span>Red — overdue or a drop-off; clear these first</span></div>
+              <div class="rw"><span class="sm"><span class="k" style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--mut);margin-right:8px;"></span>Grey — preparation, no client waiting</span></div>
+            </div>
+            <div class="cd" style="margin-top:12px;"><p class="lb">CONSENT PILLS</p>
+              <div class="rw"><span class="pill p-good">CONSENTED</span><span class="sm">Portfolio, insights and briefing open — revocable anytime</span></div>
+              <div class="rw"><span class="pill p-watch">LINK SENT</span><span class="sm">Waiting on the client — only they can approve</span></div>
+              <div class="rw"><span class="pill p-mut">NO CONSENT</span><span class="sm">Contact, bookings and comms only — numbers stay theirs</span></div>
+            </div>
+            <div class="cd" style="margin-top:12px;"><p class="lb">LEAD STAGE VS COMMUNICATION STATUS</p>
+              <p class="sm" style="margin-top:8px;">Two separate axes. Stage = where the deal is (New → Contacted → Qualified → In progress → Won / Lost / Dormant). Communication status = whether the conversation is healthy (<span style="color:var(--pos);">Replied</span> · Awaiting reply · <span style="color:var(--attn);">Follow-up due</span> · <span style="color:var(--crit);">Overdue</span>). A lead can be Qualified and still Overdue — the red pill always wins your attention.</p>
+            </div>
+          </div>
+          <div>
+            <div class="cd"><p class="lb">SCORES, BANDS &amp; THE LINE</p>
+              <p class="sm" style="margin-top:8px;">Clients carry a wealth health score (0–100); you carry a work health score built the same way. The depth gauge is <b style="color:var(--tx);">"the line"</b> — the gold marker is where they (or you) stand; the milestone label is the next line to cross. Bands: <span style="color:var(--pos);">Good</span> · Fair · <span style="color:var(--attn);">Watch</span> · <span style="color:var(--crit);">Critical</span>. NO DATA is never shown as a passing state — and an <b style="color:var(--crit);">error is not NO DATA</b>: errors show last-good data with a timestamp and a Retry; NO DATA asks for consent.</p>
+            </div>
+            <div class="cd" style="margin-top:12px;"><p class="lb">THE WATER</p>
+              <p class="sm" style="margin-top:8px;">The vessel fills as your day’s moments complete. Views rise from below the waterline when they open. "Below the waterline" on a client page means the client hasn’t shared — it opens the moment they do. The Arth mark — a circle half-above the waterline — marks every surface where Arth is speaking; lavender belongs to Arth alone.</p>
+            </div>
+            <div class="cd" style="margin-top:12px;"><p class="lb">TRACE IDS</p>
+              <p class="sm" style="margin-top:8px;">Every error carries an NVY-xxxx trace, auto-logged. Ask Arth "errors" to list recent ones — give dev the trace, not a screenshot.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ ADD CLIENT ============ -->
+      <section id="v-addclient">
+        <p class="lb" style="color:var(--gold);">ASSISTED ONBOARDING</p>
+        <h1 class="ser">Add a client</h1>
+        <p class="sm" style="margin-top:6px;max-width:560px;">For clients who'd rather you set things up. You create the record and open a service — <b style="color:var(--tx);">consent stays theirs</b>: the data connection is approved only by the client, on link or with their own OTP on this device. Every consent stores its channel and timestamp.</p>
+        <div class="grid2">
+          <div class="cd">
+            <div class="frow"><span class="lb">FULL NAME</span><input id="nc_name" placeholder="e.g. Suresh Iyengar"></div>
+            <div class="frow"><span class="lb">MOBILE</span><input id="nc_phone" placeholder="+91"></div>
+            <div class="frow"><span class="lb">EMAIL</span><input id="nc_email" placeholder="name@email.com"></div>
+            <div class="frow"><span class="lb">OPEN A SERVICE LEAD</span>
+              <select id="nc_svc"><option>Wealth</option><option>Insurance</option><option>Bonds</option><option>PMS</option></select></div>
+            <p class="sm dm" style="margin-top:8px;">Assignee: <b style="color:var(--tx);" id="nc_asg"></b> (you). Admin can reassign later, service-wise.</p>
+          </div>
+          <div class="cd">
+            <p class="lb">CONSENT CHANNEL</p>
+            <div class="rolebig tap" data-cch="link" id="cchlink" style="border-color:rgba(217,185,106,.5);"><div><b>Send consent link</b><p class="sm">SMS + WhatsApp to their number. They approve on their phone. Status: pending until they do.</p></div><span style="color:var(--gold);">●</span></div>
+            <div class="rolebig tap" data-cch="assisted" id="cchasst"><div><b>Assisted, on this device</b><p class="sm">Hand them this device — they review the consent screen and enter their own OTP. You never enter it for them.</p></div><span class="dm">○</span></div>
+            <p class="sm dm" style="margin-top:10px;">Until consent: contact, bookings and communication only. No portfolio, no insights — for you or anyone.</p>
+            <span class="cta tap" id="nc_go" style="margin-top:14px;width:100%;">Create client</span>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+  <aside id="arthrail">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px;">
+      <span style="display:inline-flex;align-items:center;gap:8px;"><span class="arthic"><svg width="14" height="14" viewBox="0 0 40 40" style="vertical-align:-2px;"><path d="M20 4 A16 16 0 0 1 36 20 H4 A16 16 0 0 1 20 4 Z" fill="var(--lav)" opacity=".8"/><circle cx="20" cy="20" r="16" fill="none" stroke="var(--lav)" stroke-width="2.5"/><line x1="2" y1="20" x2="38" y2="20" stroke="var(--lav)" stroke-width="2.5"/></svg></span><p class="lb" style="color:var(--lav);margin:0;">ARTH · YOUR DAY, MADE</p></span>
+      <span class="sm dm" id="daysub"></span>
+    </div>
+    <h2 class="ser" id="dayhi" style="font-size:19px;margin-top:8px;">Good morning.</h2>
+    <p class="sm" id="arthsay" style="margin-top:8px;color:var(--tx);"></p>
+    <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;">
+      <input id="askq" placeholder="Ask Arth — follow-ups · consent · errors · open Rahul" style="flex:1;min-width:150px;">
+      <span class="cta tap" id="askgo">Ask</span>
+    </div>
+    <div class="filters" id="askhints" style="margin-top:9px;"></div>
+    <div id="askans"></div>
+  </aside>
+</div>
+<span id="arthpill" class="tap"><svg width="14" height="14" viewBox="0 0 40 40" style="vertical-align:-2px;"><path d="M20 4 A16 16 0 0 1 36 20 H4 A16 16 0 0 1 20 4 Z" fill="var(--lav)" opacity=".8"/><circle cx="20" cy="20" r="16" fill="none" stroke="var(--lav)" stroke-width="2.5"/><line x1="2" y1="20" x2="38" y2="20" stroke="var(--lav)" stroke-width="2.5"/></svg> Arth</span>
+<div id="tour" style="position:fixed;inset:0;background:rgba(6,7,9,.72);z-index:75;display:none;align-items:flex-end;justify-content:center;padding:22px;">
+  <div class="cd" style="max-width:430px;width:100%;background:#14161d;border-color:rgba(189,179,246,.45);">
+    <div style="display:flex;justify-content:space-between;align-items:center;"><span class="arthic"><svg width="14" height="14" viewBox="0 0 40 40" style="vertical-align:-2px;"><path d="M20 4 A16 16 0 0 1 36 20 H4 A16 16 0 0 1 20 4 Z" fill="var(--lav)" opacity=".8"/><circle cx="20" cy="20" r="16" fill="none" stroke="var(--lav)" stroke-width="2.5"/><line x1="2" y1="20" x2="38" y2="20" stroke="var(--lav)" stroke-width="2.5"/></svg></span><span class="sm dm" id="tstep"></span></div>
+    <h2 class="ser" id="tttl" style="margin-top:10px;"></h2>
+    <p class="sm" id="ttxt" style="margin-top:8px;color:var(--tx);"></p>
+    <div style="display:flex;gap:8px;margin-top:14px;justify-content:flex-end;"><span class="ghost tap" id="tskip">Skip</span><span class="cta tap" id="tnext">Next</span></div>
+  </div>
+</div>
+<div id="wsplash"><span class="arthic" style="width:44px;height:44px;border-radius:14px;"><svg width="22" height="22" viewBox="0 0 40 40" style="vertical-align:-2px;"><path d="M20 4 A16 16 0 0 1 36 20 H4 A16 16 0 0 1 20 4 Z" fill="var(--lav)" opacity=".8"/><circle cx="20" cy="20" r="16" fill="none" stroke="var(--lav)" stroke-width="2.5"/><line x1="2" y1="20" x2="38" y2="20" stroke="var(--lav)" stroke-width="2.5"/></svg></span><div class="vessel"><div class="vfill"></div></div><p class="sm" style="color:var(--tx);">Arth is making your day…</p></div>
+<div id="toast"></div>
+
+<script>
+/* ================= DATA ================= */
+var ROLES={swapnil:{key:'swapnil',name:'Swapnil',desk:'RM · Wealth desk'},priya:{key:'priya',name:'Supriya Narkar',desk:'Service desk · Insurance'},admin:{key:'admin',name:'Admin',desk:'All clients · all assignees'}};
+var ROLE=null;
+
+var CLIENTS=[
+ {id:'rahul',name:'Rahul Mehra',phone:'+91 98110 ···· 20',email:'rahul.mehra@gmail.com',consent:'granted',consentMeta:'In-app · 12 Jul 2026, 09:14 IST',
+  created:'12 Jul',updated:'Today',lastChat:'Today',recent:'“Can we relook at the term cover after the bonus?”',
+  services:[{svc:'Wealth',asg:'Swapnil',lastTalk:'Today · chat'},{svc:'Insurance',asg:'Supriya Narkar',lastTalk:'21 Jul · call'}],
+  aum:'₹86.4L',score:61,band:'Fair',
+  fin:{updated:[['Bank flows (AA)','Today 06:00'],['MF Central','Yesterday 21:40'],['Credit bureau','12 Jul'],['Declared','12 Jul']],
+   hold:[['Mutual funds · 14 folios','₹58.6L','XIRR 11.2% · 2 folios overlap 71%'],['Direct equity · 6 stocks','₹14.2L','No position over 9%'],['Cash + FDs','₹13.6L','₹12,400 idle in savings']],
+   liab:[['Home loan · HDFC','₹48.2L','8.9% · 16 yrs left · EMI ₹43,500/mo'],['Credit card · revolving','₹52,600','42% APR · ₹1,840/mo interest leak'],['Car loan','Closed 2024','—']],
+   cash:{inc:'₹2.4L',spend:'₹1.48L',sip:'₹45,000',sur:'₹47,000',note:'Salary credit 2.4× normal on 28 Jul (bonus) · surplus steady 6 months'}},
+  brief:{good:['SIPs unbroken 26 months — ₹45,000/mo across 3 funds','Term cover ₹2 Cr active, premium on autopay','Emergency float 4.1 months — above the 3-month line'],
+  bad:['Card revolving at 42% APR — ₹1,840/mo interest leak','₹12,400 idle in savings vs 6.8% sweep','2 folios overlap 71% — same large-caps bought twice'],
+  talk:['Bonus landed (salary credit 2.4× normal on 28 Jul) — the term-cover relook he asked for is the door: cover gap is ₹1 Cr at current income','Card clearance first: ₹52,600 clears it, saves ₹22,080/yr of interest — route exists in-app','Overlap fix is a switch, not a sell — zero exit load on both folios after Aug 3']},
+  bookings:[{t:'Fri 1 Aug · 6:30 PM',w:'Swapnil',note:'Term cover relook · portfolio shared for this call'}],
+  comms:[{ch:'chat',when:'Today 10:12',by:'Rahul',note:'“Can we relook at the term cover after the bonus?” — replied, call booked Fri'},{ch:'call',when:'21 Jul',by:'Supriya Narkar',note:'Health top-up explained; wants spouse covered too — lead updated'},{ch:'email',when:'14 Jul',by:'Swapnil',note:'Sent Jun statement + fee report PDF'},{ch:'chat',when:'12 Jul',by:'Rahul',note:'First scan done · asked what the 61 score means'}]},
+ {id:'meera',name:'Meera Krishnan',phone:'+91 98450 ···· 77',email:'meera.k@outlook.com',consent:'granted',consentMeta:'In-app · 02 Jul 2026',
+  created:'02 Jul',updated:'Yesterday',lastChat:'Yesterday',recent:'“Send the PMS strategy one-pager please.”',
+  services:[{svc:'Wealth',asg:'Swapnil',lastTalk:'Yesterday · chat'},{svc:'PMS',asg:'Swapnil',lastTalk:'Yesterday · chat'}],
+  aum:'₹2.3 Cr',score:74,band:'Good',
+  fin:{updated:[['Bank flows (AA)','Today 06:00'],['MF Central','Yesterday'],['DEMAT (declared)','20 Jul']],
+   hold:[['Mutual funds','₹68L','XIRR 12.4%'],['Direct equity','₹1.44 Cr','Disciplined · max position 8%'],['FDs','₹18L','6.4% pre-tax · post-tax 4.5%']],
+   liab:[['None on record','—','Bureau clean']],
+   cash:{inc:'₹4.2L',spend:'₹1.9L',sip:'₹60,000',sur:'₹1.7L',note:'RSU vests add USD income · no international allocation yet'}},
+  brief:{good:['Direct-equity book disciplined — no position over 8%','FD ladder matures in sync with tax years','Health + term both adequate'],
+  bad:['₹18L in FDs at 6.4% pre-tax — post-tax 4.5% vs debt-fund 6.9%','No international allocation despite RSU income in USD'],
+  talk:['She asked for the PMS one-pager — min ticket ₹50L fits, 3y CAGR comparison ready','FD-to-debt-fund math: ₹43,000/yr difference at her slab — show, don\u2019t push']},
+  bookings:[],comms:[{ch:'chat',when:'Yesterday',by:'Meera',note:'Asked for PMS strategy one-pager — sent, follow up Thu'},{ch:'call',when:'18 Jul',by:'Swapnil',note:'Quarterly review · flagged FD reinvestment window'}]},
+ {id:'arjun',name:'Arjun Bhatia',phone:'+91 99870 ···· 41',email:'arjun.b@gmail.com',consent:'none',consentMeta:null,
+  created:'19 Jul',updated:'2 days ago',lastChat:'2 days ago',recent:'“Will decide after our call.”',
+  services:[{svc:'Wealth',asg:'Swapnil',lastTalk:'2 days ago · call'}],
+  aum:null,score:null,band:null,brief:null,
+  bookings:[{t:'Sat 2 Aug · 11:00 AM',w:'Swapnil',note:'Intro call · no data shared — talk from what he tells you'}],
+  comms:[{ch:'call',when:'2 days ago',by:'Swapnil',note:'Referred by Rahul Mehra. Cautious about data sharing — explained consent model, he liked “nothing visible till I say so”'},{ch:'chat',when:'19 Jul',by:'Arjun',note:'“Rahul said I should talk to you before I move my folios.”'}]},
+ {id:'kavita',name:'Kavita Rao',phone:'+91 98220 ···· 63',email:'kavita.rao@yahoo.com',consent:'granted',consentMeta:'Link · 08 Jul 2026',
+  created:'05 Jul',updated:'3 days ago',lastChat:'6 days ago',recent:'“Policy received, thank you Supriya!”',
+  services:[{svc:'Insurance',asg:'Supriya Narkar',lastTalk:'6 days ago · chat'}],
+  aum:'₹34.8L',score:68,band:'Fair',
+  fin:{updated:[['Bank flows (AA)','Today 06:00'],['MF Central','2 days ago'],['IRDAI / declared','22 Jul']],
+   hold:[['Mutual funds','₹28.4L','SIP ₹25,000/mo steady'],['FDs','₹6.4L','—'],['ULIP (legacy)','in force','2.1%/yr charge · surrender > paid premium']],
+   liab:[['Credit card','Paid in full','No revolve history']],
+   cash:{inc:'₹1.6L',spend:'₹1.05L',sip:'₹25,000',sur:'₹30,000',note:'Stable · premium autopay active'}},
+  brief:{good:['Term ₹1.5 Cr issued 22 Jul — free-look window till 21 Aug','SIPs steady ₹25,000/mo'],
+  bad:['No health top-up above employer ₹5L cover','Old ULIP charging 2.1%/yr — surrender value now exceeds paid premium'],
+  talk:['Post-issuance check-in due — free-look reminder is a trust moment','ULIP math ready if she asks: exit is now cost-free']},
+  bookings:[],comms:[{ch:'chat',when:'6 days ago',by:'Kavita',note:'Policy received — thanked. Free-look reminder scheduled 14 Aug'},{ch:'email',when:'22 Jul',by:'Supriya Narkar',note:'Policy document + free-look terms sent'}]},
+ {id:'sanjay',name:'Sanjay Gulati',phone:'+91 98100 ···· 08',email:'sgulati@rediffmail.com',consent:'pending',consentMeta:'Link sent · today 11:20 IST — not yet approved',
+  created:'Today',updated:'Today',lastChat:'Today',recent:'“Beta, you handle it, I\u2019ll press whatever you send.”',
+  services:[{svc:'Bonds',asg:'Swapnil',lastTalk:'Today · call'}],
+  aum:null,score:null,band:null,brief:null,
+  bookings:[],comms:[{ch:'call',when:'Today 11:05',by:'Swapnil',note:'Walk-in via branch. Wants FD alternative for ₹40L maturing Aug. Created record, consent link sent to his number — he\u2019ll approve with his son this evening'},{ch:'wa',when:'Today 11:20',by:'Swapnil',note:'Consent link delivered on WhatsApp · delivered ✓✓, not yet opened'}]},
+ {id:'neha',name:'Neha Verma',phone:'+91 99530 ···· 92',email:'neha.verma@gmail.com',consent:'granted',consentMeta:'In-app · 14 Jun 2026',
+  created:'14 Jun',updated:'12 days ago',lastChat:'19 days ago',recent:'“Travelling, will revert.”',
+  services:[{svc:'Wealth',asg:'Rohan D.',lastTalk:'19 days ago · chat'},{svc:'Insurance',asg:'Supriya Narkar',lastTalk:'26 days ago · email'}],
+  aum:'₹52.1L',score:57,band:'Fair',
+  fin:{updated:[['Bank flows (AA)','3 days ago'],['MF Central','12 days ago'],['Credit bureau','14 Jun',1]],
+   hold:[['Mutual funds · 6 AMCs','₹49L','SIP paused 2 months · ₹30,000/mo gap'],['Cash','₹3.1L','—']],
+   liab:[['Car loan','₹6.8L','9.4% · EMI ₹14,200/mo']],
+   cash:{inc:'₹1.8L',spend:'₹1.35L',sip:'paused',sur:'₹45,000',note:'Health cover lapses 30 Sep if premium unpaid'}},
+  brief:{good:['Portfolio diversified across 6 AMCs'],bad:['SIP paused 2 months — ₹30,000/mo gap compounding','Health cover lapses 30 Sep if premium unpaid'],
+  talk:['19 days silent + lapse date approaching — one WhatsApp, one date: “premium due 30 Sep, want me to set autopay?”']},
+  bookings:[],comms:[{ch:'chat',when:'19 days ago',by:'Neha',note:'“Travelling, will revert.” — no follow-up logged since'},{ch:'email',when:'26 days ago',by:'Supriya Narkar',note:'Renewal notice + premium options sent'}]},
+ {id:'vikram',name:'Vikram Shetty',phone:'+91 98860 ···· 15',email:'v.shetty@gmail.com',consent:'none',consentMeta:null,
+  created:'26 Jul',updated:'26 Jul',lastChat:'—',recent:null,
+  services:[{svc:'Insurance',asg:'Supriya Narkar',lastTalk:'No talk yet'}],
+  aum:null,score:null,band:null,brief:null,bookings:[],
+  comms:[{ch:'email',when:'26 Jul',by:'Supriya Narkar',note:'Inbound from website form — term insurance quote request. Intro email sent, no reply yet'}]},
+ {id:'deepa',name:'Deepa Iyer',phone:'+91 98410 ···· 30',email:'deepa.iyer@gmail.com',consent:'granted',consentMeta:'In-app · 20 Jun 2026',
+  created:'20 Jun',updated:'5 days ago',lastChat:'5 days ago',recent:'“Approved the switch, go ahead.”',
+  services:[{svc:'Wealth',asg:'Rohan D.',lastTalk:'5 days ago · chat'}],
+  aum:'₹1.1 Cr',score:79,band:'Good',
+  fin:{updated:[['Bank flows (AA)','Today 06:00'],['MF Central','5 days ago']],
+   hold:[['Mutual funds','₹74L','Post-switch · no overlap'],['Direct equity','₹31L','—'],['Cash','₹5L','—']],
+   liab:[['None on record','—','Bureau clean']],
+   cash:{inc:'₹2.6L',spend:'₹1.4L',sip:'₹50,000',sur:'₹70,000',note:'Clean month · no leaks flagged'}},
+  brief:{good:['Clean book — no leaks flagged this month'],bad:['—'],talk:['Switch executed, confirmation due']},
+  bookings:[],comms:[{ch:'chat',when:'5 days ago',by:'Deepa',note:'Approved folio switch — executed same day'}]}
+];
+
+var STAGES=['New','Contacted','Qualified','In progress','Won'];
+var CSTATES=['Awaiting reply','Replied','Follow-up due','Overdue'];
+var LEADS=[
+ {id:'L1',fud:3,fut:'1 Aug · 6:30 PM call',client:'rahul',svc:'Insurance',ttl:'Term cover top-up ₹1 Cr',stage:'Qualified',cst:'Replied',asg:'Supriya Narkar',next:'Fri 1 Aug call — Swapnil hosts, Supriya joins for quote',log:[{when:'Today',by:'Supriya Narkar',note:'Quote refreshed post-bonus: ₹1 Cr top-up at ₹14,200/yr, smoker-status confirmed non'},{when:'21 Jul',by:'Supriya Narkar',note:'Call — wants spouse covered too; separate policy cheaper than rider, math shared'}]},
+ {id:'L2',fud:7,fut:'5 Aug',client:'rahul',svc:'Bonds',ttl:'FD alternative for idle cash',stage:'New',cst:'Awaiting reply',asg:'Swapnil',next:'Raise after card clearance — sequencing per capital waterfall',log:[{when:'Today',by:'Swapnil',note:'Opened from briefing — do NOT pitch before the 42% card leak is closed'}]},
+ {id:'L3',fud:0,fut:'Today · 4:00 PM',client:'meera',svc:'PMS',ttl:'PMS ₹50L ticket',stage:'In progress',cst:'Follow-up due',asg:'Swapnil',next:'Thu — she reads the one-pager by then',log:[{when:'Yesterday',by:'Swapnil',note:'One-pager sent. Fee structure question expected — TER comparison ready'}]},
+ {id:'L4',fud:16,fut:'14 Aug · free-look check-in',client:'kavita',svc:'Insurance',ttl:'Term ₹1.5 Cr',stage:'Won',cst:'Replied',asg:'Supriya Narkar',next:'Free-look check-in 14 Aug',log:[{when:'22 Jul',by:'Supriya Narkar',note:'Policy issued and delivered. Free-look till 21 Aug'}]},
+ {id:'L5',fud:-12,fut:'17 Jul — missed',client:'neha',svc:'Insurance',ttl:'Health renewal (lapse risk)',stage:'Contacted',cst:'Overdue',asg:'Supriya Narkar',next:'OVERDUE 12 days — WhatsApp with lapse date today',log:[{when:'26 days ago',by:'Supriya Narkar',note:'Renewal notice emailed — no reply, no follow-up logged'}]},
+ {id:'L6',fud:0,fut:'Today · evening (post-consent)',client:'sanjay',svc:'Bonds',ttl:'₹40L FD maturity — bond ladder',stage:'Contacted',cst:'Awaiting reply',asg:'Swapnil',next:'Consent approval expected this evening — then run scan, then propose',log:[{when:'Today',by:'Swapnil',note:'Needs are clear from the call, but no proposal before his data consent lands'}]},
+ {id:'L7',fud:2,fut:'31 Jul · call',client:'vikram',svc:'Insurance',ttl:'Term quote (inbound)',stage:'New',cst:'Awaiting reply',asg:'Supriya Narkar',next:'Second touch Wed if silent — call, not email',log:[{when:'26 Jul',by:'Supriya Narkar',note:'Website inbound. Intro sent'}]}
+];
+
+var PREP={
+ rahul:{talk:'He asked for the term relook — his bonus (salary 2.4× on 28 Jul) is the door. Card ₹52,600 @ 42% clears first: saves ₹22,080/yr. Overlap switch is free after 3 Aug.',
+  pot:'₹1 Cr cover gap · overlap switch · FD-sweep order he already started',
+  val:'est ₹3,500 incentive · client score path 61 → 65',
+  act:'Exploring: insurance ×3 this week · 11 min in report · dropped one order at payment last night'},
+ meera:{talk:'She read the PMS one-pager twice — the fee question is coming. TER comparison ready; FD → debt-fund math (₹43,000/yr at her slab) is the second door.',
+  pot:'₹50L PMS ticket · ₹18L FD reallocation · USD income, no intl allocation',
+  val:'est ₹12,500 incentive · score 74 → 80 path',
+  act:'PMS page ×2 · downloaded the one-pager · replies fastest 4–6 PM'},
+ kavita:{talk:'Post-issuance check-in — free-look till 21 Aug is a trust moment, lead with it. ULIP exit is now cost-free if she raises it.',
+  pot:'Health top-up above employer ₹5L · ULIP surrender → SIP',
+  val:'protect-first · est ₹2,100',
+  act:'Opened policy PDF twice · quiet since delivery — good sign, not silence'},
+ neha:{talk:'19 days silent + lapse 30 Sep. One WhatsApp, one date: “premium due 30 Sep — set autopay?” Nothing else in message one.',
+  pot:'Renewal save · SIP restart ₹30,000/mo after',
+  val:'lapse prevented > any sale this month',
+  act:'App not opened in 12 days — reach outside the app'},
+ deepa:{talk:'Switch executed — confirm it landed, then stay quiet. Clean book, no pitch.',
+  pot:'— nothing due',val:'trust compounding',act:'Checks portfolio weekly, Sunday evenings'},
+ arjun:{talk:'No data shared — built from his words only: “Rahul said I should talk to you before I move my folios.” Lead with the consent model he liked: nothing visible till he says so.',
+  pot:'Folio move (size unknown — don’t guess it)',val:'referral trust · highest-leverage intro this month',
+  act:'Opened app ×2, never past limited mode — consent is the wall, not interest'},
+ sanjay:{talk:'Consent approved 9:41 AM on the WhatsApp link. Run the scan, then talk numbers — he said “you handle it”, so bring one clear plan, not options.',
+  pot:'₹40L FD maturing Aug → bond ladder',val:'est ₹4,200 · first proposal must land clean',
+  act:'Son helped him approve — include the son on the call invite'},
+ vikram:{talk:'Inbound term-quote, silent 3 days. Second touch by call, not email — quote follow-ups die in inboxes.',
+  pot:'Term policy · est ₹6,800',val:'inbound = warmest cold lead there is',act:'Form filled 11 PM — evening caller'}};
+var MOMENTS=[
+ {id:'M1',own:'Swapnil',k:'consent',ttl:'Sanjay approved consent — 9:41 AM, on the WhatsApp link',why:'₹40L FD maturing Aug · wants one clear plan',act:'Open Sanjay',client:'sanjay',val:'est ₹4,200',done:false},
+ {id:'M2',own:'Swapnil',k:'talk',ttl:'Rahul is waiting in chat — 18 min',why:'“Term cover after the bonus?” · bonus landed 28 Jul',act:'Open chat',client:'rahul',val:'₹1 Cr gap · est ₹3,500',done:false},
+ {id:'M3',own:'Swapnil',k:'fu',ttl:'Meera — PMS follow-up at 4:00 PM',why:'Read the one-pager twice · fee question likely',act:'Open lead',lead:'L3',val:'₹50L ticket · est ₹12,500',done:false},
+ {id:'M4',own:'Swapnil',k:'drop',ttl:'Rahul dropped an order at payment — 9:12 PM',why:'FD sweep ₹12,400 · intent was there, gateway wasn’t',act:'Nudge on WhatsApp',client:'rahul',val:'first self-serve order',done:false},
+ {id:'M5',own:'Swapnil',k:'prep',ttl:'Prep: Arjun intro call — tomorrow 11 AM',why:'No data shared · talk-track from his own words',act:'Open prep',client:'arjun',val:'referral trust',done:false},
+ {id:'M6',own:'Supriya Narkar',k:'fu',ttl:'Neha — renewal 12 days overdue',why:'Health cover lapses 30 Sep',act:'Open lead',lead:'L5',val:'lapse save',done:false},
+ {id:'M7',own:'Supriya Narkar',k:'fu',ttl:'Kavita — free-look check-in',why:'Window till 21 Aug · trust moment',act:'Open lead',lead:'L4',val:'—',done:false},
+ {id:'M8',own:'Supriya Narkar',k:'fu',ttl:'Vikram — second touch, by call',why:'Inbound quote · silent 3 days · evening caller',act:'Open lead',lead:'L7',val:'est ₹6,800',done:false}];
+var SIGNALS=[
+ {t:'9:41 AM',k:'consent',client:'sanjay',txt:'Approved data consent on the WhatsApp link — scan can run now',act:'Open Sanjay'},
+ {t:'9:24 AM',k:'talk',client:'rahul',txt:'Tapped “Bring Swapnil in” — waiting in chat',act:'Open chat'},
+ {t:'Yesterday 9:12 PM',k:'drop',client:'rahul',txt:'Order started (FD sweep ₹12,400) — dropped at the payment gateway',act:'Nudge'},
+ {t:'This week',k:'explore',client:'rahul',txt:'Insurance category ×3 · 11 min in report · international ×1',act:'See prep'},
+ {t:'This week',k:'explore',client:'meera',txt:'PMS page ×2 · downloaded the strategy one-pager',act:'Open lead'},
+ {t:'This week',k:'drop',client:'arjun',txt:'Opened app ×2 · never past limited mode — consent is the wall, not interest',act:'See prep'},
+ {t:'Sun evening',k:'explore',client:'deepa',txt:'Weekly portfolio check · nothing pending',act:'Open'}];
+var FUNNEL=[['Opened app',100],['Saw report',84],['Started an order',41],['Reached KYC',32],['Paid',27]];
+var PEERS=[
+ {n:'Supriya Narkar',score:76,band:'Strong',mom:'2 of 3',earn:'₹41,200'},
+ {n:'Swapnil',score:72,band:'Steady',mom:'0 of 5',earn:'₹38,400'},
+ {n:'Rohan D.',score:64,band:'Drifting',mom:'1 of 2',earn:'₹29,800'}];
+var RMS={
+ swapnil:{s:72,band:'Steady',sub:'Overdue: none · 4 of 4 clients touched in 7 days · pipeline moved 2 stages this week',
+  lift:[['Answer Rahul now','+2'],['Close Meera follow-up','+3'],['Convert Sanjay’s consent to a scan','+2']],
+  },
+ priya:{s:76,band:'Strong',sub:'1 overdue (Neha, 12 days) is the only drag · clear it and the band moves',
+  lift:[['Clear Neha — 12 days overdue','+5'],['Vikram second touch','+2'],['Kavita free-look check-in','+1']]},
+ admin:{s:71,band:'Team · Steady',sub:'Team average · 1 overdue across the floor · 3 unconverted consents this month',
+  lift:[['Reassign Neha if Supriya is loaded','—'],['Rohan: 2 silent clients >10 days','—']]}};
+var EARN={
+ swapnil:{m:'₹38,400',y:'₹2.6L',pipe:'₹20,200',split:[['MF trail','₹21,600'],['Bonds','₹9,300'],['Insurance referral','₹7,500']],
+  pipeitems:[['Meera · PMS ₹50L','₹12,500'],['Sanjay · bond ladder','₹4,200'],['Rahul · term top-up (with Supriya)','₹3,500']]},
+ priya:{m:'₹41,200',y:'₹2.9L',pipe:'₹9,900',split:[['Insurance new','₹28,400'],['Renewals','₹8,600'],['Referrals','₹4,200']],
+  pipeitems:[['Vikram · term','₹6,800'],['Rahul · term top-up (with Swapnil)','₹3,100']]},
+ admin:{m:'₹1.09L',y:'₹7.8L',pipe:'₹30,100',split:[['Swapnil','₹38,400'],['Supriya Narkar','₹41,200'],['Rohan D.','₹29,800']],
+  pipeitems:[['Floor pipeline · 3 moments','₹30,100']]}};
+var GEO={
+ rahul:{city:'Gurgaon, HR',ll:'Gurgaon · yesterday 9:14 PM',lang:'Hinglish'},
+ meera:{city:'Bengaluru, KA',ll:'Bengaluru · yesterday',lang:'English'},
+ arjun:{city:'Gurgaon, HR',ll:'Gurgaon · 2 days ago',lang:'English'},
+ kavita:{city:'Pune, MH',ll:'Pune · 6 days ago',lang:'Marathi + English'},
+ sanjay:{city:'Gurgaon, HR',ll:'Branch kiosk · today 11:05 AM',lang:'Hindi'},
+ neha:{city:'Noida, UP',ll:'Dubai · 19 days ago (travelling)',lang:'Hindi + English'},
+ vikram:{city:'Mangaluru, KA',ll:'Mangaluru · 26 Jul, 11:04 PM',lang:'English + Kannada'},
+ deepa:{city:'Chennai, TN',ll:'Chennai · 5 days ago',lang:'English + Tamil'}};
+var LMSG={
+ rahul:['ti-brand-whatsapp','“Your order’s saved — one tap finishes it. ₹12,400 sweep at 6.8%.”'],
+ meera:['ti-file-text','Opened: PMS strategy one-pager — second read'],
+ arjun:['ti-phone','Call summary: consent model explained — “nothing visible till I say so” landed well'],
+ kavita:['ti-mail','“Your policy + free-look terms — valid till 21 Aug.”'],
+ sanjay:['ti-brand-whatsapp','Consent link: “Approve to let Nett read your accounts — revoke anytime.” delivered ✓✓'],
+ neha:['ti-mail','“Renewal due 30 Sep — 3 premium options inside.” · unopened'],
+ vikram:['ti-mail','Intro: “Your term quote — ₹1 Cr from ₹790/mo.” · no reply'],
+ deepa:['ti-device-mobile','App session: portfolio check, 4 min, nothing pending']};
+var SUP={
+ rahul:{pos:'Praised the fee report — “finally someone shows the commission”',neg:'AA sync failed twice in June — frustrated then; resolved in 2 days',next:'Don’t relitigate the sync issue — if he raises it, acknowledge and move'},
+ meera:{pos:'—',neg:'—',next:'Asked support for PMS fee structure — buying-intent signal; the answer is in the one-pager she’s already read twice'},
+ kavita:{pos:'Thanked support for the policy-PDF help',neg:'—',next:'Goodwill is high — the free-look check-in lands warm'},
+ neha:{pos:'—',neg:'OPEN ticket: “too many reminder emails” — 3 days waiting on us',next:'Resolve the ticket FIRST, apologise for the noise, then one WhatsApp with only the lapse date'}};
+var TICKETS=[
+ {id:'T-1077',client:'neha',topic:'Too many reminder emails',status:'Open',opened:'8 days ago',last:'Waiting on us · 3 days · last reply hers',sent:'neg'},
+ {id:'T-1080',client:'meera',topic:'PMS fee structure clarification',status:'Waiting on client',opened:'2 days ago',last:'Answer sent · fee table attached',sent:'intent'},
+ {id:'T-1058',client:'rahul',topic:'Fee report question',status:'Resolved',opened:'14 Jul',last:'Closed same day · he praised the transparency',sent:'pos'},
+ {id:'T-1041',client:'rahul',topic:'AA bank sync failed',status:'Resolved',opened:'14 Jun',last:'Fixed in 2 days · apology accepted',sent:'neg'},
+ {id:'T-1069',client:'kavita',topic:'Policy PDF password',status:'Resolved',opened:'23 Jul',last:'Solved on chat in 10 min',sent:'pos'}];
+/* ================= STATE ================= */
+var SORT='rel',CONF='all',ASG='all',SVC='all',CUR=null,CURLEAD=null,CTAB='brief',CCH='link',SIGK='all';
+
+/* ================= HELPERS ================= */
+function $(id){return document.getElementById(id);}
+function toast(m){var t=$('toast');t.classList.remove('err');t.textContent=m;t.classList.add('on');clearTimeout(t._x);t._x=setTimeout(function(){t.classList.remove('on');},3200);}
+var ERRLOG=[];
+function trace(){return 'NVY-'+Math.random().toString(16).slice(2,6).toUpperCase();}
+function logErr(src,msg){var e={t:'Now',src:src,msg:msg,id:trace()};ERRLOG.unshift(e);
+  var t=$('toast');t.classList.add('err');t.innerHTML=msg+' \u00b7 <b>'+e.id+'</b> \u00b7 <span class="lnk tap" data-retry="'+src+'" style="color:var(--tx);">Retry</span>';
+  t.classList.add('on');clearTimeout(t._x);t._x=setTimeout(function(){t.classList.remove('on');t.classList.remove('err');},6000);return e;}
+function ini(n){return n.split(' ').map(function(x){return x[0];}).join('').slice(0,2);}
+function visible(c){if(ROLE.key==='admin')return true;return c.services.some(function(s){return s.asg===ROLE.name;});}
+function myClients(){return CLIENTS.filter(visible);}
+function pillC(c){return c.consent==='granted'?'<span class="pill p-good">CONSENTED</span>':c.consent==='pending'?'<span class="pill p-watch">LINK SENT</span>':'<span class="pill p-mut">NO CONSENT</span>';}
+function chico(ch){return '<i class="ti ti-'+(ch==='chat'?'message-circle':ch==='call'?'phone':ch==='wa'?'brand-whatsapp':'mail')+'"></i>';}
+
+/* ================= VIEWS ================= */
+var CURV=null,VSTACK=[];
+function show(v,noPush){
+  if(!noPush&&CURV&&CURV!==v)VSTACK.push(CURV);
+  if(CURV!==v)CURV=v;
+  document.querySelectorAll('.views>section').forEach(function(s){s.classList.remove('on');});
+  var sec=$('v-'+v);sec.classList.remove('on');void sec.offsetWidth;sec.classList.add('on');
+  $('gback').style.display=VSTACK.length?'inline-flex':'none';
+  document.querySelectorAll('.nv').forEach(function(n){n.classList.toggle('on',n.getAttribute('data-view')===v);});
+  $('side').classList.remove('open');
+  if(v==='clients')renderClients();if(v==='leads')renderBoard();if(v==='day')renderDay();if(v==='chat')renderChat();if(v==='cal')renderCal();if(v==='signals')renderSignals();if(v==='lb')renderLB();if(v==='earn')renderEarn();if(v==='fu')renderFU();if(v==='addclient'){$('nc_asg').textContent=ROLE.key==='admin'?'choose on save':ROLE.name;}}
+
+function renderClients(){
+  var list=myClients().slice();
+  if(CONF!=='all')list=list.filter(function(c){return c.consent===CONF;});
+  if(ROLE.key==='admin'&&ASG!=='all')list=list.filter(function(c){return c.services.some(function(s){return s.asg===ASG;});});
+  var ord={'Today':0,'Yesterday':1,'—':99};
+  function k(v){if(v in ord)return ord[v];var m=v&&v.match(/(\d+) day/);return m?+m[1]:50;}
+  if(SORT==='rel')list.sort(function(a,b){return (REL[b.id]?REL[b.id].sc:0)-(REL[a.id]?REL[a.id].sc:0);});
+  if(SORT==='updated')list.sort(function(a,b){return k(a.updated)-k(b.updated);});
+  if(SORT==='created')list.sort(function(a,b){return k(a.created)-k(b.created);});
+  if(SORT==='lastchat'||SORT==='recent')list.sort(function(a,b){return k(a.lastChat)-k(b.lastChat);});
+  $('cltb').innerHTML=list.map(function(c){
+    return '<tr data-c="'+c.id+'"><td><span class="avatar">'+ini(c.name)+'</span><b>'+c.name+'</b>'+(SORT==='recent'&&c.recent?'<p class="sm dm" style="margin-top:3px;">'+c.recent+'</p>':'')+'</td>'+
+    '<td>'+pillC(c)+'</td>'+
+    '<td class="sm">'+c.services.map(function(s){return s.svc+' · <b style="color:var(--tx);">'+s.asg+'</b>';}).join('<br>')+'</td>'+
+    '<td class="sm">'+c.services.map(function(s){return s.lastTalk;}).join('<br>')+'</td>'+
+    '<td class="sm">'+c.updated+'</td></tr>';}).join('');
+  $('ctcl').textContent=myClients().length;var fuc=LEADS.filter(function(l){var c2=CLIENTS.find(function(x){return x.id===l.client;});return visible(c2)&&l.stage!=='Won'&&l.stage!=='Lost'&&l.fud<=0;}).length;$('ctfu').textContent=fuc||'';$('ctld').textContent=LEADS.filter(function(l){return visible(CLIENTS.find(function(c){return c.id===l.client;}));}).length;
+  $('clhead').textContent=ROLE.key==='admin'?'All clients':'Your book';
+  $('asgrow').style.display=ROLE.key==='admin'?'flex':'none';
+  var mc=myClients();['granted','pending','none'].forEach(function(k){var el=document.querySelector('[data-con="'+k+'"]');if(el){var base=k==='granted'?'Consented':k==='pending'?'Link sent':'No consent';el.textContent=base+' \u00b7 '+mc.filter(function(c){return c.consent===k;}).length;}});
+  $('clnote').textContent=ROLE.key==='admin'?'Admin view — every client, filter by assignee above. Service-wise reassignment happens here.':'You see clients with at least one service assigned to you — including what other desks last discussed with them. Clients with no service under you don\u2019t exist here.';
+}
+
+function open360(id){CUR=CLIENTS.find(function(c){return c.id===id;});CTAB='brief';
+  $('cname').textContent=CUR.name;$('cname2').textContent=CUR.name;$('cav').textContent=ini(CUR.name);
+  $('cmeta').textContent=CUR.phone+' · '+CUR.email+(CUR.aum?' · AUM '+CUR.aum:'');
+  var g=GEO[CUR.id];$('cgeo').innerHTML=g?'<i class="ti ti-map-pin"></i> '+g.city+'  ·  <i class="ti ti-login"></i> last login: '+g.ll+'  ·  <i class="ti ti-language"></i> prefers '+g.lang:'';
+  var cb=$('consentbar');
+  if(CUR.consent==='granted')cb.innerHTML='<div class="cd" style="border-color:rgba(62,213,152,.35);padding:11px 16px;"><span class="sm"><b style="color:var(--pos);">Consent granted</b> · '+CUR.consentMeta+' — portfolio, insights and briefing are open. Revocable by the client anytime.</span>'+
+    (CUR.score?'<div class="depth"><div class="dline"></div><div class="dmark" style="left:'+CUR.score+'%;"></div></div><p class="sm dm">Your line · '+CUR.score+' · '+CUR.band+' · next milestone '+(CUR.score<65?65:80)+' — same gauge '+CUR.name.split(' ')[0]+' sees in-app</p>':'')+'</div>';
+  else if(CUR.consent==='pending')cb.innerHTML='<div class="cd" style="border-color:rgba(224,180,92,.35);padding:11px 16px;"><span class="sm"><b style="color:var(--watch);">Consent link sent</b> · '+CUR.consentMeta+' · <span class="ghost tap" id="resend">Resend link</span></span></div>';
+  else cb.innerHTML='<div class="cd" style="border-color:rgba(255,255,255,.12);padding:11px 16px;"><span class="sm"><b>No consent</b> — contact, bookings and communication only. <span class="ghost tap" id="asklink">Send consent link</span></span></div>';
+  var pp=PREP[CUR.id];
+  $('arthprep').innerHTML=pp?'<div class="arth"><span style="display:inline-flex;align-items:center;gap:8px;"><span class="arthic"><svg width="14" height="14" viewBox="0 0 40 40" style="vertical-align:-2px;"><path d="M20 4 A16 16 0 0 1 36 20 H4 A16 16 0 0 1 20 4 Z" fill="var(--lav)" opacity=".8"/><circle cx="20" cy="20" r="16" fill="none" stroke="var(--lav)" stroke-width="2.5"/><line x1="2" y1="20" x2="38" y2="20" stroke="var(--lav)" stroke-width="2.5"/></svg></span><p class="lb" style="margin:0;">ARTH · BEFORE YOU TALK</p></span>'+
+   '<p class="sm" style="margin-top:8px;color:var(--tx);">'+pp.talk+'</p>'+
+   '<div class="grid3" style="margin-top:10px;"><div><p class="lb">POTENTIAL</p><p class="sm" style="margin-top:5px;color:var(--tx);">'+pp.pot+'</p></div>'+
+   '<div><p class="lb">VALUE IF IT LANDS</p><p class="sm" style="margin-top:5px;color:var(--tx);">'+pp.val+'</p></div>'+
+   '<div><p class="lb">LAST TOUCH · WHERE THEIR HEAD IS</p>'+
+   (ACQ[CUR.id]?'<p class="sm" style="margin-top:5px;color:var(--lav);">'+ACQ[CUR.id].l[0]+' — '+ACQ[CUR.id].l[1]+'</p>':'')+
+   (LMSG[CUR.id]?'<p class="sm" style="margin-top:5px;color:var(--tx);"><i class="ti '+LMSG[CUR.id][0]+'" style="color:var(--lav);"></i> '+LMSG[CUR.id][1]+'</p>':'')+
+   '<p class="sm" style="margin-top:5px;color:var(--tx);">'+((CUR.consent==='granted')?pp.act:'In-app behaviour hidden — no RM visibility. Read built from their last touch and conversations only.')+'</p></div></div>'+
+   (function(){var sp=SUP[CUR.id];var ot=TICKETS.find(function(tk){return tk.client===CUR.id&&tk.status!=='Resolved';});
+    if(!sp&&!ot)return '';
+    return '<div style="margin-top:12px;border-top:1px solid rgba(189,179,246,.25);padding-top:10px;"><p class="lb">SUPPORT PULSE</p>'+
+     (sp?'<div class="grid3" style="margin-top:6px;"><p class="sm"><b style="color:var(--pos);">Happy:</b> '+sp.pos+'</p><p class="sm"><b style="color:var(--crit);">Not happy:</b> '+sp.neg+'</p><p class="sm"><b style="color:var(--gold);">Next:</b> '+sp.next+'</p></div>':'')+
+     (ot?'<p class="sm" style="margin-top:8px;color:var(--crit);">Open ticket '+ot.id+' · '+ot.topic+' · '+ot.last+' — resolve before any pitch.</p>':'')+'</div>';})()+
+   '</div>':'';
+  renderCTab();show('c360');}
+
+function renderCTab(){
+  document.querySelectorAll('#ctabs .tb').forEach(function(t){t.classList.toggle('on',t.getAttribute('data-ct')===CTAB);});
+  var b=$('cbody'),c=CUR,html='';
+  var locked=c.consent!=='granted';
+  if(CTAB==='brief'||CTAB==='data'){
+    var inner;
+    if(CTAB==='brief'){
+      inner='<div class="grid3">'+
+      '<div class="cd"><p class="lb" style="color:var(--good);">WHAT\u2019S GOOD</p>'+(c.brief?c.brief.good.map(function(x){return '<p class="sm" style="margin-top:9px;color:var(--tx);">'+x+'</p>';}).join(''):'')+'</div>'+
+      '<div class="cd"><p class="lb" style="color:var(--crit);">WHAT NEEDS ACTION</p>'+(c.brief?c.brief.bad.map(function(x){return '<p class="sm" style="margin-top:9px;color:var(--tx);">'+x+'</p>';}).join(''):'')+'</div>'+
+      '<div class="cd" style="border-color:rgba(217,185,106,.4);"><p class="lb" style="color:var(--gold);">WHAT TO TALK ABOUT</p>'+(c.brief?c.brief.talk.map(function(x){return '<p class="sm" style="margin-top:9px;color:var(--tx);">'+x+'</p>';}).join(''):'')+'</div></div>'+
+      '<p class="sm dm" style="margin-top:12px;">Briefing language stays inside the perimeter: observations, numbers, comparisons and routes — never advice scripts. Score '+(c.score||'—')+(c.band?' · '+c.band:'')+(c.score?' · next milestone '+(c.score<65?65:80):'')+'.</p>';
+    }else{
+      var f=c.fin;
+      inner='<div class="cd" style="padding:11px 18px;"><div style="display:flex;gap:16px;flex-wrap:wrap;align-items:center;">'+(f?f.updated.map(function(u){return u[2]?'<span class="errrow">'+u[0]+' · refresh failed 09:12 — showing '+u[1]+' \u00b7 <span class="lnk" data-retry="'+u[0]+'">Retry</span></span>':'<span class="sm"><b style="color:var(--tx);">'+u[0]+'</b> · updated '+u[1]+'</span>';}).join(''):'')+'</div></div>'+
+      '<div class="grid3">'+
+      '<div class="cd"><p class="lb">HOLDINGS</p>'+(f?f.hold.map(function(h){return '<div class="rw"><div><span class="sm" style="color:var(--tx);">'+h[0]+'</span><p class="sm dm">'+h[2]+'</p></div><b>'+h[1]+'</b></div>';}).join(''):'')+'</div>'+
+      '<div class="cd"><p class="lb">LIABILITIES</p>'+(f?f.liab.map(function(h){return '<div class="rw"><div><span class="sm" style="color:var(--tx);">'+h[0]+'</span><p class="sm dm">'+h[2]+'</p></div><b>'+h[1]+'</b></div>';}).join(''):'')+'</div>'+
+      '<div class="cd"><p class="lb">CASHFLOW / MONTH</p>'+(f?'<div class="rw"><span class="sm">Income</span><b>'+f.cash.inc+'</b></div><div class="rw"><span class="sm">Spends</span><b>'+f.cash.spend+'</b></div><div class="rw"><span class="sm">SIPs</span><b>'+f.cash.sip+'</b></div><div class="rw"><span class="sm">Surplus</span><b style="color:var(--pos);">'+f.cash.sur+'</b></div><p class="sm dm" style="margin-top:8px;">'+f.cash.note+'</p>':'')+'</div></div>'+
+      '<div class="cd" style="margin-top:12px;border-color:rgba(217,185,106,.4);"><div class="rw" style="border:none;padding:0;flex-wrap:wrap;gap:10px;"><div><p class="lb" style="color:var(--gold);">WEALTH HEALTH REPORT</p><p class="sm" style="margin-top:4px;">Score '+(c.score||'—')+' · '+(c.band||'')+' · mirrors exactly what '+c.name.split(' ')[0]+' sees in-app · generated Today 06:00</p></div>'+
+      '<div style="display:flex;gap:8px;flex-wrap:wrap;"><span class="cta2 tap" id="vreport">View report</span><span class="cta2 tap" id="dreport">Download PDF</span><span class="cta tap" id="wareport">Send to '+c.name.split(' ')[0]+' on WhatsApp</span></div></div>'+
+      '<div id="repbody" style="display:none;margin-top:12px;border-top:1px solid var(--hair);padding-top:12px;">'+(c.brief?'<div class="grid3"><div><p class="lb" style="color:var(--good);">WORKING</p>'+c.brief.good.map(function(x){return '<p class="sm" style="margin-top:7px;color:var(--tx);">'+x+'</p>';}).join('')+'</div><div><p class="lb" style="color:var(--crit);">NEEDS ACTION</p>'+c.brief.bad.map(function(x){return '<p class="sm" style="margin-top:7px;color:var(--tx);">'+x+'</p>';}).join('')+'</div><div><p class="lb">SCORE PATH</p><p class="sm" style="margin-top:7px;color:var(--tx);">'+c.score+' now · next milestone '+(c.score<65?65:80)+'</p><p class="sm dm" style="margin-top:5px;">Same bands, same numbers as the client’s report — one truth, two views.</p></div></div>':'')+'</div></div>'+
+      '<div class="cd" style="margin-top:12px;"><p class="lb">STATEMENTS &amp; REPORTS — SAME AS IN-APP</p>'+
+      [['Monthly statement','Jun 2026'],['CA-ready capital gains statement','FY 2025–26'],['Tax pack · 80C / ELSS proofs','FY 2025–26'],['Fee &amp; commission report','every rupee earned from this account · Jun 2026']].map(function(rp){
+        return '<div class="rw"><div><span class="sm" style="color:var(--tx);">'+rp[0]+'</span><p class="sm dm">'+rp[1]+'</p></div><div style="display:flex;gap:8px;"><span class="cta2 tap" data-rdl="'+rp[0]+'" style="padding:6px 11px;font-size:12px;">Download</span><span class="cta2 tap" data-rwa="'+rp[0]+'" style="padding:6px 11px;font-size:12px;">WhatsApp</span></div></div>';}).join('')+
+      '<p class="sm dm" style="margin-top:8px;">Shares go to '+c.name.split(' ')[0]+'’s verified number only · every share is logged.</p></div>';
+    }
+    if(locked){
+      html='<div class="gate"><div class="under">'+ (CTAB==='brief'
+        ?'<div class="grid3"><div class="cd" style="height:150px;"></div><div class="cd" style="height:150px;"></div><div class="cd" style="height:150px;"></div></div>'
+        :'<div class="grid2"><div class="cd" style="height:170px;"></div><div class="cd" style="height:170px;"></div></div>')+'</div>'+
+      '<div class="lock"><p class="lb" style="color:var(--gold);">BELOW THE WATERLINE</p><h2 class="ser" style="margin-top:8px;">Opens when '+c.name.split(' ')[0]+' says so.</h2><p class="sm" style="margin-top:8px;max-width:380px;">'+(c.consent==='pending'?'Consent link sent — the moment it\u2019s approved, briefing and data appear here.':'No consent on record. You can talk, book and log — the numbers stay theirs until shared.')+'</p>'+(c.consent==='none'?'<span class="cta2 tap" id="asklink2" style="margin-top:14px;">Send consent link</span>':'')+'</div></div>';
+    } else html=inner;
+    if(c.bookings.length&&!locked&&CTAB==='brief'){html+='<div class="cd" style="margin-top:12px;"><p class="lb">UPCOMING BOOKING</p>'+c.bookings.map(function(bk){return '<div class="rw"><span class="sm" style="color:var(--tx);">'+bk.t+' · with '+bk.w+'</span><span class="sm dm">'+bk.note+'</span></div>';}).join('')+'</div>';}
+    if(c.bookings.length&&locked){html+='<div class="cd" style="margin-top:12px;"><p class="lb">UPCOMING BOOKING (VISIBLE WITHOUT CONSENT)</p>'+c.bookings.map(function(bk){return '<div class="rw"><span class="sm" style="color:var(--tx);">'+bk.t+' · with '+bk.w+'</span><span class="sm dm">'+bk.note+'</span></div>';}).join('')+'</div>';}
+  }
+  if(CTAB==='leads'){
+    var ls=LEADS.filter(function(l){return l.client===c.id;});
+    html=ls.length?ls.map(function(l){return '<div class="cd tap" data-lead="'+l.id+'" style="margin-top:10px;"><div class="rw" style="border:none;padding:0;"><div><b>'+l.ttl+'</b><p class="sm">'+l.svc+' · '+l.asg+'</p></div><div style="text-align:right;"><span class="pill p-stage">'+l.stage.toUpperCase()+'</span> <span class="pill '+(l.cst==='Overdue'?'p-crit':l.cst==='Follow-up due'?'p-attn':'p-mut')+'">'+l.cst.toUpperCase()+'</span></div></div></div>';}).join(''):'<p class="sm dm">No leads yet — open one from the button above when a conversation earns it.</p>';
+  }
+  if(CTAB==='comms'){
+    html='<div class="cd">'+c.comms.map(function(m){return '<div class="comm"><span class="cic">'+chico(m.ch)+'</span><div><p class="sm" style="color:var(--tx);">'+m.note+'</p><p class="sm dm" style="margin-top:2px;">'+m.when+' · '+m.by+' · '+m.ch+'</p></div></div>';}).join('')+'</div>';
+  }
+  if(CTAB==='sup'){
+    var tks=TICKETS.filter(function(tk){return tk.client===c.id;});
+    html=tks.length?tks.map(function(tk){
+      var pc=tk.status==='Resolved'?'p-good':tk.status==='Open'?'p-crit':'p-watch';
+      return '<div class="cd" style="margin-top:10px;"><div class="rw" style="border:none;padding:0;flex-wrap:wrap;gap:8px;"><div><b>'+tk.id+' · '+tk.topic+'</b><p class="sm" style="margin-top:3px;">Opened '+tk.opened+' · '+tk.last+'</p></div><span class="pill '+pc+'">'+tk.status.toUpperCase()+'</span></div></div>';
+    }).join('')+'<p class="sm dm" style="margin-top:10px;">Sentiment from these conversations feeds Arth’s Support Pulse above — the ticket is the record, Arth carries the meaning.</p>':'<p class="sm dm">No tickets — clean support history.</p>';
+  }
+  if(CTAB==='src'){
+    var aq=ACQ[c.id];
+    html=aq?'<div class="grid2"><div class="cd"><p class="lb">FIRST TOUCH · HOW THEY FOUND US</p>'+
+     '<div class="rw"><span class="sm">Lead source</span><b>'+aq.lead+'</b></div>'+
+     '<div class="rw"><div><span class="sm" style="color:var(--tx);">'+aq.f[0]+'</span><p class="sm dm">'+aq.f[1]+'</p></div></div>'+
+     '<div class="rw"><span class="sm">UTM</span><span class="sm" style="color:var(--tx);">'+aq.u+'</span></div></div>'+
+     '<div class="cd"><p class="lb">LAST TOUCH · WHERE THEY WERE LAST</p>'+
+     '<div class="rw"><div><span class="sm" style="color:var(--tx);">'+aq.l[0]+'</span><p class="sm dm">'+aq.l[1]+'</p></div></div>'+
+     '<div class="rw"><span class="sm">Journey</span><span class="sm" style="color:var(--tx);">'+aq.touch+'</span></div></div></div>'+
+     '<p class="sm dm" style="margin-top:10px;">Acquisition metadata is ours, so it shows regardless of consent — first source never changes; last touch updates with every session or outreach.</p>':'<p class="sm dm">No acquisition record.</p>';
+  }
+  if(CTAB==='svc'){
+    html='<div class="cd">'+c.services.map(function(s){return '<div class="rw"><div><b>'+s.svc+'</b><p class="sm">Assignee: '+s.asg+(s.asg===ROLE.name?' (you)':'')+'</p></div><span class="sm dm">Last talk: '+s.lastTalk+'</span></div>';}).join('')+'</div>'+
+    '<p class="sm dm" style="margin-top:10px;">Everyone assigned to '+c.name.split(' ')[0]+' on any service sees this panel — who else is on the account and when they last spoke. Nobody double-calls. '+(ROLE.key==='admin'?'Reassignment is admin-only: tap an assignee to change (demo: toast).':'Reassignment is admin-only.')+'</p>';
+  }
+  b.innerHTML=html;
+}
+
+/* ================= LEADS ================= */
+function renderBoard(){
+  var vis=LEADS.filter(function(l){var c=CLIENTS.find(function(x){return x.id===l.client;});return visible(c)&&(SVC==='all'||l.svc===SVC);});
+  $('board').innerHTML=STAGES.map(function(st){
+    var col=vis.filter(function(l){return l.stage===st;});
+    return '<div class="col"><p class="lb">'+st.toUpperCase()+' · '+col.length+'</p>'+col.map(function(l){var c=CLIENTS.find(function(x){return x.id===l.client;});
+      return '<div class="leadcd" data-lead="'+l.id+'"><b style="font-size:13px;">'+l.ttl+'</b><p class="sm" style="margin-top:3px;">'+c.name+' · '+l.svc+'</p><p class="sm dm">'+l.asg+'</p><span class="pill '+(l.cst==='Overdue'?'p-crit':l.cst==='Follow-up due'?'p-attn':l.cst==='Replied'?'p-good':'p-mut')+'" style="margin-top:7px;">'+l.cst.toUpperCase()+'</span> <span class="cta2 tap" data-c="'+c.id+'" style="padding:4px 9px;font-size:11px;margin-top:7px;display:inline-block;">Profile</span></div>';}).join('')+'</div>';}).join('');
+}
+function myMoments(){return MOMENTS.filter(function(m){return ROLE.key==='admin'||m.own===ROLE.name;});}
+function rmsKey(){return ROLE.key;}
+function renderDay(){
+  var R=RMS[rmsKey()],ms=myMoments(),dn=ms.filter(function(m){return m.done;});
+  var h=new Date().getHours();
+  $('dayhi').textContent=(h<12?'Good morning, ':h<17?'Good afternoon, ':'Good evening, ')+(ROLE.key==='admin'?'Admin':ROLE.name.split(' ')[0])+'.';
+  $('daysub').textContent=ROLE.key==='admin'?'The floor’s tide — every desk’s moments in one queue.':'Arth read your book overnight. '+ms.length+' moments matter today — in order.';
+  $('dsc').textContent=R.s;$('dband').textContent=R.band;$('dscsub').textContent=R.sub;
+  $('ddm').style.left=R.s+'%';
+  $('dprog').textContent=dn.length+' / '+ms.length;
+  $('vfill').style.height=(ms.length?Math.round(dn.length/ms.length*100):0)+'%';
+  $('dlift').innerHTML='<span class="lb" style="align-self:center;">WHAT LIFTS IT</span>'+R.lift.map(function(l){return '<span class="tag">'+l[0]+' <b style="color:var(--pos);">'+l[1]+'</b></span>';}).join('');
+  var kc={consent:'var(--pos)',talk:'var(--gold)',fu:'var(--attn)',drop:'var(--crit)',prep:'var(--mut)'};
+  function mcard(m){var mc=m.client||(m.lead?((LEADS.find(function(l){return l.id===m.lead;})||{}).client):null);return '<div class="mom'+(m.done?' done':'')+'"><div style="display:flex;gap:12px;align-items:flex-start;flex:1;min-width:240px;"><span class="k" style="background:'+kc[m.k]+';margin-top:7px;"></span><div><b>'+m.ttl+'</b><p class="sm" style="margin-top:3px;">'+m.why+'</p><p class="sm" style="margin-top:3px;color:var(--gold);">'+m.val+'</p></div></div><div style="display:flex;gap:8px;align-items:center;">'+(m.done?'':'<span class="cta tap" data-mact="'+m.id+'">'+m.act+'</span>')+(mc?'<span class="cta2 tap" data-c="'+mc+'" style="padding:6px 10px;font-size:11.5px;">Profile</span>':'')+'<span class="cta2 tap" data-mdone="'+m.id+'">'+(m.done?'Undo':'Done')+'</span></div></div>';}
+  $('dq').innerHTML=ms.filter(function(m){return !m.done;}).map(mcard).join('')||'<p class="sm dm" style="margin-top:8px;">Tide’s out — everything that mattered today is done.</p>';
+  $('ddone').innerHTML=dn.map(mcard).join('')||'<p class="sm dm" style="margin-top:8px;">Nothing yet — the vessel fills as you go.</p>';
+  $('ctday').textContent=(ms.length-dn.length)||'';
+  $('ctsig').textContent=SIGNALS.filter(function(g){var c=CLIENTS.find(function(x){return x.id===g.client;});return c&&visible(c);}).length||'';
+}
+function renderSignals(){
+  var vis=SIGNALS.filter(function(g){var c=CLIENTS.find(function(x){return x.id===g.client;});return c&&visible(c)&&(SIGK==='all'||g.k===SIGK);});
+  var kc={consent:'var(--pos)',talk:'var(--gold)',explore:'var(--tx)',drop:'var(--crit)'};
+  $('sigbody').innerHTML=vis.map(function(g){var c=CLIENTS.find(function(x){return x.id===g.client;});
+    return '<div class="sigrow"><span class="k" style="width:8px;height:8px;border-radius:50%;background:'+kc[g.k]+';margin-top:7px;"></span><div style="flex:1;min-width:220px;"><b>'+c.name+'</b> <span class="sm dm">· '+g.t+'</span><p class="sm" style="margin-top:3px;">'+g.txt+'</p></div><span class="cta2 tap" data-c="'+g.client+'">'+g.act+'</span></div>';}).join('')||'<p class="sm dm" style="margin-top:10px;">No signals in this filter.</p>';
+  var mx=FUNNEL[0][1];
+  $('funnel').innerHTML=FUNNEL.map(function(f,i){var pr=i?Math.round(f[1]/FUNNEL[i-1][1]*100):100;
+    return '<div class="fbar"><span class="ft">'+f[0]+'</span><div class="fb" style="width:'+Math.round(f[1]/mx*260)+'px;"></div><span class="fp">'+f[1]+'%'+(i?' · keeps '+pr+'% of previous':'')+'</span></div>';}).join('');
+}
+function renderLB(){
+  var rows=PEERS.slice().sort(function(a,b){return b.score-a.score;});
+  $('lbbody').innerHTML='<table class="ls"><thead><tr><th>#</th><th>RM</th><th>Work health</th><th>Moments today</th><th>Incentive · month</th></tr></thead><tbody>'+
+   rows.map(function(r,i){var me=r.n===ROLE.name;
+    return '<tr style="'+(me?'background:rgba(217,185,106,.06);':'')+'"><td>'+(i+1)+'</td><td><span class="avatar">'+ini(r.n)+'</span><b>'+r.n+(me?' · you':'')+'</b></td><td><b>'+r.score+'</b> <span class="sm">'+r.band+'</span></td><td class="sm">'+r.mom+'</td><td><b>'+r.earn+'</b></td></tr>';}).join('')+'</tbody></table>'+
+   (ROLE.key==='admin'?'<p class="lb" style="margin-top:22px;color:var(--gold);">RM BY RM · WHERE ATTENTION GOES</p>'+
+    rows.map(function(r){var st=RMSTAT[r.n];if(!st)return '';
+      return '<div class="cd" style="margin-top:10px;'+(st.flag&&st.flag.indexOf('ATTENTION')===0?'border-color:rgba(224,138,138,.5);':'')+'"><div class="rw" style="border:none;padding:0;flex-wrap:wrap;gap:8px;"><div><b>'+r.n+'</b> · <span class="sm">'+r.score+' '+r.band+' · '+st.trend+'</span><p class="sm" style="margin-top:4px;">Overdue: '+st.overdue+' · Silent >10d: '+st.silent+' · '+st.conv+'</p>'+(st.flag?'<p class="sm" style="margin-top:4px;color:'+(st.flag.indexOf('ATTENTION')===0?'var(--crit)':'var(--amb)')+';">'+st.flag+'</p>':'<p class="sm" style="margin-top:4px;color:var(--pos);">Clean — no flags.</p>')+'</div></div></div>';}).join('')+
+    '<p class="lb" style="margin-top:22px;color:var(--crit);">COMPLIANCE · MIS-SELL FLAGS</p>'+
+    (MISSELL.length?MISSELL.map(function(m){var c=CLIENTS.find(function(x){return x.id===m.client;});
+      return '<div class="cd" style="margin-top:10px;border-color:rgba(224,138,138,.5);"><div class="rw" style="border:none;padding:0;flex-wrap:wrap;gap:8px;"><div><b>'+m.rm+' → '+(c?c.name:m.client)+'</b> <span class="pill p-crit">'+m.sev+'</span> <span class="pill p-watch">'+m.status.toUpperCase()+'</span><p class="sm" style="margin-top:4px;color:var(--tx);">'+m.prod+'</p><p class="sm" style="margin-top:4px;">'+m.rule+'</p><p class="sm dm" style="margin-top:3px;">'+m.when+'</p></div><span class="cta2 tap" data-c="'+m.client+'">Client</span></div></div>';}).join(''):'<p class="sm dm" style="margin-top:8px;">No flags — clean floor.</p>')
+   :'');
+}
+function renderEarn(){
+  var E=EARN[rmsKey()];
+  $('earntop').innerHTML='<div class="cd"><p class="lb">EARNED · THIS MONTH</p><p style="font-size:28px;font-weight:650;letter-spacing:-.6px;margin-top:6px;">'+E.m+'</p></div>'+
+   '<div class="cd"><p class="lb">FY SO FAR</p><p style="font-size:28px;font-weight:650;letter-spacing:-.6px;margin-top:6px;">'+E.y+'</p></div>'+
+   '<div class="cd" style="border-color:rgba(217,185,106,.4);"><p class="lb" style="color:var(--gold);">IN TODAY’S TIDE</p><p style="font-size:28px;font-weight:650;letter-spacing:-.6px;margin-top:6px;">'+E.pipe+'</p></div>';
+  $('earnsplit').innerHTML=E.split.map(function(x){return '<div class="rw"><span class="sm">'+x[0]+'</span><b>'+x[1]+'</b></div>';}).join('');
+  $('earnpipe').innerHTML=E.pipeitems.map(function(x){return '<div class="rw"><span class="sm">'+x[0]+'</span><b style="color:var(--gold);">'+x[1]+'</b></div>';}).join('');
+  renderSales();
+}
+function fuCard(l){var c=CLIENTS.find(function(x){return x.id===l.client;});
+  return '<div class="cd tap" data-lead="'+l.id+'" style="margin-top:10px;"><div class="rw" style="border:none;padding:0;flex-wrap:wrap;gap:8px;"><div><b>'+c.name+'</b> · <span class="sm">'+l.ttl+' · '+l.svc+'</span><p class="sm dm" style="margin-top:3px;">'+l.next+'</p></div><div style="text-align:right;"><span class="pill '+(l.fud<0?'p-crit':l.fud===0?'p-attn':'p-mut')+'">'+l.fut+'</span><p class="sm dm" style="margin-top:4px;">'+l.asg+'</p><span class="cta2 tap" data-c="'+c.id+'" style="padding:5px 10px;font-size:11px;margin-top:6px;display:inline-block;">Profile</span></div></div></div>';}
+function renderFU(){
+  var vis=LEADS.filter(function(l){var c=CLIENTS.find(function(x){return x.id===l.client;});return visible(c)&&l.stage!=='Won'&&l.stage!=='Lost';});
+  var od=vis.filter(function(l){return l.fud<0;}),td=vis.filter(function(l){return l.fud===0;}),up=vis.filter(function(l){return l.fud>0;}).sort(function(a,b){return a.fud-b.fud;});
+  $('fubody').innerHTML=
+   '<p class="lb" style="margin-top:16px;color:var(--crit);">OVERDUE / PENDING · '+od.length+'</p>'+(od.length?od.map(fuCard).join(''):'<p class="sm dm" style="margin-top:8px;">Nothing overdue — keep it that way.</p>')+
+   '<p class="lb" style="margin-top:22px;color:var(--attn);">TODAY · '+td.length+'</p>'+(td.length?td.map(fuCard).join(''):'<p class="sm dm" style="margin-top:8px;">No follow-ups due today.</p>')+
+   '<p class="lb" style="margin-top:22px;">UPCOMING · '+up.length+'</p>'+(up.length?up.map(fuCard).join(''):'<p class="sm dm" style="margin-top:8px;">Nothing scheduled ahead — log calls with a next date and they land here.</p>');
+}
+function openLead(id){CURLEAD=LEADS.find(function(l){return l.id===id;});var c=CLIENTS.find(function(x){return x.id===CURLEAD.client;});
+  $('lttl').textContent=CURLEAD.ttl;$('lhead').textContent=CURLEAD.ttl;
+  $('lmeta').textContent=c.name+' · '+CURLEAD.svc+' · assignee '+CURLEAD.asg;
+  $('llog').innerHTML=CURLEAD.log.map(function(m){return '<div class="comm"><span class="cic"><i class="ti ti-notes"></i></span><div><p class="sm" style="color:var(--tx);">'+m.note+'</p><p class="sm dm" style="margin-top:2px;">'+m.when+' · '+m.by+'</p></div></div>';}).join('');
+  $('lstg').innerHTML=STAGES.concat(['Lost','Dormant']).map(function(s){return '<span class="tag tap'+(CURLEAD.stage===s?' on':'')+'" data-st="'+s+'">'+s+'</span>';}).join('');
+  $('lcst').innerHTML=CSTATES.map(function(s){return '<span class="tag tap'+(CURLEAD.cst===s?' on':'')+'" data-cs="'+s+'">'+s+'</span>';}).join('');
+  $('lnext').textContent=CURLEAD.next;$('lfu').textContent=CURLEAD.fut||'— none set';
+  show('lead');}
+
+/* ================= EVENTS ================= */
+document.addEventListener('click',function(e){
+  var t=e.target.closest('.tap,[data-view],[data-c],[data-lead],[data-sort],[data-asg],[data-svc],[data-ct],[data-st],[data-cs],[data-role],[data-cch],.tb,tr[data-c]');
+  if(!t)return;
+  if(t.id==='crmotp'){$('crmotpb').style.display='block';t.style.opacity=.4;t.textContent='OTP sent ✓';toast('OTP sent to +91 98330 ···· 45 — auto-reads in a moment.');return;}
+  if(t.id==='crmres'){toast('Fresh code sent — the old one just died.');return;}
+  if(t.id==='crmwa'){toast('Same 6-digit code sent on WhatsApp ✓ — check the green app.');return;}
+  if(t.id==='crmver'){$('authblock').style.display='none';$('roleblock').style.display='block';toast('Number verified ✓');return;}
+  if(t.id==='crmqr'){$('crmqrb').style.display='block';$('crmotpb').style.display='none';$('crmotp').style.display='none';t.style.display='none';
+    clearTimeout(window._qrt);window._qrt=setTimeout(function(){var q=$('crmqrst');if(q&&$('crmqrb').style.display!=='none'){q.textContent='Scanned ✓ — signed in from your phone.';q.style.color='var(--pos)';setTimeout(function(){$('authblock').style.display='none';$('roleblock').style.display='block';toast('Signed in via QR ✓ — no OTP needed.');},700);}},2600);return;}
+  if(t.id==='crmqrx'){$('crmqrb').style.display='none';$('crmotp').style.display='block';$('crmqr').style.display='block';clearTimeout(window._qrt);return;}
+  var role=t.getAttribute&&t.getAttribute('data-role');
+  if(role){ROLE=ROLES[role];$('login').style.display='none';$('whochip').innerHTML='<b>'+ROLE.name+'</b><p class="sm">'+ROLE.desk+'</p>';
+    $('wsplash').classList.add('on');
+    setTimeout(function(){$('wsplash').classList.remove('on');$('app').style.display='flex';VSTACK=[];show('day',true);toast('Signed in as '+ROLE.name+' — Arth has your day ready.');
+      if(!TOURSEEN[ROLE.key]){TOURSEEN[ROLE.key]=1;setTimeout(tourStart,600);}},980);return;}
+  if(t.id==='switchrole'){$('login').style.display='flex';$('app').style.display='none';return;}
+  if(t.id==='burger'){$('side').classList.toggle('open');return;}
+  if(t.id==='tourgo'){show('day');setTimeout(tourStart,150);return;}
+  if(t.id==='tnext'){TI++;tourShow();return;}
+  if(t.id==='tskip'){tourEnd();return;}
+  if(t.id==='gback'||t.closest&&t.closest('#gback')){var pv=VSTACK.pop();if(pv)show(pv,true);$('gback').style.display=VSTACK.length?'inline-flex':'none';return;}
+  if(t.id==='arthpill'||t.closest&&t.closest('#arthpill')){$('arthrail').classList.toggle('open');return;}
+  var v=t.getAttribute('data-view');if(v){show(v);return;}
+  var cid=t.getAttribute('data-c');if(cid){open360(cid);return;}
+  var lid=t.getAttribute('data-lead');if(lid){openLead(lid);return;}
+  if(t.id==='askgo'){arthAsk($('askq').value);return;}
+  if(t.getAttribute('data-tour')){show('day');setTimeout(tourStart,150);return;}
+  var ah=t.getAttribute('data-ask');if(ah){$('askq').value=ah;arthAsk(ah);return;}
+  var sk=t.getAttribute('data-sk');if(sk){SIGK=sk;document.querySelectorAll('[data-sk]').forEach(function(x){x.classList.toggle('on',x===t);});renderSignals();return;}
+  var ma=t.getAttribute('data-mact');if(ma){var m=MOMENTS.find(function(x){return x.id===ma;});m.done=true;
+    if(m.k==='talk'){openChat(m.client);return;}
+    if(m.k==='drop'){toast('WhatsApp nudge sent — “your order’s saved, one tap finishes it.” Logged.');CLIENTS.find(function(c){return c.id===m.client;}).comms.unshift({ch:'wa',when:'Now',by:ROLE.name,note:'Nudge: dropped order, one tap to finish'});renderDay();return;}
+    if(m.lead){openLead(m.lead);return;}
+    if(m.client){open360(m.client);return;}
+    renderDay();return;}
+  var md=t.getAttribute('data-mdone');if(md){var m2=MOMENTS.find(function(x){return x.id===md;});m2.done=!m2.done;renderDay();toast(m2.done?'Done — the vessel rises.':'Back in the tide.');return;}
+  var so=t.getAttribute('data-sort');if(so){SORT=so;document.querySelectorAll('[data-sort]').forEach(function(x){x.classList.toggle('on',x===t);});renderClients();return;}
+  var cf=t.getAttribute('data-con');if(cf){CONF=cf;document.querySelectorAll('[data-con]').forEach(function(x){x.classList.toggle('on',x===t);});renderClients();return;}
+  var ag=t.getAttribute('data-asg');if(ag){ASG=ag;document.querySelectorAll('[data-asg]').forEach(function(x){x.classList.toggle('on',x===t);});renderClients();return;}
+  var sv=t.getAttribute('data-svc');if(sv){SVC=sv;document.querySelectorAll('[data-svc]').forEach(function(x){x.classList.toggle('on',x===t);});renderBoard();return;}
+  var ct=t.getAttribute('data-ct');if(ct){CTAB=ct;renderCTab();return;}
+  var st=t.getAttribute('data-st');if(st){CURLEAD.stage=st;openLead(CURLEAD.id);toast('Lead moved to '+st+'.');return;}
+  var cs=t.getAttribute('data-cs');if(cs){CURLEAD.cst=cs;openLead(CURLEAD.id);toast('Communication status: '+cs+'.');return;}
+  var cch=t.getAttribute('data-cch');if(cch){CCH=cch;$('cchlink').style.borderColor=cch==='link'?'rgba(217,185,106,.5)':'';$('cchasst').style.borderColor=cch==='assisted'?'rgba(217,185,106,.5)':'';$('cchlink').querySelector('span').textContent=cch==='link'?'●':'○';$('cchlink').querySelector('span').style.color=cch==='link'?'var(--gold)':'';$('cchasst').querySelector('span').textContent=cch==='assisted'?'●':'○';$('cchasst').querySelector('span').style.color=cch==='assisted'?'var(--gold)':'';return;}
+  if(t.id==='actchat'){openChat(CUR.id);return;}
+  if(t.id==='actcall'){toast('Dialing '+CUR.phone+' — call auto-logs to communications.');return;}
+  if(t.id==='actemail'){toast('Composer opens · sent mail auto-logs to communications.');return;}
+  if(t.id==='actwa'){CUR.comms.unshift({ch:'wa',when:'Now',by:ROLE.name,note:'WhatsApp opened to '+CUR.phone});renderCTab();toast('WhatsApp opens to '+CUR.phone+' — the touch logs to communications.');return;}
+  if(t.id==='lwa'){toast('WhatsApp opens against this lead — logs to the lead and the client trail.');return;}
+  if(t.id==='vreport'){var rb=document.getElementById('repbody');rb.style.display=rb.style.display==='none'?'block':'none';return;}
+  if(t.id==='dreport'){toast('Report PDF downloading — identical to '+CUR.name.split(' ')[0]+'’s in-app report, stamped with generation time.');return;}
+  var rt=t.getAttribute('data-retry');if(rt){toast('Retrying '+rt+'\u2026');setTimeout(function(){toast(rt+' recovered \u2713 \u2014 refreshed just now. Logged against the same trace.');if(CUR&&CUR.fin)CUR.fin.updated.forEach(function(u){if(u[0]===rt){u[1]='Just now';u.length=2;}});if(CURV==='c360')renderCTab();},1200);return;}
+  var rdl=t.getAttribute('data-rdl');if(rdl){if(CUR&&CUR.id==='neha'&&!CUR._pdfok){CUR._pdfok=1;logErr('PDF service',rdl+' failed \u2014 PDF service timed out');return;}toast(rdl+' downloading — identical to the in-app document.');return;}
+  var rwa=t.getAttribute('data-rwa');if(rwa){CUR.comms.unshift({ch:'wa',when:'Now',by:ROLE.name,note:rwa+' sent on WhatsApp to '+CUR.phone});toast(rwa+' sent to '+CUR.name.split(' ')[0]+' on WhatsApp — logged.');return;}
+  if(t.id==='wareport'){CUR.comms.unshift({ch:'wa',when:'Now',by:ROLE.name,note:'Wealth health report PDF sent on WhatsApp to '+CUR.phone});toast('Report sent to '+CUR.name.split(' ')[0]+' on WhatsApp — to their verified number only, and logged.');return;}
+  if(t.id==='lprof'){open360(CURLEAD.client);return;}
+  if(t.id==='lchat'){openChat(CURLEAD.client);return;}
+  if(t.id==='lcall'||t.id==='lemail'){toast('Opens against this lead — the touch logs to the lead, and to the client trail.');return;}
+  if(t.id==='actlead'){var svc=prompt('Service for the new lead (Wealth / Insurance / Bonds / PMS):','Wealth');if(!svc)return;
+    var nl={id:'L'+(LEADS.length+1),client:CUR.id,svc:svc,ttl:svc+' — from conversation',stage:'New',cst:'Awaiting reply',asg:ROLE.key==='admin'?'Swapnil':ROLE.name,next:'First touch within 24h',log:[{when:'Now',by:ROLE.name,note:'Lead opened from client 360'}]};
+    LEADS.push(nl);CTAB='leads';renderCTab();toast('Lead created under '+svc+' · assigned to '+nl.asg+'.');return;}
+  if(t.id==='resend'||t.id==='asklink'||t.id==='asklink2'){toast('Consent link re-sent by SMS + WhatsApp. Only '+ (CUR?CUR.name.split(' ')[0]:'the client') +' can approve it.');return;}
+  if(t.id==='laddlog'){var n=$('lnote').value.trim();if(!n){toast('Write the remark first — a log line is a memory the whole team shares.');return;}
+    var ch2=$('lch').value,fd=$('lfudate').value.trim();
+    CURLEAD.log.unshift({when:'Now',by:ROLE.name,note:'['+ch2+'] '+n});
+    if(fd){CURLEAD.fut=fd;CURLEAD.fud=/today/i.test(fd)?0:1;CURLEAD.next=fd+' — '+n;CURLEAD.cst='Follow-up due';}
+    $('lnote').value='';$('lfudate').value='';openLead(CURLEAD.id);renderClients();
+    toast(fd?'Logged · follow-up set for '+fd+' — it’s on your Follow-ups list.':'Logged.');return;}
+  if(t.id==='nc_go'){var nm=$('nc_name').value.trim();if(!nm){toast('Name is the one field that can\u2019t wait.');return;}
+    var nid='c'+Date.now();
+    CLIENTS.unshift({id:nid,name:nm,phone:$('nc_phone').value||'+91 —',email:$('nc_email').value||'—',consent:CCH==='link'?'pending':'none',
+      consentMeta:CCH==='link'?'Link sent · just now':'Assisted consent chosen — hand the client this device to approve with their own OTP',
+      created:'Today',updated:'Today',lastChat:'—',recent:null,
+      services:[{svc:$('nc_svc').value,asg:ROLE.key==='admin'?'Swapnil':ROLE.name,lastTalk:'No talk yet'}],
+      aum:null,score:null,band:null,brief:null,bookings:[],
+      comms:[{ch:'call',when:'Now',by:ROLE.name,note:'Client created via assisted onboarding · consent channel: '+(CCH==='link'?'link to client\u2019s phone':'assisted on-device (client\u2019s own OTP)')}]});
+    var nl2={id:'L'+(LEADS.length+1),client:nid,svc:$('nc_svc').value,ttl:$('nc_svc').value+' — assisted onboarding',stage:'New',cst:'Awaiting reply',asg:ROLE.key==='admin'?'Swapnil':ROLE.name,next:CCH==='link'?'Consent approval first — no proposal before data lands':'Complete assisted consent, then scan',log:[{when:'Now',by:ROLE.name,note:'Opened at client creation'}]};
+    LEADS.push(nl2);
+    $('nc_name').value='';$('nc_phone').value='';$('nc_email').value='';
+    toast(CCH==='link'?'Client created · consent link sent — they approve, then data flows.':'Client created · hand them the device to approve consent with their own OTP.');
+    show('clients');return;}
+});
+var TOUR=[
+ {el:'arthrail',t:'Arth made your day',x:'Narration, the Ask bar and answers live here — on every page, not just the board. If you don\u2019t know where something is, just ask.'},
+ {el:'dmods',t:'Five numbers, one glance',x:'Work health, day progress, today\u2019s \u20b9 tide, your rank, and the calendar. Tap any to go deep.'},
+ {el:'dq',t:'The tide',x:'Your day in order \u2014 green dot means fresh consent, gold means someone\u2019s waiting, red means overdue or a drop. Act from the card; the vessel fills as you finish.'},
+ {el:'drel',t:'Most relevant first',x:'Latest consent and latest chat request always float to the top — here and in the client list.'},
+ {el:'gloss',t:'Every symbol, decoded',x:'Dots, pills, bands, the line, trace IDs — the Glossary has all of it. It\u2019s in the menu, always. That\u2019s the tour — the tide\u2019s waiting.'}];
+var TI=0,TOURSEEN={};
+function tourStart(){TI=0;tourShow();}
+function tourShow(){
+  document.querySelectorAll('.tourhl').forEach(function(e){e.classList.remove('tourhl');});
+  var st=TOUR[TI];if(!st){tourEnd();return;}
+  if(st.el!=='gloss'){var el=$(st.el);if(el)el.classList.add('tourhl');}
+  $('tstep').textContent=(TI+1)+' of '+TOUR.length;
+  $('tttl').textContent=st.t;$('ttxt').textContent=st.x;
+  $('tnext').textContent=TI===TOUR.length-1?'Done':'Next';
+  $('tour').classList.add('on');
+}
+function tourEnd(){document.querySelectorAll('.tourhl').forEach(function(e){e.classList.remove('tourhl');});$('tour').classList.remove('on');}
+var ACQ={
+ rahul:{lead:'Organic',f:['Google organic · blog: “The hidden charges in your MF”','/blog/hidden-fees-mf · 12 Jul, 08:52'],l:['WhatsApp · CRM nudge (dropped order)','app → /report · yesterday 9:14 PM'],u:'utm_source=google · medium=organic · campaign=—',touch:'23 sessions · 6 channels'},
+ meera:{lead:'Paid social',f:['LinkedIn ad · HNW-PMS campaign','/pms · 02 Jul, 21:10'],l:['Direct · app open','app → /pms · yesterday'],u:'utm_source=linkedin · medium=paid · campaign=hnw-pms-jul',touch:'14 sessions · 3 channels'},
+ arjun:{lead:'Referral — Rahul Mehra',f:['Referral link nett.in/r/RAHUL','/welcome · 19 Jul, 19:40'],l:['Call · outbound (you)','— · 2 days ago'],u:'utm_source=referral · medium=link · campaign=r-RAHUL',touch:'2 app opens · limited mode'},
+ kavita:{lead:'Paid social',f:['Facebook ad · term-July','/insurance/term · 05 Jul, 13:22'],l:['Email · policy delivery','email → policy PDF · 22 Jul'],u:'utm_source=facebook · medium=paid · campaign=term-jul',touch:'9 sessions · 4 channels'},
+ sanjay:{lead:'Branch walk-in',f:['Branch · Gurgaon Sec-54 (offline)','— · today 11:00'],l:['WhatsApp · consent link','wa → consent · today 9:41 AM'],u:'utm_source=branch · medium=offline · campaign=—',touch:'1 visit · consent approved'},
+ neha:{lead:'Paid search',f:['Google Ads · wealth-checkup','/scan · 14 Jun, 22:05'],l:['Email · renewal notice','email · 26 days ago'],u:'utm_source=google · medium=cpc · campaign=wealth-checkup-jun',touch:'11 sessions · then silence 12 days'},
+ vikram:{lead:'Inbound — website form',f:['Google Ads · term-quote','/insurance/term#form · 26 Jul, 23:04'],l:['Email · intro (you)','email · 26 Jul'],u:'utm_source=google · medium=cpc · campaign=term-quote-jul',touch:'1 session · form filled 11 PM'},
+ deepa:{lead:'Employee referral — Rohan D.',f:['Referral · internal','/welcome · 20 Jun'],l:['Direct · app (Sunday check)','app → /wealth · 5 days ago'],u:'utm_source=referral · medium=employee · campaign=—',touch:'8 sessions · weekly rhythm'}};
+document.addEventListener('keydown' ,function(e){if(e.key==='Enter'&&document.activeElement&&document.activeElement.id==='askq'){arthAsk(document.activeElement.value);}});
+
+/* ================= v2.1: relevance, calendar, Arth board ================= */
+var REL={sanjay:{sc:98,why:'consent 9:41 AM'},rahul:{sc:95,why:'waiting in chat'},meera:{sc:80,why:'follow-up 4 PM'},arjun:{sc:60,why:'call tomorrow'},kavita:{sc:55,why:'free-look window'},vikram:{sc:50,why:'inbound quote'},neha:{sc:45,why:'renewal overdue'},deepa:{sc:30,why:'all clear'}};
+var CAL=[
+ {d:'Wed 29 · today',today:true,items:[
+   {t:'4:00 PM',who:'Meera Krishnan',what:'PMS follow-up',own:'Swapnil',lead:'L3'},
+   {t:'5:30 PM',who:'Vikram Shetty',what:'Second touch — call, not email',own:'Supriya Narkar',lead:'L7'},
+   {t:'6:00 PM',who:'Sanjay Gulati',what:'Post-consent call · son joins',own:'Swapnil',client:'sanjay'}]},
+ {d:'Thu 30',items:[]},
+ {d:'Fri 1 Aug',items:[{t:'6:30 PM',who:'Rahul Mehra',what:'Term cover relook · portfolio shared for this call',own:'Swapnil',client:'rahul'}]},
+ {d:'Sat 2 Aug',items:[{t:'11:00 AM',who:'Arjun Bhatia',what:'Intro call · no data shared',own:'Swapnil',client:'arjun'}]},
+ {d:'Later',items:[{t:'14 Aug',who:'Kavita Rao',what:'Free-look check-in',own:'Supriya Narkar',lead:'L4'}]}];
+function calVis(it){return ROLE.key==='admin'||it.own===ROLE.name;}
+function renderCal(){
+  $('calbody').innerHTML=CAL.map(function(day){
+    var its=day.items.filter(calVis);
+    return '<div class="col" style="'+(day.today?'border-color:rgba(217,185,106,.45);':'')+'"><p class="lb"'+(day.today?' style="color:var(--gold);"':'')+'>'+day.d.toUpperCase()+'</p>'+
+      (its.length?its.map(function(it){var cid2=it.client||(it.lead?((LEADS.find(function(l){return l.id===it.lead;})||{}).client):'');return '<div class="leadcd tap" '+(it.lead?'data-lead="'+it.lead+'"':'data-c="'+it.client+'"')+'><b style="font-size:13px;">'+it.t+'</b><p class="sm" style="margin-top:3px;color:var(--tx);">'+it.who+'</p><p class="sm dm">'+it.what+'</p>'+(ROLE.key==='admin'?'<p class="sm dm" style="margin-top:3px;">'+it.own+'</p>':'')+'<span class="cta2 tap" data-c="'+cid2+'" style="padding:4px 9px;font-size:11px;margin-top:6px;display:inline-block;">Profile</span></div>';}).join(''):'<p class="sm dm" style="margin-top:10px;">Clear.</p>')+'</div>';}).join('');
+}
+function renderDay(){
+  var R=RMS[rmsKey()],ms=myMoments(),dn=ms.filter(function(m){return m.done;}),un=ms.length-dn.length;
+  var E=EARN[rmsKey()];
+  var h=new Date().getHours();
+  $('dayhi').textContent=(h<12?'Good morning':h<17?'Good afternoon':'Good evening')+(ROLE.key==='admin'?', Admin.':', '+ROLE.name.split(' ')[0]+'.');
+  $('daysub').textContent='Wed 29 Jul';
+  $('arthsay').textContent=ROLE.key==='admin'
+    ?'The floor has '+un+' open moments worth '+E.pipe+'. One overdue (Neha, with Supriya). Sanjay\u2019s consent this morning is the freshest thing on the board \u2014 route it before evening.'
+    :'I read your book overnight and lined up '+ms.length+' moments \u2014 worth '+E.pipe+' if they land. '+R.sub+'. Start at the top; I\u2019ve already ordered them.';
+  $('askhints').innerHTML=['today\u2019s follow-ups','overdue','who gave consent','who wants to talk','my incentive','leaderboard','calendar','drop-offs'].map(function(x){return '<span class="tag tap" data-ask="'+x+'">'+x+'</span>';}).join('');
+  var rows=PEERS.slice().sort(function(a,b){return b.score-a.score;});
+  var rk=rows.findIndex(function(r){return r.n===ROLE.name;});
+  var tcal=CAL[0].items.filter(calVis).length;
+  var opT=TICKETS.filter(function(tk){var c3=CLIENTS.find(function(x){return x.id===tk.client;});return c3&&visible(c3)&&tk.status!=='Resolved';});
+  $('dmods').innerHTML=
+   '<div class="cd tap" data-view="lb"><p class="lb">WORK HEALTH</p><p style="font-size:24px;font-weight:650;letter-spacing:-.6px;margin-top:4px;" id="dsc"></p><p class="sm" id="dband"></p></div>'+
+   '<div class="cd"><div style="display:flex;gap:14px;align-items:center;"><div class="vessel"><div class="vfill" id="vfill"></div></div><div><p class="lb">TODAY</p><p style="font-size:24px;font-weight:650;letter-spacing:-.6px;margin-top:4px;" id="dprog"></p><p class="sm dm">moments done</p></div></div></div>'+
+   '<div class="cd tap" data-view="earn"><p class="lb" style="color:var(--gold);">IN TODAY\u2019S TIDE</p><p style="font-size:24px;font-weight:650;letter-spacing:-.6px;margin-top:4px;">'+E.pipe+'</p><p class="sm dm">'+E.m+' earned this month</p></div>'+
+   '<div class="cd tap" data-view="lb"><p class="lb">RANK</p><p style="font-size:24px;font-weight:650;letter-spacing:-.6px;margin-top:4px;">'+(rk>-1?('#'+(rk+1)+' of '+rows.length):'Team')+'</p><p class="sm dm">'+(rk>0?(rows[rk-1].score-rows[rk].score)+' pts behind '+rows[rk-1].n.split(' ')[0]:rk===0?'holding the top':'floor view')+'</p></div>'+
+   '<div class="cd tap" data-view="cal"><p class="lb">CALENDAR</p><p style="font-size:24px;font-weight:650;letter-spacing:-.6px;margin-top:4px;">'+tcal+' today</p><p class="sm dm">next: '+(CAL[0].items.filter(calVis)[0]?CAL[0].items.filter(calVis)[0].t+' \u00b7 '+CAL[0].items.filter(calVis)[0].who.split(' ')[0]:'\u2014')+'</p></div>'+
+   '<div class="cd tap" data-ask="open tickets"><p class="lb">SUPPORT</p><p style="font-size:24px;font-weight:650;letter-spacing:-.6px;margin-top:4px;">'+opT.length+' open</p><p class="sm dm">'+(opT.length?'resolve before you pitch':'no open tickets')+'</p></div>';
+  $('dsc').textContent=R.s;$('dband').textContent=R.band;
+  $('ddm').style.left=R.s+'%';$('dscsub').textContent=R.sub;
+  $('dprog').textContent=dn.length+' / '+ms.length;
+  $('vfill').style.height=(ms.length?Math.round(dn.length/ms.length*100):0)+'%';
+  $('dlift').innerHTML='<span class="lb" style="align-self:center;">WHAT LIFTS IT</span>'+R.lift.map(function(l){return '<span class="tag">'+l[0]+' <b style="color:var(--pos);">'+l[1]+'</b></span>';}).join('');
+  var rel=CLIENTS.filter(visible).slice().sort(function(a,b){return (REL[b.id]?REL[b.id].sc:0)-(REL[a.id]?REL[a.id].sc:0);}).slice(0,6);
+  $('drel').innerHTML=rel.map(function(c,i){return '<span class="tag tap'+(i===0?' on':'')+'" data-c="'+c.id+'">'+c.name.split(' ')[0]+' \u00b7 '+(REL[c.id]?REL[c.id].why:'')+'</span>';}).join('');
+  $('dcal').innerHTML=CAL[0].items.filter(calVis).map(function(it){return '<div class="sigrow"><b style="min-width:70px;">'+it.t+'</b><div style="flex:1;min-width:200px;"><b>'+it.who+'</b><p class="sm" style="margin-top:2px;">'+it.what+'</p></div><span class="cta2 tap" '+(it.lead?'data-lead="'+it.lead+'"':'data-c="'+it.client+'"')+'>Open</span></div>';}).join('')||'<p class="sm dm" style="margin-top:8px;">Nothing booked today.</p>';
+  var kc={consent:'var(--pos)',talk:'var(--gold)',fu:'var(--attn)',drop:'var(--crit)',prep:'var(--mut)'};
+  function mcard(m){var mc=m.client||(m.lead?((LEADS.find(function(l){return l.id===m.lead;})||{}).client):null);return '<div class="mom'+(m.done?' done':'')+'"><div style="display:flex;gap:12px;align-items:flex-start;flex:1;min-width:240px;"><span class="k" style="background:'+kc[m.k]+';margin-top:7px;"></span><div><b>'+m.ttl+'</b><p class="sm" style="margin-top:3px;">'+m.why+'</p><p class="sm" style="margin-top:3px;color:var(--gold);">'+m.val+'</p></div></div><div style="display:flex;gap:8px;align-items:center;">'+(m.done?'':'<span class="cta tap" data-mact="'+m.id+'">'+m.act+'</span>')+(mc?'<span class="cta2 tap" data-c="'+mc+'" style="padding:6px 10px;font-size:11.5px;">Profile</span>':'')+'<span class="cta2 tap" data-mdone="'+m.id+'">'+(m.done?'Undo':'Done')+'</span></div></div>';}
+  $('dq').innerHTML=ms.filter(function(m){return !m.done;}).map(mcard).join('')||'<p class="sm dm" style="margin-top:8px;">Tide\u2019s out \u2014 everything that mattered today is done.</p>';
+  $('ddone').innerHTML=dn.map(mcard).join('')||'<p class="sm dm" style="margin-top:8px;">Nothing yet \u2014 the vessel fills as you go.</p>';
+  $('ctday').textContent=un||'';
+  $('ctsig').textContent=SIGNALS.filter(function(g){var c=CLIENTS.find(function(x){return x.id===g.client;});return c&&visible(c);}).length||'';
+}
+function arthAsk(q){
+  var A=$('askans');q=(q||'').toLowerCase().trim();if(!q){A.innerHTML='';return;}
+  A.innerHTML='<div class="wload"><i></i><i></i><i></i></div>';
+  clearTimeout(arthAsk._t);arthAsk._t=setTimeout(function(){arthAskGo(q);},480);
+}
+function arthAskGo(q){
+  var A=$('askans');
+  function wrap(say,items){A.innerHTML='<div class="cd" style="border-color:rgba(185,168,232,.4);margin-top:10px;"><p class="sm" style="color:var(--tx);">'+say+'</p>'+items+'</div>';}
+  function it(txt,btn,attr){return '<div class="rw"><span class="sm" style="color:var(--tx);">'+txt+'</span><span class="cta2 tap" '+attr+' style="padding:6px 11px;font-size:12px;">'+btn+'</span></div>';}
+  var vis=CLIENTS.filter(visible);
+  var hit=vis.find(function(c){return q.indexOf(c.name.split(' ')[0].toLowerCase())>-1;});
+  var actL=LEADS.filter(function(l){var c=CLIENTS.find(function(x){return x.id===l.client;});return visible(c)&&l.stage!=='Won'&&l.stage!=='Lost';});
+  if(/over|pending/.test(q)){var od=actL.filter(function(l){return l.fud<0;});
+    wrap(od.length?'One thing is overdue \u2014 clear it first, everything else can wait.':'Nothing overdue. Clean slate.',
+    od.map(function(l){var c=CLIENTS.find(function(x){return x.id===l.client;});return it(c.name+' \u00b7 '+l.ttl+' \u00b7 '+l.fut,'Open lead','data-lead="'+l.id+'"');}).join('')+it('Everything in one place','Follow-ups','data-view="fu"'));return;}
+  if(/follow/.test(q)){var td=actL.filter(function(l){return l.fud===0;});
+    wrap(td.length?'Today\u2019s follow-ups \u2014 '+td.length+', in time order.':'Nothing due today.',
+    td.map(function(l){var c=CLIENTS.find(function(x){return x.id===l.client;});return it(c.name+' \u00b7 '+l.ttl+' \u00b7 '+l.fut,'Open lead','data-lead="'+l.id+'"');}).join('')+it('The full list, all buckets','Follow-ups','data-view="fu"'));return;}
+  if(/consent/.test(q)){var cg=SIGNALS.filter(function(g){return g.k==='consent'&&visible(CLIENTS.find(function(x){return x.id===g.client;}));});
+    var pend=vis.filter(function(c){return c.consent==='pending';});
+    wrap('Freshest consent first \u2014 that\u2019s where the energy is.',
+    cg.map(function(g){var c=CLIENTS.find(function(x){return x.id===g.client;});return it(c.name+' \u00b7 approved \u00b7 '+g.t,'Open','data-c="'+c.id+'"');}).join('')+
+    pend.map(function(c){return it(c.name+' \u00b7 link sent, not yet approved','Open','data-c="'+c.id+'"');}).join('')+it('All consent signals','Signals','data-view="signals"'));return;}
+  if(/talk|chat|wait/.test(q)){var tk=SIGNALS.filter(function(g){return g.k==='talk'&&visible(CLIENTS.find(function(x){return x.id===g.client;}));});
+    wrap(tk.length?'Waiting on you right now:':'Nobody is waiting in chat.',
+    tk.map(function(g){var c=CLIENTS.find(function(x){return x.id===g.client;});return it(c.name+' \u00b7 '+g.txt,'Open','data-c="'+c.id+'"');}).join(''));return;}
+  if(/incent|earn|kitna|paisa/.test(q)){var E=EARN[rmsKey()];
+    wrap('This month '+E.m+' earned \u00b7 '+E.pipe+' sitting in today\u2019s tide if it converts.',it('Full attribution and pipeline','Incentives','data-view="earn"'));return;}
+  if(/lead|rank|board|peer/.test(q)&&!/pipeline/.test(q)){var rows=PEERS.slice().sort(function(a,b){return b.score-a.score;});var rk=rows.findIndex(function(r){return r.n===ROLE.name;});
+    wrap(rk>-1?('You\u2019re #'+(rk+1)+' of '+rows.length+(rk>0?' \u2014 '+(rows[rk-1].score-rows[rk].score)+' pts behind '+rows[rk-1].n+'. Follow-up discipline is the fastest climb.':' \u2014 holding the top.')):'Floor view \u2014 three desks.',it('Side by side','Leaderboard','data-view="lb"'));return;}
+  if(/cal|book|meet|appoint/.test(q)){var t2=CAL[0].items.filter(calVis);
+    wrap(t2.length?('Today: '+t2.length+' on the calendar.'):('Nothing today \u2014 next is '+(CAL[2].items.filter(calVis)[0]?'Fri 6:30 PM, Rahul.':'open.')),
+    t2.map(function(x){return it(x.t+' \u00b7 '+x.who+' \u00b7 '+x.what,'Open',(x.lead?'data-lead="'+x.lead+'"':'data-c="'+x.client+'"'));}).join('')+it('The whole week','Calendar','data-view="cal"'));return;}
+  var pgk=/\bpms\b/.test(q)?'pms':/\baif\b/.test(q)?'aif':/bond/.test(q)?'bond':/insur|term cover|health top/.test(q)?'ins':/mutual|\bmf\b|elss|sip\b/.test(q)?'mf':null;
+  if(pgk){var g=PG[pgk];
+    var hit2=CLIENTS.filter(visible).find(function(c){return q.indexOf(c.name.split(' ')[0].toLowerCase())>-1;});
+    var fc=hit2?fitCheck(pgk,hit2):null;
+    wrap((hit2?g.n+' for '+hit2.name+' — fit first, then the questions.':g.n+' — ask these three before naming any product. You’re the RM of record: Arth gives facts and fit, the recommendation is yours.'),
+     (fc?'<p class="sm" style="margin-top:6px;color:'+(fc.ok?'var(--pos)':'var(--crit)')+';"><b>'+(fc.ok?'SUITABLE':'NOT SUITABLE')+':</b> '+fc.why+'</p>':'')+
+     '<p class="lb" style="margin-top:10px;">ASK FIRST</p>'+g.ask.map(function(x){return '<p class="sm" style="margin-top:5px;color:var(--tx);">· '+x+'</p>';}).join('')+
+     ((!fc||fc.ok)?'<p class="lb" style="margin-top:10px;">ON THE SHELF</p>'+g.opt.map(function(x){return '<p class="sm" style="margin-top:5px;color:var(--tx);">· '+x+'</p>';}).join(''):'')+
+     '<p class="sm" style="margin-top:10px;color:var(--amb);">'+g.guard+'</p>');return;}
+  if(/sold|sales|convert|revenue/.test(q)){var mine2=SALES.filter(function(x){return ROLE.key==='admin'||x.own===ROLE.name;});
+    var tot=mine2.reduce(function(a,x){return a+x.rev;},0);
+    wrap('Converted so far — ₹'+tot.toLocaleString('en-IN')+' across '+mine2.length+' lines'+(mine2.some(function(x){return x.flag;})?' · one carries a compliance flag':'')+'.',
+     mine2.map(function(x){var c=x.client?CLIENTS.find(function(k){return k.id===x.client;}):null;return it((c?c.name+' · ':'')+x.prod+' · '+x.amt+' · ₹'+x.rev.toLocaleString('en-IN')+(x.flag?' · FLAGGED':''),'Details','data-view="earn"');}).join(''));return;}
+  if(/ticket|support/.test(q)){
+    var opn=TICKETS.filter(function(tk){var c4=CLIENTS.find(function(x){return x.id===tk.client;});return c4&&visible(c4)&&tk.status!=='Resolved';});
+    var res=TICKETS.filter(function(tk){var c4=CLIENTS.find(function(x){return x.id===tk.client;});return c4&&visible(c4)&&tk.status==='Resolved';});
+    wrap(opn.length?('Open first — '+opn.length+' ticket'+(opn.length>1?'s':'')+' need'+(opn.length>1?'':'s')+' clearing before any pitch:'):'Nothing open. Resolved history below.',
+    opn.map(function(tk){var c4=CLIENTS.find(function(x){return x.id===tk.client;});return it(c4.name+' · '+tk.id+' · '+tk.topic+' · '+tk.status,'Open profile','data-c="'+c4.id+'"');}).join('')+
+    res.slice(0,3).map(function(tk){var c4=CLIENTS.find(function(x){return x.id===tk.client;});return it(c4.name+' · '+tk.id+' · '+tk.topic+' · resolved','Open profile','data-c="'+c4.id+'"');}).join(''));return;}
+  if(/gloss|mean|legend|dot|symbol|what does/.test(q)){
+    wrap('Quick read: green = fresh consent · gold = waiting on you · orange = follow-up due · red = overdue or a drop · grey = prep. Full legend in the Glossary.',it('Every dot, pill and line — decoded','Glossary','data-view="gloss"'));return;}
+  if(/tour|help|how|guide|walk/.test(q)){
+    wrap('I\u2019ll walk you through the board — five stops, thirty seconds.',it('Start where the day starts','Take the tour','data-tour="1"'));return;}
+  if(/error|fail|issue/.test(q)){
+    var errs=ERRLOG.slice(0,5);
+    wrap(errs.length?('Recent errors \u2014 every one carries a trace ID, already logged:'):'No errors logged this session. One standing issue: Neha\u2019s credit-bureau rail failed refresh at 09:12 \u2014 her page shows last-good data from 14 Jun with a Retry.',
+    errs.map(function(e){return it(e.src+' \u00b7 '+e.msg+' \u00b7 '+e.id,'\u2014','');}).join(''));return;}
+  if(/drop/.test(q)){var dr=SIGNALS.filter(function(g){return g.k==='drop'&&visible(CLIENTS.find(function(x){return x.id===g.client;}));});
+    wrap('Where intent leaked:',dr.map(function(g){var c=CLIENTS.find(function(x){return x.id===g.client;});return it(c.name+' \u00b7 '+g.txt,'Open','data-c="'+c.id+'"');}).join('')+it('Funnel \u00b7 where the book drops','Signals','data-view="signals"'));return;}
+  if(hit){wrap('Opening thread on '+hit.name+' \u2014 '+(REL[hit.id]?REL[hit.id].why:'')+'.',it(hit.name+' \u00b7 '+(PREP[hit.id]?PREP[hit.id].pot:''),'Open '+hit.name.split(' ')[0],'data-c="'+hit.id+'"'));return;}
+  wrap('I can pull any of these \u2014 tap one:',['today\u2019s follow-ups','overdue','who gave consent','who wants to talk','my incentive','leaderboard','calendar','drop-offs'].map(function(x){return '<span class="tag tap" data-ask="'+x+'" style="margin:6px 6px 0 0;display:inline-block;">'+x+'</span>';}).join(''));
+}
+/* ================= v2.8: chat, product copilot, sales, compliance, RM stats ================= */
+var CHATS=[
+ {id:'c-rahul',type:'client',who:'rahul',own:'Swapnil',open:true,msgs:[
+   {fr:'them',t:'12 Jul',x:'First scan done — what does the 61 actually mean?'},
+   {fr:'me',t:'12 Jul',x:'Fair band — average around you is 58. Two leaks are the gap: the card and idle cash. Report has both priced.'},
+   {fr:'them',t:'9:24 AM',x:'Can we relook at the term cover after the bonus?'}]},
+ {id:'c-meera',type:'client',who:'meera',own:'Swapnil',open:false,msgs:[
+   {fr:'them',t:'Yesterday',x:'Send the PMS strategy one-pager please.'},
+   {fr:'me',t:'Yesterday',x:'Sent — both strategies, fee structures side by side. Thursday to walk through it?'}]},
+ {id:'c-kavita',type:'client',who:'kavita',own:'Supriya Narkar',open:false,msgs:[
+   {fr:'them',t:'6 days ago',x:'Policy received, thank you Supriya!'},
+   {fr:'me',t:'6 days ago',x:'Free-look runs till 21 Aug — read it once, and the spouse-cover math is ready whenever.'}]},
+ {id:'t-sw-su',type:'team',ppl:['Swapnil','Supriya Narkar'],name:'Supriya Narkar',open:true,msgs:[
+   {fr:'them',t:'Today',x:'Rahul’s term quote refreshed post-bonus — ₹14,200/yr for the ₹1 Cr top-up. Want me on the Friday 6:30 call?'},
+   {fr:'me',t:'Today',x:'Yes — join at 6:40, I’ll open with the card-first sequencing, you land the quote.'}]},
+ {id:'t-sw-ro',type:'team',ppl:['Swapnil','Rohan D.'],name:'Rohan D.',open:false,msgs:[
+   {fr:'them',t:'Mon',x:'Any bond paper you’d pair with a 3-year goal? Client wants predictable.'},
+   {fr:'me',t:'Mon',x:'Tata Cap NCD if held to maturity — show the fee-in-price line, always.'}]},
+ {id:'t-su-ro',type:'team',ppl:['Supriya Narkar','Rohan D.'],name:'Rohan D.',open:false,msgs:[
+   {fr:'them',t:'Fri',x:'Neha’s renewal — want me to nudge her from the wealth side?'},
+   {fr:'me',t:'Fri',x:'Hold — her open ticket first. One voice, and it’s mine after the apology.'}]}];
+var ARTHASSIST={
+ 'c-rahul':{sug:'Congrats on the bonus, Rahul. At the new income the cover gap is ₹1 Cr — ₹14,200/yr closes it; exact quote on Friday’s call. One thing first: clearing the ₹52,600 card saves ₹22,080/yr — want it queued tonight?',why:'Bonus verified · gap math · card-first per waterfall · quote ready at Supriya’s desk'},
+ 'c-meera':{sug:'The fee page is where most people pause — fixed 1.5% vs 0.75% + 15% profit share. At ₹50L and 15% gross, they cross at about year two. Thursday I’ll show both on your numbers.',why:'She read the one-pager twice · support ticket asked exactly this · fee comparison pre-computed'},
+ 'c-kavita':{sug:'Glad it landed. Free-look till 21 Aug — no action needed, just read the exclusions page once. Spouse cover: separate policy beats a rider by ₹1,900/yr at her age.',why:'Free-look window · spouse-cover intent from the 21 Jul call'}};
+var SALES=[
+ {own:'Swapnil',client:'meera',prod:'Tata Capital NCD 2029',cat:'Bonds',amt:'₹11L',terms:'8.4% YTM · AAA · T+1 demat · matures Mar 2029',when:'14 Jul',rev:9300},
+ {own:'Swapnil',client:null,prod:'MF trail — 14 serviced folios',cat:'Mutual funds',amt:'₹58.6L AUM',terms:'0.44% weighted trail',when:'monthly',rev:21600},
+ {own:'Swapnil',client:'kavita',prod:'Term referral → insurance desk',cat:'Referral',amt:'₹1.5 Cr cover',terms:'issued 22 Jul · co-credit',when:'22 Jul',rev:7500},
+ {own:'Supriya Narkar',client:'kavita',prod:'iTerm Plus ₹1.5 Cr',cat:'Insurance',amt:'₹14,800/yr premium',terms:'claims-paid 99.1% · free-look till 21 Aug',when:'22 Jul',rev:28400},
+ {own:'Supriya Narkar',client:null,prod:'Renewal book — 41 policies',cat:'Insurance',amt:'—',terms:'persistency 93%',when:'monthly',rev:8600},
+ {own:'Supriya Narkar',client:'rahul',prod:'Referral credit — term top-up pipeline',cat:'Referral',amt:'—',terms:'shared with wealth desk',when:'Jul',rev:4200},
+ {own:'Rohan D.',client:'neha',prod:'Smallcap Momentum Fund',cat:'Mutual funds',amt:'₹6L lumpsum',terms:'exit load 1% <1y',when:'18 Jul',rev:6900,flag:1}];
+var MISSELL=[
+ {rm:'Rohan D.',client:'neha',prod:'Smallcap Momentum Fund · ₹6L lumpsum',rule:'Capital-waterfall breach — growth product sold while protection cover is lapsing (30 Sep) and SIP paused. System flagged at order; sold anyway.',sev:'HIGH',when:'18 Jul',status:'Open review'}];
+var RMSTAT={
+ 'Swapnil':{trend:'+3 this week',overdue:0,silent:0,conv:'2 of 5 moments → pipeline',flag:null},
+ 'Supriya Narkar':{trend:'+1 this week',overdue:1,silent:1,conv:'3 of 6 · strongest closer',flag:'Clear Neha (ticket + renewal) — only drag on a strong week'},
+ 'Rohan D.':{trend:'−4 this week',overdue:0,silent:2,conv:'1 of 4 · lowest touch rate',flag:'ATTENTION: 1 mis-sell flag open · 2 clients silent >10 days · score drifting'}};
+var PG={
+ pms:{n:'PMS',ask:['Investible surplus ≥ ₹50L? SEBI minimum — hard gate, ask first','Horizon 5y+ and comfortable with a concentrated 20–25 stock book?','Fee lens: fixed 1.5% vs 0.75% + 15% profit share — which sits better with them?'],opt:['Choice Focused Equity · 3y CAGR 19.2% · min ₹50L','Choice Multi-Asset · 3y CAGR 14.8% · min ₹50L'],guard:'HARD GATE ₹50L minimum. Below it → do not offer; route to Flexi Cap SIP instead.'},
+ mf:{n:'Mutual funds',ask:['Goal and horizon first — what is this money for, and when?','Overlap check — what do they already hold? (Rahul’s 71% overlap is the cautionary tale)','Is the emergency floor + insurance funded? Waterfall before growth.'],opt:['Flexi Cap · XIRR 13.1% · grow','Index 50 · lowest cost · grow','ELSS · tax + 3y lock','Liquid sweep · 6.8% · park'],guard:'No smallcap/momentum products to clients with paused SIPs or lapsing cover — the system flags it, and the flag reaches Admin.'},
+ bond:{n:'Bonds',ask:['Held to maturity, or might they need an exit? Secondary is thin.','Tax slab — post-tax vs debt-fund math done in front of them?','One maturity or a ladder?'],opt:['Tata Capital NCD 2029 · 8.4% YTM · AAA','NHAI InvIT bond · 8.9% YTM · quarterly payout'],guard:'Fee is in the price — always show the line. No credit-risk paper without stating default history.'},
+ ins:{n:'Insurance',ask:['Cover ≥ 10× annual income? That’s the anchor.','Employer cover — how much, and does it travel?','Premium ≤ 10% of income? Above that, restructure — never push.'],opt:['iTerm Plus · claims-paid 99.1%','Health top-up ₹95L over ₹5L base'],guard:'Never position ULIPs as investment. Smoker status honest — a wrong declaration kills the claim, not the premium.'},
+ aif:{n:'AIF',ask:['₹1 Cr minimum — SEBI hard gate','Illiquidity accepted in writing? 4–6 year lock','Concentration ≤ 15% of net worth?'],opt:['Cat-II Credit AIF · 11.5% target · via-RM only'],guard:'HARD GATE ₹1 Cr · always via RM · illiquidity named in the first sentence.'}};
+function aumL(c){if(!c||!c.aum)return null;var m=String(c.aum).match(/([\d.]+)\s*(L|Cr)/);return m?parseFloat(m[1])*(m[2]==='Cr'?100:1):null;}
+function fitCheck(cat,c){
+  if(!c)return null;var a=aumL(c);
+  if(cat==='pms'){if(a===null)return {ok:false,why:'No verified AUM — no consent/scan yet. Do not offer PMS on guesswork.'};return a>=50?{ok:true,why:'AUM '+c.aum+' clears the ₹50L gate — suitable to discuss.'}:{ok:false,why:'AUM '+c.aum+' is below the ₹50L SEBI minimum — NOT suitable, do not offer. Route: Flexi Cap SIP.'};}
+  if(cat==='aif'){if(a===null)return {ok:false,why:'No verified AUM — hard gate unmet by definition.'};return a>=100?{ok:true,why:'Clears the ₹1 Cr gate.'}:{ok:false,why:'Below the ₹1 Cr AIF minimum — NOT suitable, do not offer.'};}
+  if(cat==='mf'&&c.id==='neha')return {ok:false,why:'Protection lapsing + SIP paused — waterfall says NO growth products. Fix cover first. (This exact breach is Rohan’s open flag.)'};
+  return {ok:true,why:'No hard gate for '+PG[cat].n+' — suitability rests on the qualifying questions.'};
+}
+var CURCHAT=null;
+function myThreads(){return CHATS.filter(function(th){
+  if(th.type==='client'){var c=CLIENTS.find(function(x){return x.id===th.who;});return ROLE.key==='admin'||th.own===ROLE.name;}
+  return ROLE.key==='admin'||th.ppl.indexOf(ROLE.name)>-1;});}
+function openChat(cid){var th=CHATS.find(function(t){return t.type==='client'&&t.who===cid;});
+  if(!th){th={id:'c-'+cid,type:'client',who:cid,own:ROLE.key==='admin'?'Swapnil':ROLE.name,open:false,msgs:[]};CHATS.push(th);}
+  CURCHAT=th.id;show('chat');}
+function renderChat(){
+  var ths=myThreads();
+  if(!CURCHAT||!ths.find(function(t){return t.id===CURCHAT;}))CURCHAT=ths.length?ths[0].id:null;
+  function row(th){var nm=th.type==='client'?(CLIENTS.find(function(x){return x.id===th.who;})||{}).name:th.name+(ROLE.key==='admin'?' ↔ '+th.ppl[0]:'');
+    var last=th.msgs.length?th.msgs[th.msgs.length-1].x:'—';
+    return '<div class="thd'+(th.id===CURCHAT?' on':'')+'" data-th="'+th.id+'"><b style="font-size:13px;">'+nm+(th.open?'<span class="dot"></span>':'')+'</b><p class="sm dm" style="margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+last+'</p></div>';}
+  $('chcl').innerHTML=ths.filter(function(t){return t.type==='client';}).map(row).join('')||'<p class="sm dm" style="margin-top:8px;">No client threads.</p>';
+  $('chtm').innerHTML=ths.filter(function(t){return t.type==='team';}).map(row).join('')||'<p class="sm dm" style="margin-top:8px;">No team threads.</p>';
+  var th=CHATS.find(function(t){return t.id===CURCHAT;});
+  if(!th){$('chwho').textContent='Pick a thread';$('chmsgs').innerHTML='';$('charth').innerHTML='';return;}
+  var nm=th.type==='client'?(CLIENTS.find(function(x){return x.id===th.who;})||{}).name:th.name;
+  $('chwho').textContent=nm;
+  $('chsub').textContent=th.type==='client'?'same thread the client sees in-app':'internal · desk to desk';
+  $('chmsgs').innerHTML=th.msgs.map(function(m){return '<div class="msg'+(m.fr==='me'?' me':'')+'">'+m.x+'<div class="mt">'+m.t+(m.fr==='me'?' · you':'')+'</div></div>';}).join('')||'<p class="sm dm" style="margin-top:10px;">No messages yet — open with something worth their time.</p>';
+  var aa=ARTHASSIST[th.id];
+  $('charth').innerHTML=aa?'<div class="arth" style="margin-top:10px;padding:12px 14px;"><span style="display:inline-flex;align-items:center;gap:7px;"><span class="arthic" style="width:20px;height:20px;border-radius:7px;"><svg width="11" height="11" viewBox="0 0 40 40"><path d="M20 4 A16 16 0 0 1 36 20 H4 A16 16 0 0 1 20 4 Z" fill="var(--lav)" opacity=".8"/><circle cx="20" cy="20" r="16" fill="none" stroke="var(--lav)" stroke-width="3"/><line x1="2" y1="20" x2="38" y2="20" stroke="var(--lav)" stroke-width="3"/></svg></span><p class="lb" style="margin:0;">ARTH · SUGGESTED REPLY</p></span><p class="sm" style="margin-top:7px;color:var(--tx);">'+aa.sug+'</p><p class="sm dm" style="margin-top:5px;">'+aa.why+'</p><span class="cta2 tap" id="chuse" style="margin-top:8px;padding:6px 12px;font-size:12px;">Use this reply</span></div>':'';
+  var mine=ROLE.key!=='admin'||th.type==='team';
+  $('chin').disabled=!mine;$('chin').placeholder=mine?'Write a reply…':'Admin oversight — read only';
+}
+function renderSales(){
+  var box=$('salesbox');if(!box)return;
+  var mine=SALES.filter(function(x){return ROLE.key==='admin'||x.own===ROLE.name;});
+  box.innerHTML=mine.map(function(x){var c=x.client?CLIENTS.find(function(k){return k.id===x.client;}):null;
+    return '<div class="rw" style="flex-wrap:wrap;gap:8px;"><div><b>'+x.prod+'</b>'+(x.flag?' <span class="pill p-crit">FLAGGED</span>':'')+'<p class="sm" style="margin-top:3px;">'+(c?c.name+' · ':'')+x.cat+' · '+x.amt+' · '+x.terms+'</p><p class="sm dm">'+x.when+(ROLE.key==='admin'?' · '+x.own:'')+'</p></div><b style="color:var(--gold);">₹'+x.rev.toLocaleString('en-IN')+'</b></div>';}).join('')||'<p class="sm dm">Nothing converted yet — the tide is the way in.</p>';
+}
+document.addEventListener('click',function(e){
+  var t=e.target.closest('[data-th],#chsend,#chuse');
+  if(!t)return;
+  var thid=t.getAttribute&&t.getAttribute('data-th');
+  if(thid){CURCHAT=thid;renderChat();return;}
+  if(t.id==='chuse'){var aa=ARTHASSIST[CURCHAT];if(aa)$('chin').value=aa.sug;return;}
+  if(t.id==='chsend'){var v=$('chin').value.trim();if(!v){toast('Write it first — silence doesn’t log.');return;}
+    var th=CHATS.find(function(x){return x.id===CURCHAT;});if(!th)return;
+    if(ROLE.key==='admin'&&th.type==='client'){toast('Admin oversight is read-only on client threads.');return;}
+    th.msgs.push({fr:'me',t:'Now',x:v});th.open=false;$('chin').value='';
+    if(th.type==='client'){var c=CLIENTS.find(function(x){return x.id===th.who;});if(c)c.comms.unshift({ch:'chat',when:'Now',by:ROLE.name,note:'Replied in chat: “'+v.slice(0,60)+(v.length>60?'…':'')+'”'});}
+    renderChat();toast('Sent ✓'+(th.type==='client'?' — logged to the client trail.':''));return;}
+});
+</script>
+</body>
+</html>

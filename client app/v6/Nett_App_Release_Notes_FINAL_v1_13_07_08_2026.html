@@ -1,0 +1,203 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Nett App — Release Notes</title><style>:root{--bg:#0C0D10;--card:rgba(255,255,255,.03);--hair:rgba(255,255,255,.09);--tx:#ECECF1;--mut:#8E8E9C;--dim:#6B6B78;--bone:#C9C3B2;--gold:#D9B96A;--pos:#3ED598;--attn:#E8935C;--neg:#E08A8A;--lav:#BDB3F6}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--tx);font-family:-apple-system,'SF Pro Text',Inter,'Segoe UI',Roboto,sans-serif;line-height:1.6;padding:52px 26px 90px;max-width:1020px;margin:0 auto}
+.ser{font-family:'New York','Iowan Old Style',Georgia,serif;letter-spacing:-.5px;font-weight:600}
+h1{font-size:34px;letter-spacing:-.9px;font-weight:650}h2{font-size:21px;margin-top:46px;letter-spacing:-.4px}h3{font-size:15px;margin-top:24px}
+p{margin-top:10px;font-size:14.5px}.lb{font-size:10px;letter-spacing:1.7px;font-weight:600;color:var(--dim);text-transform:uppercase}
+.mut{color:var(--mut)}.dim{color:var(--dim)}
+.cd{border:1px solid var(--hair);border-radius:18px;background:var(--card);padding:18px 20px;margin-top:16px}
+code{font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:11.5px;background:rgba(255,255,255,.05);border-radius:6px;padding:2px 7px;color:var(--bone)}
+table{width:100%;border-collapse:collapse;margin-top:12px;font-size:12.5px}
+th{text-align:left;color:var(--dim);font-size:10px;letter-spacing:1.4px;padding:8px 10px;border-bottom:1px solid var(--hair);text-transform:uppercase}
+td{padding:10px;border-bottom:1px solid rgba(255,255,255,.05);vertical-align:top}
+.was{color:var(--neg);font-size:11px;font-family:ui-monospace,Menlo,monospace}
+.now{color:var(--pos);font-size:11px;font-family:ui-monospace,Menlo,monospace}
+.rule{color:var(--bone);font-size:11.5px}.ct{color:var(--dim);white-space:nowrap}
+.bd{display:inline-block;margin-left:6px;font-size:8.5px;letter-spacing:.12em;border:1px solid rgba(232,147,92,.5);color:var(--attn);border-radius:999px;padding:2px 7px}
+.flag{border:1px solid rgba(224,180,92,.45);background:rgba(224,180,92,.06);border-radius:14px;padding:14px 16px;margin-top:14px;font-size:13.5px}
+.crit{border:1px solid rgba(224,138,138,.5);background:rgba(224,138,138,.07);border-radius:14px;padding:14px 16px;margin-top:14px;font-size:13.5px}
+.dont{border-left:2px solid var(--neg);padding-left:14px;margin-top:12px}
+.ver{display:inline-block;border:1px solid rgba(201,195,178,.4);color:var(--bone);border-radius:999px;padding:4px 13px;font-size:11.5px;font-weight:650}</style></head><body>
+<p class="lb" style="color:var(--gold);">NETT APP · RELEASE NOTES · LATEST ON TOP</p>
+<h1 class="ser">nett-app.html</h1>
+<div class="cd" style="border-color:rgba(217,185,106,.4);">
+  <p class="lb" style="color:var(--gold);">DEV HAND-OFF · FINAL CONSOLIDATED · v1.7 → v1.13</p>
+  <p style="margin-top:8px;"><b>Build:</b> <code>nett-app_v1_13_07_08_2026.html</code> — the entry screen must read <i>prototype build v1.13 · 07 Aug 2026</i>. If it doesn’t, you’re holding the wrong file: stop.</p>
+  <p class="mut" style="margin-top:8px;"><b style="color:var(--tx);">Before touching anything:</b> <code>node nett_audit_gate.js nett-app_v1_13_07_08_2026.html 1.13</code> → ALL 14 GATES PASS · <code>node nett_app_flow_tests.js</code> → ALL 45 INTERACTION TESTS PASS. Both suites ship alongside; both stay green on every hand-back.</p>
+  <p class="mut" style="margin-top:8px;"><b style="color:var(--tx);">Companions:</b> <code>NETT_CHANGES_APP_FINAL_v1_13….md</code> (single change map + ONE cumulative v1.7→v1.13 diff) · <code>Nett_App_Flow_Doc_v1_13….xlsx</code> (65 screens with the extracted nav graph · 12 flows · 17-sheet dialog census; yellow = changed this cycle).</p>
+  <p class="mut" style="margin-top:8px;"><b style="color:var(--tx);">Honest limits:</b> jsdom can’t hit-test — occlusion-flagged screens need one real tap · family approval simulates the member’s device (G-17) · mood needs a live Nifty feed + Rule-Book threshold (G-14) · <b>G-06 stands: the app demo persona ≠ Rahul Mehra</b> — decide before any joint app+CRM demo.</p>
+</div>
+
+<h2 class="ser">v1.13 <span class="ver">07 Aug 2026 · 20:30 IST</span></h2>
+<p class="mut">Build identity, the member ledger, and the interaction audit packaged as a mandatory skill.</p>
+<div class="cd"><p class="lb">YOUR TWO REPORTS</p>
+<p class="mut" style="line-height:1.85;"><b style="color:var(--tx);">Add family</b> — the code works and 45 real clicks prove it; your description matches v1.11 exactly, and I shipped three builds today under one filename. My process failure. Fixed as a class: versioned filenames + a visible build stamp on the entry screen, cross-checked by the audit. If v1.13 still fails with the stamp confirmed, the occlusion gate names the next suspect.<br>
+<b style="color:var(--tx);">Whose data is this</b> — tapping a member now opens their ledger sheet: water-blue chrome, "SHARED WITH YOU · READ-ONLY", their name in the title and the consent line, their rows and net, and no act-verbs — "acting on this money is theirs alone."</p></div>
+<div class="cd"><p class="lb">THE AUDIT IS NOW A SKILL — AND EARNED ITS KEEP IN ONE RUN</p>
+<p class="mut"><code>nett-interaction-audit</code>: build identity · selector reachability · sheet sweep with duplicate-id check · CSS-scoped occlusion heuristic · voice regression incl. JS strings · plus the 45-test flow suite. First run found the G-10 root — <b>a doubled opening tag, 33 characters apart</b> — whose removal fixed the duplicate id and the +1 div imbalance in one stroke. Also caught ₹58,000/yr, another slash my k-conversion created. <b>G-10 closed.</b></p></div>
+<div class="cd"><p class="lb">GATES</p><p class="mut" style="font-family:ui-monospace,Menlo,monospace;font-size:11.5px;">nett_audit_gate.js → ALL 14 GATES PASS · flow suite → ALL 45 INTERACTION TESTS PASS · honest limit stated: occlusion needs a real finger; the gate flags, a human verifies.</p></div>
+
+<h2 class="ser">v1.12 <span class="ver">07 Aug 2026 · 18:10 IST</span></h2>
+<p class="mut">The family release — scope confirmed in shorthand (Q1b · Q2a · Q3A · Q4-all-sharing · Q5-ok) before a line was written.</p>
+<div class="cd"><p class="lb">WHAT SHIPPED</p>
+<p class="mut" style="line-height:1.9;">
+<b style="color:var(--tx);">Add journey</b> — name · their mobile · relationship (segmented); Child flips to guardian-managed, no OTP.<br>
+<b style="color:var(--tx);">Their approval</b> — framed as their phone: three-level choice (Full ledger / Net worth only / Join without sharing), 6 OTP boxes, "Approve — their tap, not yours."<br>
+<b style="color:var(--tx);">All member states on one screen</b> — you · Anita sharing · Kiara guardian-managed (₹1,85,000, 2034 goal) · Papa invited · new member: joined → scan link → reading → holdings.<br>
+<b style="color:var(--tx);">The household in one line</b> — ₹4.22 Cr owned − ₹96,00,000 owed = ₹3.26 Cr · +₹2,25,000 a month free; recomputes live to ₹3.37 Cr after the new member’s scan. Everyone sharing sees the same view.<br>
+<b style="color:var(--tx);">Cross-member insight</b> — card leak ₹1,840 a month vs ₹2,60,000 idle at 3%: "one transfer." Carries its own consent line and off-switch.</p></div>
+<div class="cd">
+<div class="flag"><b>G-16 · Yogesh.</b> Cross-member insight authorised by founder under mutual full-ledger; the pattern still needs the compliance eye before beta.</div>
+<div class="flag"><b>G-17.</b> The approval sheet simulates the member’s device; production is a real out-of-band approval, channel + timestamp stored.</div>
+<div class="flag"><b>G-18.</b> The member-side "what I share with family" revocation toggle is not yet designed.</div></div>
+<div class="cd"><p class="lb">GATES + DISCLOSURES</p>
+<p class="mut" style="font-family:ui-monospace,Menlo,monospace;font-size:11.5px;line-height:1.95;">ALL 38 INTERACTION TESTS PASS (16 new family tests: sheets, canon mobile error, OTP, levels, scan-link journey, live aggregate recompute, minor path) · static gates green · skill fully clean incl. JS strings.<br>Self-caught: my cross-insight first used ₹1,540 — tied to nothing; now the canon ₹1,840 leak. Header ₹3.24 Cr predated Kiara — now ₹3.26 Cr live. Two /mo tokens were created by my own v1.10 k-conversion; fixed, and the numerals check now covers JS string literals.</p></div>
+
+<h2 class="ser">v1.11 <span class="ver">07 Aug 2026 · 15:35 IST</span></h2>
+<p class="mut">The interaction-audit release. Your two repeat reports were real, and the cause was one structural bug.</p>
+<div class="cd"><p class="lb">ROOT CAUSE — ONE SELECTOR, THIRTEEN DEAD BUTTONS</p>
+<p>Listener 1 only fires for elements matching its <code>closest()</code> list. Every id its body handles but the list omits is silently dead: the exit-intent <b>Leave anyway / Finish the order</b>, the error dialog’s close and retry, and four more — <b>dead since v1.7</b> — plus the v1.9 eye and error-sheet wiring I anchored into the same listener. Also: <code>exitint</code> is <code>dlgwrap</code>, not <code>modal</code>, so the v1.9 back/backdrop fixes never covered it.</p>
+<p class="mut" style="margin-top:8px;">Fixes: selector completed (13 revived) · Back and backdrop now close both sheet families · seven <code>₹Nk</code> tokens converted to full figures and the k-pattern added to the permanent numerals check.</p></div>
+<div class="cd"><p class="lb">THE NEW GATE — REAL CLICKS, NOT STUBS</p>
+<p class="mut">Static checks can’t see a selector filtering a click out. The suite now loads the page in a real DOM (jsdom) and dispatches actual clicks: <b>ALL 22 INTERACTION TESTS PASS</b> — eye wraps 181 money tokens app-wide and blurs them; Leave anyway leaves; every one of 15 sheets closes via Back <i>and</i> backdrop; penny-drop advances; mood flips at −1%; selector-reachability reports zero dead handler ids. This gate is permanent.</p></div>
+<div class="cd"><div class="flag"><b>G-15 · Revived handlers need a product pass.</b> <code>h0go, pdob, ppanx, scdob</code> never fired for any user until today. They run clean; whether they do the <i>right</i> thing needs a product eye.</div>
+<div class="flag"><b>Disclosure.</b> My v1.9 wiring anchored into the narrow listener — string-correct, behaviourally dead — and two rounds of stubbed tests could not catch it. The test-method gap was the real defect; it is now closed.</div></div>
+
+<h2 class="ser">v1.10 <span class="ver">07 Aug 2026 · 12:50 IST</span></h2>
+<p class="mut">Dev feedback round 2 — five items, 12 patch groups, 13 replacements.</p>
+<div class="cd"><p class="lb">THE FIVE, EACH IN ONE LINE</p>
+<p class="mut" style="line-height:1.9;">
+<b style="color:var(--tx);">1 · Eye</b> — masked only 4 tagged figures; now a one-time TreeWalker wraps every ₹/$ token in all 65 screens, and the blur covers everything.<br>
+<b style="color:var(--tx);">2 · Bank verification</b> — <b>pre-existing v1.7 dead end</b>: the penny-drop handler returned before navigation ran, so "Verified — continue" did nothing and KYC 7–10 were unreachable. Root-caused, fixed, verified against base.<br>
+<b style="color:var(--tx);">3 · Mood</b> — calm/volatile chips were buttons; now one non-tappable pill driven by the Nifty day move (≤ −1% = volatile). <code>?nifty=-1.4</code> to demo. Volatile copy carries the number and the basis, no fear language.<br>
+<b style="color:var(--tx);">4 · Flow surface</b> — swipe glyph added inline before the label.<br>
+<b style="color:var(--tx);">5 · Chat + voice</b> — message, mic and send icons now inline SVG; the chat surface, like the tab bar, renders with zero network.</p></div>
+<div class="cd">
+  <div class="flag"><b>G-13 · Duplicate signature capture.</b> kyc7 still carries its old signature-upload row now that kyc9 is the signature screen. One should go — flow decision, founder call.</div>
+  <div class="flag"><b>G-14 · Nifty feed.</b> Mood needs a live index at beta; the −1% threshold is a placeholder for the Rule Book owner, like every other threshold.</div>
+</div>
+<div class="cd"><p class="lb">GATE RUN — FULL OUTPUT, UNCROPPED</p>
+<p class="mut" style="font-family:ui-monospace,Menlo,monospace;font-size:11.5px;line-height:1.95;">PASS screens 65/65 · PASS nav 38 · PASS div-delta vs base · PASS sections 65/65 · PASS VER 1.10 · PASS E1 tree-walker + xlink · PASS E2 kpd advances · PASS E3 chips gone, pill + setNifty API · PASS E3 volatile copy number+basis · PASS E4 swipe placed · PASS E5 chat icons inline · PASS skill on all new strings · PASS runtime parse + stubbed-DOM<br>
+<span style="color:var(--pos);">RESULT: ALL GATES PASS — 13 replacements, 0 failures.</span></p></div>
+
+<h2 class="ser">v1.9 <span class="ver">06 Aug 2026 · 17:40 IST</span></h2>
+<p class="mut">Dev feedback — seven design items. 22 patch groups, 62 replacements. <b>Ships together with v1.8 below as one build</b> (v1.8 was validated but unsubmitted).</p>
+
+<div class="cd"><p class="lb">THE SEVEN, EACH IN ONE LINE</p>
+<p class="mut" style="line-height:1.9;">
+<b style="color:var(--tx);">1 · Tab icons</b> — rode the Tabler CDN font; now inline SVG, renders with zero network. Permanent check added.<br>
+<b style="color:var(--tx);">2 · Error sheet</b> — didn't exist; built canonically (what failed · last-good · one Retry · trace ID) and canonized into DS §3b this release.<br>
+<b style="color:var(--tx);">3+4 · KYC</b> — review screen removed, signature draw/upload in its place; <code>s-kyc9</code> id retained, registry parity holds, 65/65.<br>
+<b style="color:var(--tx);">5 · Sheet back</b> — Back now closes the top sheet before popping screens, and backdrop tap dismisses; 5 sheets previously had <b>no exit at all</b>. Both behaviours are permanent audit checks.<br>
+<b style="color:var(--tx);">6 · Relink</b> — reconnecting a delinked source restores consent and re-initiates the scan (<code>s-scanning</code>), as the real product will.<br>
+<b style="color:var(--tx);">7 · Eye mask</b> — Home + Wealth headline amounts blur on toggle; session-scoped; app-wide masking spec'd for the Flutter build in DS §3b.</p></div>
+
+<div class="cd">
+  <div class="crit"><b>G-10 · Found by the new modal census, pre-existing:</b> duplicate <code>id="delsheet"</code> — two modals share the id since v1.7 or earlier, so one is almost certainly dead markup. Which one is live is a product question; flagged, not silently fixed.</div>
+  <div class="flag"><b>G-11 · Review removal — Yogesh flag.</b> KYC review-before-submit often exists for a compliance reason. Removed per instruction; if a confirmation moment is required, kyc10 can absorb a one-line summary.</div>
+  <div class="flag"><b>G-12 · Signature upload is a prototype stub</b> — camera/gallery + format validation are build work, five states per UX Architecture §5.</div>
+</div>
+
+<div class="cd"><p class="lb">GATE RUN — FULL OUTPUT, UNCROPPED</p>
+<p class="mut" style="font-family:ui-monospace,Menlo,monospace;font-size:11.5px;line-height:1.95;">PASS screen presence 65/65 · PASS registry parity vs v1.8 · PASS nav reachability 38 · PASS div delta unchanged vs base · PASS sections 65/65 · PASS NETT_VER 1.9 · PASS B1 tab bars font-free · PASS B2 errsheet anatomy · PASS B3/4 kyc9=signature wired · PASS B5 back closes top sheet first · PASS B5 backdrop closes · PASS B6 relink re-initiates scan · PASS B7 eye mask both surfaces · PASS C new copy passes nett-ux-writing · PASS modal census 13 · PASS runtime parse + stubbed-DOM execution<br><span style="color:var(--pos);">RESULT: ALL GATES PASS — 62 replacements, 0 failures.</span></p></div>
+
+<div class="cd"><p class="lb">TOOLING DISCLOSURE (v1.9)</p>
+<p class="mut">Four assertions fired and aborted before any write — a stale toast anchor, a click-listener collision from the new signature driver, a whitespace-divergent relink anchor (regexified), and an over-broad eye anchor that matched 4 refresh links (scoped to one). One gate was miscalibrated twice (div counting JS strings; B1 matching non-tab icons) — corrected against base evidence rather than loosened blindly. No silent no-ops.</p></div>
+
+<h2 class="ser">v1.8 <span class="ver">06 Aug 2026 · 11:55 IST</span></h2>
+<p class="mut">All 65 screens validated against <code>nett-ux-writing</code> v1.0. 46 patch groups, <b>368 replacements</b>, copy only — structural parity with v1.7 verified element by element.</p>
+
+<div class="cd"><p class="lb">THE HEADLINE</p>
+<p>The app's writing was already the strongest of the three surfaces — no urgency words, no guarantees, no drowning language, no "you should", and Nett was never used as a verb. Two real canon breaches were found, and one pre-existing problem that is bigger than either.</p></div>
+
+<h3 class="ser">Canon breaches found</h3>
+<div class="cd">
+  <div class="dont"><b>A · Peer comparison was shipped — 9 instances.</b> "Profiles like yours average 58", "profiles like yours surface ≈₹6.9L/yr", and the same construction inside the consent gate, the scan entry and the confidence calculator. Three carried rupee amounts. Peer comparison is <b>unauthorised</b> pending founder + Yogesh sign-off, and §3 names this exact shape as inducement dressed as insight. Converted to benchmark framing: <i>"The average is 58"</i>, <i>"≈₹6,90,000 a year typically hides here"</i>.</div>
+  <div class="dont"><b>B · Arth spoke in the first person.</b> The chat empty state read "Ask me anything about your money… <b>I answer</b> from your data, set up the execution, and bring Swapnil in", and the daily thought offered "ask me why". §6: Arth states, shows and calculates — it has no self to refer to. Now: "Answers come from your data" and "see the working", which is also a canon button label. <b>Swapnil's first person was left untouched</b> — Human register is the one place "I" belongs.</div>
+</div>
+
+<h3 class="ser">The numerals migration — 232 figures</h3>
+<div class="cd">
+  <p class="mut">112 unique lakh figures converted to full Indian-grouped figures, from ₹0.4 L → ₹40,000 up to ₹96 L → ₹96,00,000. Every one verified below ₹1 crore, so nothing should have stayed in Cr. Alongside: 74 rates and flows given their basis ("42% a year", "₹2,890 a month"), 10 abbreviated durations spelled out, and three dollar figures unabbreviated.</p>
+  <p class="dim" style="margin-top:8px;">With web v0.16 and app v1.8 done, <b>the CRM is now the only unmigrated surface.</b> Until it moves, the app and the CRM print the same numbers differently — which §5 forbids.</p>
+</div>
+
+<h3 class="ser">Jargon — 25 terms translated</h3>
+<div class="cd"><p class="mut">XIRR → "return a year" (×12) · CAGR → "a year over 3 years" · drawdown → "fall" · liquidity → "cash you can reach" · bps → percentages · runway → "shortens the home loan" · total expense ratio → "yearly fee on this fund".</p></div>
+
+<h3 class="ser">Buttons</h3>
+<div class="cd"><p class="mut">Two "Next" buttons named what they actually do: <b>"See how it works"</b> on the intro carousel and <b>"Send me the code"</b> on the scan entry — which also sets the correct expectation before an OTP arrives.</p></div>
+
+<h3 class="ser">Full change map — 46 groups, 368 replacements</h3>
+<table><tr><th>ID</th><th>Rule</th><th>×</th><th>Before → After</th></tr>
+<tr><td><code>A-01</code><span class="bd">UNAUTHORISED CLAIM</span></td><td class="rule">§3 Perimeter — peer comparison</td><td class="ct">x2</td><td><span class="was">Profiles like yours average &lt;b</span><br><span class="now">The average is &lt;b</span></td></tr>
+<tr><td><code>A-02</code><span class="bd">UNAUTHORISED CLAIM</span></td><td class="rule">§3 Perimeter — peer comparison</td><td class="ct">x1</td><td><span class="was">≈₹1.1L/yr for profiles like yours.</span><br><span class="now">≈₹1.1L/yr typically hides here.</span></td></tr>
+<tr><td><code>A-03</code><span class="bd">UNAUTHORISED CLAIM</span></td><td class="rule">§3 Perimeter — peer comparison</td><td class="ct">x1</td><td><span class="was">Leaks surfaced, profiles like yours</span><br><span class="now">Leaks typically surfaced</span></td></tr>
+<tr><td><code>A-04</code><span class="bd">UNAUTHORISED CLAIM</span></td><td class="rule">§3 Perimeter — peer comparison</td><td class="ct">x2</td><td><span class="was">every leak visible — profiles like yours surface ≈₹6.9L/yr.</span><br><span class="now">every leak visible — ≈₹6.9L/yr typically hides here.</span></td></tr>
+<tr><td><code>A-05</code><span class="bd">UNAUTHORISED CLAIM</span></td><td class="rule">§3 Perimeter — peer comparison</td><td class="ct">x1</td><td><span class="was">the leak map (profiles like yours surface ≈₹6.9L/yr)</span><br><span class="now">the leak map (≈₹6.9L/yr that typically hides here)</span></td></tr>
+<tr><td><code>A-06</code><span class="bd">UNAUTHORISED CLAIM</span></td><td class="rule">§3 Perimeter — peer comparison</td><td class="ct">x1</td><td><span class="was">≈₹1.79L/yr for profiles like yours&#x27;;}</span><br><span class="now">≈₹1.79L/yr typically hides here&#x27;;}</span></td></tr>
+<tr><td><code>A-07</code><span class="bd">UNAUTHORISED CLAIM</span></td><td class="rule">§3 Perimeter — peer comparison</td><td class="ct">x1</td><td><span class="was">58&lt;/b&gt; — and surface ≈₹6.9L/yr in leaks.</span><br><span class="now">58&lt;/b&gt;. ≈₹6.9L/yr typically hides in leaks.</span></td></tr>
+<tr><td><code>B-01</code><span class="bd">CANON VIOLATION</span></td><td class="rule">§6 Arth never says “I”</td><td class="ct">x1</td><td><span class="was">Ask me anything about your money. For example:</span><br><span class="now">Ask anything about your money. For example:</span></td></tr>
+<tr><td><code>B-02</code><span class="bd">CANON VIOLATION</span></td><td class="rule">§6 Arth never says “I”</td><td class="ct">x1</td><td><span class="was">I answer from your data, set up the execution, and bring Swapnil in when a human should sign off.</span><br><span class="now">Answers come from your data. Execution is set up here, and Swapnil is brought in when a human should sign off.</span></td></tr>
+<tr><td><code>B-03</code><span class="bd">CANON VIOLATION</span></td><td class="rule">§6 Arth never says “I”</td><td class="ct">x2</td><td><span class="was">id=&quot;lwhy&quot;&gt;ask me why&lt;/span&gt;</span><br><span class="now">id=&quot;lwhy&quot;&gt;see the working&lt;/span&gt;</span></td></tr>
+<tr><td><code>C-01 lakh→full</code></td><td class="rule">§5 Numerals — lakh is never a unit</td><td class="ct">x232</td><td><span class="was">regex /₹\s?(\d+(?:\.\d+)?)\s?L\b/</span><br><span class="now">&lt;computed&gt;</span></td></tr>
+<tr><td><code>D-01</code></td><td class="rule">§5 Rates &amp; flows carry their basis</td><td class="ct">x16</td><td><span class="was">regex /(₹[\d,]+)\s?/\s?mo\b/</span><br><span class="now">&lt;computed&gt;</span></td></tr>
+<tr><td><code>D-02</code></td><td class="rule">§5 Rates &amp; flows carry their basis</td><td class="ct">x26</td><td><span class="was">regex /(₹[\d,]+)\s?/\s?yr\b/</span><br><span class="now">&lt;computed&gt;</span></td></tr>
+<tr><td><code>D-03</code></td><td class="rule">§5 Rates &amp; flows carry their basis</td><td class="ct">x23</td><td><span class="was">regex /([\d.]+%)\s?/\s?yr\b/</span><br><span class="now">&lt;computed&gt;</span></td></tr>
+<tr><td><code>D-04</code></td><td class="rule">§5 Rates &amp; flows carry their basis</td><td class="ct">x3</td><td><span class="was">@ 42%</span><br><span class="now">at 42% a year</span></td></tr>
+<tr><td><code>D-05</code></td><td class="rule">§5 Rates &amp; flows carry their basis</td><td class="ct">x1</td><td><span class="was">@42%</span><br><span class="now">at 42% a year</span></td></tr>
+<tr><td><code>D-06</code></td><td class="rule">§5 Rates &amp; flows carry their basis</td><td class="ct">x2</td><td><span class="was">@ 8.9%</span><br><span class="now">at 8.9% a year</span></td></tr>
+<tr><td><code>D-07</code></td><td class="rule">§5 Rates &amp; flows carry their basis</td><td class="ct">x3</td><td><span class="was">@ 9.5%</span><br><span class="now">at 9.5% a year</span></td></tr>
+<tr><td><code>E-01</code></td><td class="rule">§5 Time is human</td><td class="ct">x6</td><td><span class="was">regex /\b(\d+(?:\.\d+)?) yrs\b/</span><br><span class="now">&lt;computed&gt;</span></td></tr>
+<tr><td><code>E-02</code></td><td class="rule">§5 Time is human</td><td class="ct">x4</td><td><span class="was">1 yr</span><br><span class="now">1 year</span></td></tr>
+<tr><td><code>F-01</code></td><td class="rule">§7 Jargon — permitted list only</td><td class="ct">x11</td><td><span class="was">regex /XIRR (\d+\.\d+%)/</span><br><span class="now">&lt;computed&gt;</span></td></tr>
+<tr><td><code>F-02</code></td><td class="rule">§7 Jargon — permitted list only</td><td class="ct">x1</td><td><span class="was">&lt;span class=&quot;sm&quot;&gt;XIRR&lt;/span&gt;</span><br><span class="now">&lt;span class=&quot;sm&quot;&gt;Return a year&lt;/span&gt;</span></td></tr>
+<tr><td><code>F-03</code></td><td class="rule">§7 Jargon — permitted list only</td><td class="ct">x1</td><td><span class="was">5y 15.1% a year · ahead of category 5 years</span><br><span class="now">15.1% a year over 5 years · ahead of category</span></td></tr>
+<tr><td><code>F-04</code></td><td class="rule">§7 Jargon — permitted list only</td><td class="ct">x1</td><td><span class="was">80C · 3-year lock · 13.0% XIRR</span><br><span class="now">80C · 3-year lock · 13.0% a year</span></td></tr>
+<tr><td><code>F-05</code></td><td class="rule">§7 Jargon — permitted list only</td><td class="ct">x1</td><td><span class="was">Overlap map, laggards, concentration, XIRR vs benchmark</span><br><span class="now">Overlap map, laggards, concentration, return vs category</span></td></tr>
+<tr><td><code>F-06</code></td><td class="rule">§7 Jargon — permitted list only</td><td class="ct">x1</td><td><span class="was">Quant tilt · 18.2% 3y CAGR</span><br><span class="now">Quant tilt · 18.2% a year over 3 years</span></td></tr>
+<tr><td><code>F-07</code></td><td class="rule">§7 Jargon — permitted list only</td><td class="ct">x1</td><td><span class="was">18.2% 3y CAGR</span><br><span class="now">18.2% a year over 3 years</span></td></tr>
+<tr><td><code>F-08</code></td><td class="rule">§7 Jargon — permitted list only</td><td class="ct">x1</td><td><span class="was">&lt;span class=&quot;sm&quot;&gt;3y CAGR&lt;/span&gt;</span><br><span class="now">&lt;span class=&quot;sm&quot;&gt;Return a year, 3 years&lt;/span&gt;</span></td></tr>
+<tr><td><code>F-09</code></td><td class="rule">§7 Jargon — permitted list only</td><td class="ct">x1</td><td><span class="was">Worst drawdown (&#x27;22)</span><br><span class="now">Worst fall (&#x27;22)</span></td></tr>
+<tr><td><code>F-10</code></td><td class="rule">§7 Jargon — permitted list only</td><td class="ct">x1</td><td><span class="was">A 30% drawdown is a</span><br><span class="now">A 30% fall is a</span></td></tr>
+<tr><td><code>F-11</code></td><td class="rule">§7 Jargon — permitted list only</td><td class="ct">x1</td><td><span class="was">&lt;span class=&quot;sm&quot;&gt;Total expense ratio&lt;/span&gt;</span><br><span class="now">&lt;span class=&quot;sm&quot;&gt;Yearly fee on this fund&lt;/span&gt;</span></td></tr>
+<tr><td><code>F-12</code></td><td class="rule">§7 Jargon — permitted list only</td><td class="ct">x1</td><td><span class="was">trims the home-loan runway by</span><br><span class="now">shortens the home loan by</span></td></tr>
+<tr><td><code>F-13</code></td><td class="rule">§7 Jargon — permitted list only</td><td class="ct">x1</td><td><span class="was">sized only after your liquidity plan — money you will not need for four</span><br><span class="now">sized only after your cash-you-can-reach plan — money you will not need for four</span></td></tr>
+<tr><td><code>F-14</code></td><td class="rule">§7 Jargon — permitted list only</td><td class="ct">x1</td><td><span class="was">illiquid 4y — sized only after your liquidity plan</span><br><span class="now">locked 4 years — sized only after your cash-you-can-reach plan</span></td></tr>
+<tr><td><code>F-15</code></td><td class="rule">§7 Jargon — permitted list only</td><td class="ct">x1</td><td><span class="was">then we discuss PMS with your liquidity mapped</span><br><span class="now">then we discuss PMS with your reachable cash mapped</span></td></tr>
+<tr><td><code>F-16</code></td><td class="rule">§7 Jargon — permitted list only</td><td class="ct">x1</td><td><span class="was">Repo cut 25 bps — AAA bonds still lock 7.4%</span><br><span class="now">Repo rate cut 0.25% — AAA bonds still lock 7.4% a year</span></td></tr>
+<tr><td><code>F-17</code></td><td class="rule">§7 Jargon — permitted list only</td><td class="ct">x1</td><td><span class="was">Repo cut 25 bps</span><br><span class="now">Repo rate cut 0.25%</span></td></tr>
+<tr><td><code>F-18</code></td><td class="rule">§7 Jargon — permitted list only</td><td class="ct">x1</td><td><span class="was">renews ~40 bps lower in Sep</span><br><span class="now">renews about 0.4% lower in Sep</span></td></tr>
+<tr><td><code>G-01</code></td><td class="rule">§5 Currency abbreviations</td><td class="ct">x2</td><td><span class="was">$21.4k</span><br><span class="now">$21,400</span></td></tr>
+<tr><td><code>G-02</code></td><td class="rule">§5 Currency abbreviations</td><td class="ct">x2</td><td><span class="was">$6.2k</span><br><span class="now">$6,200</span></td></tr>
+<tr><td><code>G-03</code></td><td class="rule">§5 Currency abbreviations</td><td class="ct">x1</td><td><span class="was">$140k</span><br><span class="now">$140,000</span></td></tr>
+<tr><td><code>H-01</code></td><td class="rule">§4 Buttons name the thing they do</td><td class="ct">x1</td><td><span class="was">&lt;div class=&quot;cta tap&quot; id=&quot;inext&quot;&gt;Next&lt;</span><br><span class="now">&lt;div class=&quot;cta tap&quot; id=&quot;inext&quot;&gt;See how it works&lt;</span></td></tr>
+<tr><td><code>H-02</code></td><td class="rule">§4 Buttons name the thing they do</td><td class="ct">x1</td><td><span class="was">&lt;div class=&quot;cta tap&quot; data-nav=&quot;otp&quot; style=&quot;margin-top:16px;&quot;&gt;Next&lt;</span><br><span class="now">&lt;div class=&quot;cta tap&quot; data-nav=&quot;otp&quot; style=&quot;margin-top:16px;&quot;&gt;Send me the code&lt;</span></td></tr>
+<tr><td><code>I-01</code></td><td class="rule">§5 Tie-out — one time claim</td><td class="ct">x2</td><td><span class="was">ninety seconds</span><br><span class="now">sixty seconds</span></td></tr>
+<tr><td><code>VER</code></td><td class="rule">§6 Versioning law</td><td class="ct">x1</td><td><span class="was">NETT_VER=&#x27;1.7&#x27;</span><br><span class="now">NETT_VER=&#x27;1.8&#x27;</span></td></tr>
+<tr><td><code>F-19</code></td><td class="rule">§7 Jargon — permitted list only</td><td class="ct">x1</td><td><span class="was">&lt;span class=&quot;sm&quot;&gt;Liquidity&lt;/span&gt;&lt;span&gt;Exit in ~30 days, no lock&lt;/span&gt;</span><br><span class="now">&lt;span class=&quot;sm&quot;&gt;Cash you can reach&lt;/span&gt;&lt;span&gt;Exit in about 30 days, no lock&lt;/span&gt;</span></td></tr>
+</table>
+
+<h3 class="ser">Escalated, not resolved</h3>
+<div class="cd">
+  <div class="crit"><b>G-06 · The app and the other surfaces run different demo personas.</b> The app's user has a net worth of <b>₹2,76,42,300</b> and a card revolving <b>₹7,20,000</b>. <code>RULE_BOOK §4</code> locks Rahul Mehra at AUM ₹86,40,000, card ₹52,600, home loan ₹48,20,000, EMI ₹43,500, surplus ₹47,000 — and both the CRM and the web page use those. <b>Not one locked figure appears anywhere in the app, and none ever did</b> — verified against v1.7, so this predates this release. §5 says the surfaces never disagree on the same fact; today they disagree on every fact. <b>Not touched — this is a decision about which persona is canon.</b></div>
+  <div class="flag"><b>G-07 · The peer numbers survived as benchmarks.</b> "≈₹6,90,000 a year typically hides here" keeps the figure and drops the peer frame. If that figure was derived from other users' data, the reframe is cosmetic and the number itself has to go. <b>Source needs confirming — Yogesh sir.</b></div>
+  <div class="flag"><b>G-08 · Full figures are wider than lakh notation.</b> ₹28,40,000 runs four characters longer than ₹28.4 L. On narrow chips, table rows and the net-worth display this may wrap on small devices. The copy is correct; <b>the layout needs a device pass before build.</b></div>
+  <div class="flag"><b>G-09 · XIRR was translated, not glossed.</b> "15.1% a year" loses that XIRR is money-weighted — and XIRR does appear on the user's own CAMS statement, which §7 treats as the test for admission. Alternative: add XIRR to the permitted list with a Glossary entry. <b>Founder call.</b></div>
+  <div class="flag"><b>G-01 · partly closed.</b> The app contained <b>both</b> "60-second" and "ninety seconds". Normalised to sixty seconds. The canonical number across app, web and identity still needs deciding.</div>
+</div>
+
+<h3 class="ser">Gate run — full output, uncropped</h3>
+<div class="cd"><p class="mut" style="font-family:ui-monospace,Menlo,monospace;font-size:11.5px;line-height:1.95;">
+PASS §5 lakh never a unit · PASS §5 no slash flows · PASS §5 rates carry basis · PASS §5 time is human · PASS §5 one time claim · PASS §3 peer comparison · PASS §3 urgency/guarantee · PASS §6 Arth first person · PASS §6 drowning language · PASS §6 Nett never a verb · PASS §7 jargon · PASS §4 banned buttons · PASS §8 unverifiable claims · PASS screen presence 65/65 · PASS nav reachability 38/38 · PASS structural parity vs v1.7 (div 749/749, span 920/920, section 65/65, data-nav 173/173, delta 0) · PASS runtime smoke test — no ReferenceError against stubbed DOM<br>
+<span style="color:var(--pos);">RESULT: ALL GATES PASS — 368 replacements, 0 failures.</span></p></div>
+
+<div class="cd"><p class="lb">TOOLING DISCLOSURE</p>
+<p class="mut">Four self-caught errors, all disclosed. Three assertions fired during patching and aborted the run before any write: two anchors written from the audit summary rather than the file (peer strings <code>A-02</code>–<code>A-07</code>), and one ordering collision where the XIRR regex consumed text a later literal patch expected (<code>F-03</code>). No silent no-ops occurred — which is the entire reason the assertions are there. Separately, the first build of this release note was written through a string-escape step that corrupted 44 non-ASCII characters; caught by an encoding check and regenerated from source.</p></div>
+
+<h2 class="ser">v1.7 <span class="ver">03 Aug 2026</span></h2>
+<p class="mut">Baseline. 65 screens, four account journeys, report-as-landing, island demoted to optional view. Copy written before the Brand Voice canon existed — which is what v1.8 reconciles.</p>
+
+<p class="dim" style="margin-top:44px;">Nett App Release Notes · companions: <code>NETT_CHANGES_APP.md</code> · <code>nett-ux-writing/SKILL.md</code> · <code>Nett_Brand_Voice.html</code> · bundle law per <code>NETT_INSTRUCTIONS §1</code>.</p>
+</body></html>

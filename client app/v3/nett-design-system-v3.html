@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Nett Design System · v3.0</title>
+<style>
+:root{
+  /* ---- CANON TOKENS · copy this block into any build ---- */
+  --bg:#0C0D10; --surface:#121318; --card:rgba(255,255,255,.022);
+  --tx:#ECECF1; --mut:#8E8E9C; --dim:#6B6B78;
+  --bone:#C9C3B2; --amb:#D9B96A;
+  --pos:#3ED598; --pos-deep:#2E7A5C; --neg:#E08A8A; --neg-deep:#8A4E4E;
+  --lav:#BDB3F6; --water:#8FB2EE; --deep1:#152440; --deep2:#0B1220;
+  --hair:rgba(255,255,255,.07); --hair2:rgba(255,255,255,.045);
+  --r-pill:999px; --r-card:20px; --r-btn:16px; --r-fld:15px; --r-sheet:26px;
+  --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:24px; --sp-6:32px; --sp-7:48px;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{background:var(--bg);color:var(--tx);font-family:-apple-system,'SF Pro Display','SF Pro Text',Inter,'Segoe UI',Roboto,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased;padding-bottom:100px}
+.wrap{max-width:920px;margin:0 auto;padding:0 22px}
+.lb{font-size:10.5px;letter-spacing:2.2px;color:var(--dim);font-weight:600;text-transform:uppercase}
+.lb::before{content:'▫ ';color:#4E4E5A}
+h1{font-weight:650;letter-spacing:-1.3px;font-size:36px;line-height:1.14}
+h2{font-weight:650;letter-spacing:-.6px;font-size:24px}
+h3{font-weight:650;letter-spacing:-.3px;font-size:16px}
+.mut{color:var(--mut);font-size:13.5px}
+.sm{color:var(--dim);font-size:12px;line-height:1.55}
+section{padding:48px 0;border-bottom:1px solid var(--hair)}
+.cd{background:var(--surface);border:1px solid var(--hair);border-radius:20px;padding:24px;margin-top:18px}
+.cdx{background:var(--card);border:1px solid var(--hair);border-radius:20px;padding:17px 18px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:18px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-top:18px}
+@media(max-width:700px){.grid2,.grid3{grid-template-columns:1fr}}
+table{width:100%;border-collapse:collapse;margin-top:14px;font-size:12.5px}
+td,th{padding:9px 10px;border-bottom:1px solid var(--hair);text-align:left;vertical-align:top}
+th{color:var(--dim);font-size:10.5px;letter-spacing:1.6px;text-transform:uppercase;font-weight:600}
+code,.mono{font-family:'SF Mono',ui-monospace,Menlo,monospace;font-size:11.5px;color:var(--bone)}
+pre{background:#0A0B0E;border:1px solid var(--hair);border-radius:14px;padding:16px;overflow-x:auto;margin-top:12px;font-size:11px;line-height:1.7;color:#B8B8C4}
+.toc a{color:var(--lav);text-decoration:none;font-size:13px;display:block;padding:7px 0;border-bottom:1px solid var(--hair2)}
+.dot{width:100%;height:44px;border-radius:12px;border:1px solid var(--hair);margin-bottom:8px}
+.tk{border:1px solid var(--hair);border-radius:14px;padding:12px}
+.tk b{font-size:12.5px}
+.spec{font-family:'SF Mono',ui-monospace,Menlo,monospace;color:var(--mut);font-size:10.5px;display:block;margin-top:2px}
+.badge{display:inline-block;font-size:10px;letter-spacing:1.6px;text-transform:uppercase;border-radius:999px;padding:4px 11px;font-weight:650;margin-right:6px}
+.b-ok{background:rgba(62,213,152,.1);color:var(--pos);border:1px solid rgba(62,213,152,.3)}
+.b-no{background:rgba(224,138,138,.1);color:var(--neg);border:1px solid rgba(224,138,138,.3)}
+/* prototype components reproduced for live spec */
+.cta{background:#F2F2F5;color:#0C0D10;font-size:14.5px;font-weight:600;text-align:center;border-radius:16px;padding:16px;letter-spacing:-.1px;cursor:pointer}
+.cta2{border:1px solid rgba(255,255,255,.16);color:var(--tx);font-size:13px;font-weight:500;text-align:center;border-radius:16px;padding:13px;cursor:pointer}
+.ghost{color:var(--mut);font-size:13px;text-align:center;padding:11px;cursor:pointer}
+.fld{background:rgba(255,255,255,.035);border:1px solid var(--hair);border-radius:15px;padding:15px 16px;color:var(--tx);font-size:14px;margin-top:10px}
+.fld span{color:var(--dim);font-size:10px;letter-spacing:1.6px;display:block;margin-bottom:4px}
+.rw{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid rgba(255,255,255,.045);font-size:13.5px}
+.rw:last-child{border-bottom:none}
+.fee{display:inline-block;font-size:10px;color:var(--bone);background:rgba(201,195,178,.07);border:1px solid rgba(201,195,178,.2);border-radius:999px;padding:3px 10px;letter-spacing:.3px}
+.chip{display:inline-block;font-size:13px;color:var(--tx);border:1px solid rgba(255,255,255,.15);border-radius:15px;padding:10px 18px;white-space:nowrap;font-weight:500}
+.chip.on{border-color:rgba(236,236,241,.5);background:rgba(255,255,255,.05)}
+.seg{display:flex;background:rgba(255,255,255,.04);border-radius:14px;padding:3px;margin-top:14px;max-width:320px}
+.seg span{flex:1;text-align:center;font-size:12.5px;color:var(--mut);padding:10px;border-radius:11px;cursor:pointer;font-weight:500}
+.seg span.on{background:rgba(255,255,255,.08);color:var(--tx)}
+.bar{display:flex;height:13px;border-radius:7px;overflow:hidden;margin-top:9px;max-width:420px}
+.bar div{height:100%}
+.msg{max-width:84%;border-radius:17px 17px 17px 6px;background:rgba(255,255,255,.05);padding:12px 15px;font-size:13.5px;margin-top:10px;width:fit-content;line-height:1.55}
+.msg.me{margin-left:auto;border-radius:17px 17px 6px 17px;background:rgba(189,179,246,.11);color:#E4DEFA}
+.msg.arth{border-left:2px solid var(--lav);background:rgba(189,179,246,.08)}
+.toastx{display:inline-block;background:#1B1C22;border:1px solid rgba(255,255,255,.13);font-size:12.5px;border-radius:999px;padding:11px 19px}
+.av{width:30px;height:30px;border-radius:50%;background:rgba(189,179,246,.10);border:1px solid rgba(189,179,246,.35);display:flex;align-items:center;justify-content:center;flex:0 0 30px}
+.ctaA{display:inline-block;background:linear-gradient(90deg,#2E7A5C,#3ED598);color:#06130D;font-weight:650;font-size:12.5px;border-radius:999px;padding:8px 16px;cursor:pointer}
+
+/* v3 live motion demos */
+.dnl{position:relative;display:inline-block;font-weight:650;font-size:52px;line-height:1;letter-spacing:-1.5px}
+.dnl .dnt{color:rgba(201,195,178,.32)}
+.dnl .dnw{position:absolute;left:0;top:0;color:#8FB2EE;animation:dnfill 1.7s ease-in-out infinite}
+@keyframes dnfill{0%,100%{clip-path:inset(86% 0 0 0)}50%{clip-path:inset(26% 0 0 0)}}
+.dpg{height:74px;display:flex;align-items:center;justify-content:center}
+.dpgc{width:96px;height:56px;border-radius:12px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);animation:dpgin 2.2s cubic-bezier(.2,.8,.3,1) infinite}
+@keyframes dpgin{0%{opacity:0;transform:translateY(8px)}18%,78%{opacity:1;transform:translateY(0)}92%,100%{opacity:0;transform:translateY(8px)}}
+.dwp{position:relative;height:74px;border-radius:12px;border:1px solid rgba(255,255,255,.09);overflow:hidden;display:flex;align-items:center;justify-content:center}
+.dwpw{position:absolute;left:0;right:0;height:130%;top:110%;background:linear-gradient(180deg,rgba(143,178,238,.3),#152440 26%,#0B1220);border-top:2px solid rgba(143,178,238,.6);animation:dwipe 3s cubic-bezier(.2,.8,.3,1) infinite}
+@keyframes dwipe{0%,20%{top:110%}52%{top:-8%}80%,100%{top:-140%}}
+@media(prefers-reduced-motion:reduce){.dnl .dnw,.dpgc,.dwpw{animation:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- ================= COVER ================= -->
+<section style="padding-top:64px">
+  <p class="lb">Nett Design System · v3.0 · 29 Jul 2026 · single source of truth — v1/v2 retired</p>
+  <div style="margin:34px 0 8px">
+    <svg viewBox="0 0 420 170" width="min(320px,80%)" xmlns="http://www.w3.org/2000/svg" aria-label="Nett">
+      <defs>
+        <clipPath id="ca"><rect x="0" y="0" width="420" height="98"/></clipPath>
+        <clipPath id="cb"><rect x="0" y="98" width="420" height="72"/></clipPath>
+        <linearGradient id="cdeep" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#152440" stop-opacity="0"/><stop offset="1" stop-color="#0B1220" stop-opacity=".9"/></linearGradient>
+      </defs>
+      <rect x="0" y="98" width="420" height="72" fill="url(#cdeep)"/>
+      <text x="210" y="128" text-anchor="middle" font-family="-apple-system,Inter,sans-serif" font-weight="650" font-size="110" letter-spacing="-4" fill="#C9C3B2" clip-path="url(#ca)">Nett</text>
+      <text x="213" y="128" text-anchor="middle" font-family="-apple-system,Inter,sans-serif" font-weight="650" font-size="110" letter-spacing="-4" fill="#8FB2EE" opacity=".42" clip-path="url(#cb)">Nett</text>
+      <rect x="14" y="97" width="392" height="2" rx="1" fill="#D9B96A"/>
+    </svg>
+  </div>
+  <p style="font-weight:650;font-size:17px;letter-spacing:-.2px">Grow what you own. Clear what you owe.</p>
+  <p class="mut" style="margin-top:16px;max-width:620px">This document is the single reference for anyone building Nett — brand, product, or marketing. Every value here is shipping in the prototype or specified for Direction C (Waterline). If a build and this document disagree, this document wins; raise the conflict, don't improvise.</p>
+  <div class="cd">
+    <p class="lb" style="margin-bottom:10px">Contents</p>
+    <div class="toc" style="columns:2;column-gap:32px">
+      <a href="#s1">1 · Brand core &amp; principles</a>
+      <a href="#s2">2 · Logo — guideline &amp; logic</a>
+      <a href="#s3">3 · Color system</a>
+      <a href="#s13">4 · Themes — Ink · White · Black</a>
+      <a href="#s4">5 · Typography</a>
+      <a href="#s5">6 · Spacing, radius &amp; layout</a>
+      <a href="#s12">7 · Iconography</a>
+      <a href="#s6">8 · Components</a>
+      <a href="#s7">9 · Modules</a>
+      <a href="#s8">10 · Motion — transitions, loader, wipe</a>
+      <a href="#s9">11 · Arth</a>
+      <a href="#s10">12 · Voice, tagline &amp; copy laws</a>
+      <a href="#s11">13 · Dev handoff — tokens &amp; rules</a>
+    </div>
+  </div>
+  <div class="cd" style="margin-top:18px;border-color:rgba(217,185,106,.35)">
+    <p class="lb" style="color:var(--amb)">v3.0 change note — from the full 50-screen app audit</p>
+    <p class="sm" style="margin-top:8px;line-height:1.8">· <b>§3.4 Extended palette</b>: all 52 shipped hexes inventoried — chart ramps, island trio, text tints, chrome — each mapped to a family; 3 defects flagged.<br>· <b>§4 Themes (new)</b>: Ink (shipped) fully specified, White and Black variants proposed with full token remap — pending sign-off.<br>· <b>§7 Iconography</b>: family completed — all 48 shipped icons documented (was 18).<br>· <b>§10 Motion</b>: live in-page demos for loader, page transition, wipe; Lottie assets shipped (<span class="mono">nett-loader.json</span>, <span class="mono">nett-logo-mark.json</span>).<br>· <b>§13.5 Defect register (new)</b>: 3 app defects logged from the audit.</p>
+  </div>
+</section>
+
+<!-- ================= 1 BRAND CORE ================= -->
+<section id="s1">
+  <p class="lb">1 · Brand core</p>
+  <h2 style="margin-top:12px">One idea: the line.</h2>
+  <p class="mut" style="margin-top:10px;max-width:640px">Nett measures how far above or below the waterline a person is. Assets hold you up; liabilities pull you under. Every design decision serves that single reading. Three principles govern everything:</p>
+  <div class="grid3">
+    <div class="cdx"><h3>The brand is the instrument</h3><p class="sm" style="margin-top:8px">The Nett mark always stands <i>at</i> the line. It never drowns, never floats. Only the user's marker moves. Underwater is a measured, recoverable state — always shown with distance-to-surface and one action that closes it. Never fear imagery.</p></div>
+    <div class="cdx"><h3>Number + action</h3><p class="sm" style="margin-top:8px">Every line of product copy either carries a number or ends in an action. No mood copy, no vague reassurance. This is law, inherited from the product, applied to the brand.</p></div>
+    <div class="cdx"><h3>Diagnose, never advise</h3><p class="sm" style="margin-top:8px">Nett observes, calculates, compares, quantifies, educates, discloses, routes. The words <i>advise / recommend / suggest</i> never appear in Nett or Arth copy. Advice language belongs to the RM on record, by name.</p></div>
+  </div>
+</section>
+
+<!-- ================= 2 LOGO ================= -->
+<section id="s2">
+  <p class="lb">2 · Logo — guideline &amp; logic</p>
+
+  <h3 style="margin-top:20px">2.0 · Logic — why the mark is half in the water</h3>
+  <div class="grid3">
+    <div class="cdx"><b>The product is a measurement</b><p class="sm" style="margin-top:8px">Nett tells you one thing before anything else: how far above or below the line you are. Assets hold you up; liabilities pull you under. The identity doesn’t illustrate that idea next to the name — it happens <i>to</i> the name. The wordmark is the instrument.</p></div>
+    <div class="cdx"><b>Honest to the user</b><p class="sm" style="margin-top:8px">Most users start partly underwater — a home loan, a card revolve. The brand doesn’t pretend otherwise; it measures. The lower third of the mark is submerged because that is the truthful starting state of the balance sheet it serves.</p></div>
+    <div class="cdx"><b>The brand never drowns</b><p class="sm" style="margin-top:8px">The mark is always drawn <i>at</i> the line — it never sinks, never floats. Only the user’s marker moves. Underwater is always a measured, recoverable state with a path up. This one rule keeps depth motivating instead of shaming, and keeps Nett out of fear-advertising territory.</p></div>
+  </div>
+  <p class="sm" style="margin-top:14px">Derivation chain, in one line: <span class="mono">tagline (own / owe) → the line → water level → wordmark standing in it → gauge → island</span>. Every brand surface is the same metaphor at a different zoom.</p>
+
+  <div class="cd" style="text-align:center;padding:44px 24px;background:linear-gradient(180deg,#121318 0%,#121318 58%,#111A2C 58%,#0D1524 100%)">
+    <svg viewBox="0 0 420 170" width="min(360px,84%)" xmlns="http://www.w3.org/2000/svg">
+      <defs><clipPath id="pa"><rect x="0" y="0" width="420" height="98"/></clipPath><clipPath id="pb"><rect x="0" y="98" width="420" height="72"/></clipPath></defs>
+      <text x="210" y="128" text-anchor="middle" font-family="-apple-system,Inter,sans-serif" font-weight="650" font-size="110" letter-spacing="-4" fill="#C9C3B2" clip-path="url(#pa)">Nett</text>
+      <text x="213" y="128" text-anchor="middle" font-family="-apple-system,Inter,sans-serif" font-weight="650" font-size="110" letter-spacing="-4" fill="#8FB2EE" opacity=".42" clip-path="url(#pb)">Nett</text>
+      <rect x="14" y="97" width="392" height="2" rx="1" fill="#D9B96A"/>
+    </svg>
+    <p class="sm" style="margin-top:18px">Primary mark · dark surfaces only</p>
+  </div>
+
+  <h3 style="margin-top:26px">2.1 · Construction</h3>
+  <table>
+    <tr><th>Property</th><th>Spec</th></tr>
+    <tr><td>Wordmark type</td><td class="mono">Display face (SF Pro / Inter), weight 650, tracking −0.036em, title case "Nett"</td></tr>
+    <tr><td>Waterline position</td><td class="mono">Crosses at 62% of cap-height measured from the top (letters are ~38% submerged)</td></tr>
+    <tr><td>Waterline stroke</td><td class="mono">Amber #D9B96A · thickness = 1.8% of wordmark width · extends 3.5% beyond wordmark each side</td></tr>
+    <tr><td>Submerged slice</td><td class="mono">Duplicate of wordmark · x-offset +0.7% of wordmark width (refraction) · fill #8FB2EE · opacity 0.42</td></tr>
+    <tr><td>Depth wash (optional)</td><td class="mono">Below line: linear-gradient #152440 (0 opacity) → #0B1220 (0.9) · only on hero/splash surfaces</td></tr>
+    <tr><td>Clear space</td><td class="mono">= height of the "N" on all four sides · nothing enters, including the tagline (tagline has its own lockups, §12)</td></tr>
+    <tr><td>Minimum size — full mark</td><td class="mono">64px wide. Below 64px → dry mark</td></tr>
+    <tr><td>Dry mark (fallback)</td><td class="mono">Flat "Nett" in Bone #C9C3B2 + amber underline (2px, full width of wordmark, offset 4px). No refraction, no water. Use &lt;64px, single-color contexts, print faxes, favicons ≥ requirement</td></tr>
+    <tr><td>Light backgrounds</td><td class="mono">Wordmark Ink #0C0D10 · submerged slice #4A6EA8 at 0.5 · line stays Amber. Bone-on-light is forbidden (fails contrast)</td></tr>
+  </table>
+
+  <h3 style="margin-top:26px">2.2 · App icon</h3>
+  <div class="grid2">
+    <div class="cdx" style="text-align:center;padding:30px">
+      <svg viewBox="0 0 200 200" width="120" xmlns="http://www.w3.org/2000/svg">
+        <defs><clipPath id="ja"><rect x="0" y="0" width="200" height="116"/></clipPath><clipPath id="jb"><rect x="0" y="116" width="200" height="84"/></clipPath><linearGradient id="jd" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#152440" stop-opacity=".1"/><stop offset="1" stop-color="#0B1220"/></linearGradient></defs>
+        <rect width="200" height="200" rx="46" fill="#0C0D10" stroke="rgba(217,185,106,.3)" stroke-width="2"/>
+        <rect x="2" y="116" width="196" height="82" fill="url(#jd)"/>
+        <text x="100" y="150" text-anchor="middle" font-family="-apple-system,Inter,sans-serif" font-weight="650" font-size="118" letter-spacing="-3" fill="#C9C3B2" clip-path="url(#ja)">N</text>
+        <text x="103" y="150" text-anchor="middle" font-family="-apple-system,Inter,sans-serif" font-weight="650" font-size="118" letter-spacing="-3" fill="#8FB2EE" opacity=".45" clip-path="url(#jb)">N</text>
+        <rect x="18" y="115" width="164" height="3" rx="1.5" fill="#D9B96A"/>
+      </svg>
+    </div>
+    <div class="cdx">
+      <p class="sm" style="line-height:1.75">· Ink tile, 23% corner radius, hairline amber border at 0.3 opacity<br>· "N" at 59% of tile height, waterline at 58% of tile height<br>· Same refraction spec as the wordmark<br>· Exports: 1024 master · 180/167/152/120 iOS · 512/192/48 Android adaptive (waterline stays inside the safe zone)<br>· At ≤48px the depth gradient is dropped; N + line + submerged slice only</p>
+    </div>
+  </div>
+
+  <h3 style="margin-top:26px">2.3 · Misuse — hard no's</h3>
+  <div class="grid3">
+    <div class="cdx"><span class="badge b-no">Never</span><p class="sm" style="margin-top:8px">Sink the mark below the line or float it above — the brand lives at the surface, always.</p></div>
+    <div class="cdx"><span class="badge b-no">Never</span><p class="sm" style="margin-top:8px">Recolor the submerged slice sage or blush. Water is water-blue; money colors are for money.</p></div>
+    <div class="cdx"><span class="badge b-no">Never</span><p class="sm" style="margin-top:8px">All-caps NETT, letterspaced NETT, lowercase nett, "Nett!" — the mark is title case, tracking −0.036em, and it is never typed as decoration in running copy.</p></div>
+    <div class="cdx"><span class="badge b-no">Never</span><p class="sm" style="margin-top:8px">Waves, ripples, splash effects, fish, boats. The water is still. It's a measurement, not a seascape.</p></div>
+    <div class="cdx"><span class="badge b-no">Never</span><p class="sm" style="margin-top:8px">Rotate, outline, add glow/shadow to the mark, or place it on photography without an ink scrim ≥ 0.75.</p></div>
+    <div class="cdx"><span class="badge b-no">Never</span><p class="sm" style="margin-top:8px">Pair the mark with the old island render, Nuvyra gold letterspaced style, or any Felix-era asset.</p></div>
+  </div>
+
+  <h3 style="margin-top:28px">2.4 · Tagline lockups</h3>
+  <table>
+    <tr><th>Surface</th><th>Lockup</th></tr>
+    <tr><td class="sm">Splash / hero</td><td class="sm">Centered under the surfaced wordmark: sage clause first, blush clause second — the order mirrors above/below. Screen background splits at the waterline.</td></tr>
+    <tr><td class="sm">Gauge graphic</td><td class="sm">"Grow what you own." lives in the air zone; "Clear what you owe." in the water zone — the tagline annotates the instrument.</td></tr>
+    <tr><td class="sm">Small / legal</td><td class="sm mono">One mono line, no color, no water: "Nett Wealth — Grow what you own. Clear what you owe."</td></tr>
+  </table>
+  <h3 style="margin-top:24px">2.5 · The mark in motion</h3>
+  <p class="sm" style="margin-top:10px;line-height:1.8">· Splash: water rises to the 50% line in 1.4s (<code>--ease</code>), the wordmark is already at the surface — water comes to the brand, the brand never moves.<br>· The mark itself is never animated beyond a single fade-in. No bobbing, no ripple across the letters — motion belongs to water and markers, not the instrument.<br>· Shipped reference: <code>.spwater</code> + <code>.wmark</code> in the app prototype.</p>
+</section>
+
+<!-- ================= 3 COLOR ================= -->
+<section id="s3">
+  <p class="lb">3 · Color system</p>
+  <h3 style="margin-top:14px">3.1 · Core palette</h3>
+  <div class="grid3">
+    <div class="tk"><div class="dot" style="background:#0C0D10"></div><b>Ink</b><span class="spec">--bg · #0C0D10 · app background, icon tile</span></div>
+    <div class="tk"><div class="dot" style="background:#121318"></div><b>Surface</b><span class="spec">--surface · #121318 · sheets, elevated cards</span></div>
+    <div class="tk"><div class="dot" style="background:#ECECF1"></div><b>Text</b><span class="spec">--tx · #ECECF1 · primary text</span></div>
+    <div class="tk"><div class="dot" style="background:#8E8E9C"></div><b>Muted</b><span class="spec">--mut · #8E8E9C · secondary text</span></div>
+    <div class="tk"><div class="dot" style="background:#6B6B78"></div><b>Dim</b><span class="spec">--dim · #6B6B78 · labels, tertiary</span></div>
+    <div class="tk"><div class="dot" style="background:#C9C3B2"></div><b>Bone</b><span class="spec">--bone · #C9C3B2 · brand, wordmark, fee pills</span></div>
+    <div class="tk"><div class="dot" style="background:#D9B96A"></div><b>Amber</b><span class="spec">--amb · #D9B96A · the waterline, WATCH state</span></div>
+    <div class="tk"><div class="dot" style="background:#3ED598"></div><b>Sage</b><span class="spec">--pos · #3ED598 · own / positive / GOOD</span></div>
+    <div class="tk"><div class="dot" style="background:#E08A8A"></div><b>Blush</b><span class="spec">--neg · #E08A8A · owe / negative / CRITICAL</span></div>
+    <div class="tk"><div class="dot" style="background:#BDB3F6"></div><b>Lavender</b><span class="spec">--lav · #BDB3F6 · Arth only. Exclusive.</span></div>
+    <div class="tk"><div class="dot" style="background:#8FB2EE"></div><b>Water</b><span class="spec">--water · #8FB2EE · submerged slice, info accents</span></div>
+    <div class="tk"><div class="dot" style="background:linear-gradient(180deg,#152440,#0B1220)"></div><b>Deep</b><span class="spec">--deep1 #152440 → --deep2 #0B1220 · below-line washes</span></div>
+  </div>
+
+  <h3 style="margin-top:26px">3.2 · Semantic rules</h3>
+  <table>
+    <tr><th>Rule</th><th>Detail</th></tr>
+    <tr><td>Sage/Blush = money only</td><td class="sm">Sage means owned/positive/gain; Blush means owed/negative/risk. Never used decoratively, never for generic success/error UI states (a copied-link toast is neutral, not sage).</td></tr>
+    <tr><td>Lavender = Arth only</td><td class="sm">If it's lavender, Arth said it or does it. No lavender on non-Arth surfaces. (Existing vessel-liability fill in lavender migrates to Water #8FB2EE in the next prototype pass — flagged as a breaking change, not silently done.)</td></tr>
+    <tr><td>Amber = the line + caution</td><td class="sm">Waterline color and WATCH state. Cost items cap at ATTENTION (amber-deep), never CRITICAL blush — per Rule Book v3.</td></tr>
+    <tr><td>Gradients</td><td class="sm">Only two sanctioned: positive action <code>90deg #2E7A5C→#3ED598</code> and depth wash <code>180deg #152440→#0B1220</code>. No new gradients without sign-off.</td></tr>
+    <tr><td>Contrast floor</td><td class="sm">Body text ≥ 4.5:1 on its surface; Dim #6B6B78 is approved only for labels ≥ 10.5px letterspaced or text ≥ 12px. Nothing lighter than Dim carries information.</td></tr>
+  </table>
+
+  <h3 style="margin-top:26px">3.3 · Diagnostic state bands (Rule Book v3 alignment)</h3>
+  <table>
+    <tr><th>Band</th><th>Color</th><th>Usage law</th></tr>
+    <tr><td><b style="color:#3ED598">GOOD</b></td><td class="mono">#3ED598 · tint rgba(62,213,152,.10) · border .30</td><td class="sm">State chip + row accent</td></tr>
+    <tr><td><b style="color:#D9B96A">WATCH</b></td><td class="mono">#D9B96A · tint rgba(217,185,106,.10) · border .30</td><td class="sm">State chip + row accent</td></tr>
+    <tr><td><b style="color:#B99450">ATTENTION</b></td><td class="mono">#B99450 deep-amber · tint .12</td><td class="sm">Max band for all cost items</td></tr>
+    <tr><td><b style="color:#E08A8A">CRITICAL</b></td><td class="mono">#E08A8A · tint rgba(224,138,138,.12) · border .35</td><td class="sm">Always paired with one Act button</td></tr>
+    <tr><td><b style="color:#6B6B78">NO DATA</b></td><td class="mono">#6B6B78 + dashed border rgba(255,255,255,.14)</td><td class="sm">Must read as absence — dashed, dim, never a filled chip, never anything a user could mistake for passing</td></tr>
+  </table>
+
+  <h3 style="margin-top:26px">3.4 · Extended palette — the full shipped inventory (v3 audit)</h3>
+  <p class="sm" style="margin-top:8px">Every hex in the shipped prototype, mapped. Tokens cover UI; charts, the island, and illustrations draw from these named ramps — a hex outside both this table and §13.1 is a defect. Swatches are live.</p>
+  <table>
+    <tr><th>Family</th><th>Values</th><th>Where it ships</th></tr>
+    <tr><td class="sm"><b>Sage ramp</b> (money-positive depth)</td><td class="mono"><span style="background:#3ED598;padding:1px 7px;border-radius:3px;color:#0C0D10">3ED598</span> <span style="background:#3E9D74;padding:1px 7px;border-radius:3px;color:#0C0D10">3E9D74</span> <span style="background:#31855F;padding:1px 7px;border-radius:3px">31855F</span> <span style="background:#2E7A5C;padding:1px 7px;border-radius:3px">2E7A5C</span> <span style="background:#2A6B52;padding:1px 7px;border-radius:3px">2A6B52</span></td><td class="sm">Score band, cashflow bars, vessel fill, chart series</td></tr>
+    <tr><td class="sm"><b>Blush ramp</b> (money-negative depth)</td><td class="mono"><span style="background:#E08A8A;padding:1px 7px;border-radius:3px;color:#0C0D10">E08A8A</span> <span style="background:#B06868;padding:1px 7px;border-radius:3px">B06868</span> <span style="background:#9A5656;padding:1px 7px;border-radius:3px">9A5656</span> <span style="background:#8A4E4E;padding:1px 7px;border-radius:3px">8A4E4E</span></td><td class="sm">Score band poor zone, liability charts, critical accents</td></tr>
+    <tr><td class="sm"><b>Water ramp</b> (movement &amp; ideals)</td><td class="mono"><span style="background:#9FB8E8;padding:1px 7px;border-radius:3px;color:#0C0D10">9FB8E8</span> <span style="background:#8FB2EE;padding:1px 7px;border-radius:3px;color:#0C0D10">8FB2EE</span> <span style="background:#5FA8CF;padding:1px 7px;border-radius:3px;color:#0C0D10">5FA8CF</span> <span style="background:#2E6B8A;padding:1px 7px;border-radius:3px">2E6B8A</span></td><td class="sm">Ideal-value text, vessel fill, goal progress gradient</td></tr>
+    <tr><td class="sm"><b>Island trio</b> (3D-desaturated states)</td><td class="mono"><span style="background:#8FC7AE;padding:1px 7px;border-radius:3px;color:#0C0D10">8FC7AE</span> <span style="background:#E3B65B;padding:1px 7px;border-radius:3px;color:#0C0D10">E3B65B</span> <span style="background:#D98B8B;padding:1px 7px;border-radius:3px;color:#0C0D10">D98B8B</span></td><td class="sm">Island slice states only — softened so 3D lighting doesn’t oversaturate; never on flat UI</td></tr>
+    <tr><td class="sm"><b>Chart neutrals</b></td><td class="mono">1D1E24 · 2E2F36 · 2A2B33 · 3A3D46 · 4E4E5A</td><td class="sm">Past bars, skeleton blocks, arc tracks, idle dots, projection strokes (dashed)</td></tr>
+    <tr><td class="sm"><b>Text tints</b></td><td class="mono">F2F2F5 · E4DEFA · CFCBD9 · C6C3D2 · A9AFB8</td><td class="sm">Active markers, me-bubble text, modal rows, chip labels, launcher links</td></tr>
+    <tr><td class="sm"><b>Chrome blacks</b></td><td class="mono">060708 · 0A0F18 · 111A2C · 181206 · 1B1C22</td><td class="sm">Page canvas behind frame, island bg, hero split, icon-on-sage ink, deep cards</td></tr>
+    <tr><td class="sm"><b>UI idle greys</b></td><td class="mono">606069 · 55555F · 3E3E4A</td><td class="sm">Nav idle, launcher labels, rail idle checks</td></tr>
+    <tr><td class="sm" style="color:var(--neg)"><b>DEFECTS — see §13.4</b></td><td class="mono">7A6EBE · B9AEDD · D6B36A · E4C77F · B99450 · 6E4444 · 5E7FB8 · 0E1524</td><td class="sm">Two lavender-family values in money/island charts (exclusivity breach) + the six-hex legacy Felix-era illustration surviving on the intro screen</td></tr>
+  </table>
+</section>
+
+<!-- ================= 4 TYPE ================= -->
+
+<!-- ================= 4 THEMES ================= -->
+<section id="s13">
+  <p class="lb">4 · Themes — Ink · White · Black</p>
+  <h2 style="margin-top:12px">One product, three lights. The line never moves.</h2>
+  <p class="mut" style="margin-top:10px;max-width:660px">Ink is the shipped theme and the brand’s home. White exists for daylight, screenshots into documents, and accessibility preference; Black exists for OLED battery and true-dark environments. Themes are token remaps only — spacing, type, layout, motion, and every law elsewhere in this document are theme-invariant.</p>
+
+  <h3 style="margin-top:24px">4.1 · Token remap table</h3>
+  <p class="sm" style="margin-top:6px"><b style="color:var(--pos)">Ink — shipped.</b> <b style="color:var(--amb)">White and Black — PROPOSED</b>, pending Ankit / Yogesh sir sign-off. No build until approved.</p>
+  <table>
+    <tr><th>Token</th><th>Ink (shipped)</th><th>White (proposed)</th><th>Black (proposed)</th></tr>
+    <tr><td class="mono">--bg</td><td class="mono">#0C0D10</td><td class="mono"><span style="background:#F6F5F2;color:#191A1E;padding:1px 6px;border-radius:3px">#F6F5F2</span> warm paper, never pure white</td><td class="mono">#000000</td></tr>
+    <tr><td class="mono">--surface</td><td class="mono">#121318</td><td class="mono">#FFFFFF</td><td class="mono">#0A0B0D</td></tr>
+    <tr><td class="mono">--card</td><td class="mono">rgba(255,255,255,.022)</td><td class="mono">rgba(12,13,16,.03)</td><td class="mono">rgba(255,255,255,.03)</td></tr>
+    <tr><td class="mono">--tx / --mut / --dim</td><td class="mono">#ECECF1 / #8E8E9C / #6B6B78</td><td class="mono">#191A1E / #6E6E7A / #9A9AA6</td><td class="sm">inherit Ink</td></tr>
+    <tr><td class="mono">--bone</td><td class="mono">#C9C3B2</td><td class="mono">#8A8474 (darkened — Ink-rule from §2.1 applies: bone-on-light fails contrast)</td><td class="sm">inherit</td></tr>
+    <tr><td class="mono">--amb</td><td class="mono">#D9B96A</td><td class="mono">#B5923E</td><td class="sm">inherit</td></tr>
+    <tr><td class="mono">--pos / --neg</td><td class="mono">#3ED598 / #E08A8A</td><td class="mono">#1F8F63 / #C25E5E (same hue identity, darkened to pass 4.5:1 on paper)</td><td class="sm">inherit</td></tr>
+    <tr><td class="mono">--lav</td><td class="mono">#BDB3F6</td><td class="mono">#7A6BD6 — still Arth-only</td><td class="sm">inherit</td></tr>
+    <tr><td class="mono">--water / --deep1 / --deep2</td><td class="mono">#8FB2EE / #152440 / #0B1220</td><td class="mono">#4A6EA8 / #DCE7F8 / #C9D9F2 — depth inverts to tint: underwater zones render as light-blue wash, read as shade not darkness</td><td class="sm">inherit</td></tr>
+    <tr><td class="mono">--hair / --hair2</td><td class="mono">rgba(255,255,255,.07/.045)</td><td class="mono">rgba(12,13,16,.09/.06)</td><td class="mono">rgba(255,255,255,.09/.065)</td></tr>
+  </table>
+
+  <h3 style="margin-top:24px">4.2 · What changes beyond tokens — and what never does</h3>
+  <div class="grid3">
+    <div class="cdx"><b>Ink — the original</b><p class="sm" style="margin-top:8px">The shipped theme. Ambient radial light at ≤8%, shadows only on frame and sheets, waterline mark in full color. This is the demo theme, the deck theme, and the default forever.</p></div>
+    <div class="cdx"><b>White — daylight</b><p class="sm" style="margin-top:8px">Logo switches to the §2.1 light-background variant (Ink wordmark, #4A6EA8 slice at .5, amber line unchanged). Cards gain a soft shadow (they float on paper; hairlines alone vanish in daylight). Ambient gradients drop to zero. Depth wash inverts to tint. Splash stays Ink — the brand moment is always dark water.</p></div>
+    <div class="cdx"><b>Black — OLED</b><p class="sm" style="margin-top:8px">Ink with exactly three overrides: bg, surface, hairlines (+.02 visibility). Ambient radial gradients are removed entirely — they smear on OLED. Nothing else may fork. A Black theme that diverges further than these three lines is a defect.</p></div>
+  </div>
+  <p class="sm" style="margin-top:14px"><b>Theme-invariant, always:</b> money semantics (sage=grow, blush=owe, amber=the line), lavender exclusivity, the waterline metaphor, NO DATA as dashed+dim, type scale, spacing, tap targets, copy, and all motion tokens. A theme changes the light in the room — never the instrument.</p>
+</section>
+
+<section id="s4">
+  <p class="lb">5 · Typography</p>
+  <p class="mut" style="margin-top:10px;max-width:620px">One family — the native system stack — in disciplined roles. No second typeface, anywhere. Numbers always tabular.</p>
+  <pre>font-family: -apple-system,'SF Pro Display','SF Pro Text',Inter,'Segoe UI',Roboto,sans-serif;
+font-variant-numeric: tabular-nums;  /* on every element that renders money */</pre>
+  <table>
+    <tr><th>Role</th><th>Spec</th><th>Sample</th></tr>
+    <tr><td class="mono">.big</td><td class="mono">47/1.05 · 650 · −1.8px · tabular</td><td><span style="font-size:34px;font-weight:650;letter-spacing:-1.4px;font-variant-numeric:tabular-nums">₹1.42 Cr</span><br><span class="sm">Hero numbers only — one per screen</span></td></tr>
+    <tr><td class="mono">h1.ser</td><td class="mono">38/1.14 · 650 · −1.3px</td><td><span style="font-size:26px;font-weight:650;letter-spacing:-.9px">Your wealth, examined.</span></td></tr>
+    <tr><td class="mono">h2.ser</td><td class="mono">25/1.2 · 650 · −0.6px</td><td><span style="font-size:20px;font-weight:650;letter-spacing:-.5px">What's working</span></td></tr>
+    <tr><td class="mono">.vam / card number</td><td class="mono">19–24 · 650 · −0.5 to −0.8px · tabular</td><td><span style="font-size:19px;font-weight:650;letter-spacing:-.5px">₹42,000</span></td></tr>
+    <tr><td class="mono">body</td><td class="mono">14/1.6 · 400 · 0</td><td style="font-size:14px">Money moves on regulated rails, and the units land in your name.</td></tr>
+    <tr><td class="mono">.mut</td><td class="mono">14/1.6 · 400 · --mut</td><td class="mut">Secondary explanation text.</td></tr>
+    <tr><td class="mono">.rw text</td><td class="mono">13.5/1.55 · 400–500</td><td style="font-size:13.5px">Row label · value</td></tr>
+    <tr><td class="mono">.sm</td><td class="mono">11.5/1.55 · 400 · --mut/--dim</td><td class="sm">Footnotes, disclosures, support line</td></tr>
+    <tr><td class="mono">.lb</td><td class="mono">10.5 · 600 · +2.2px · uppercase · ▫ prefix</td><td><span class="lb">Section label</span></td></tr>
+    <tr><td class="mono">.fee</td><td class="mono">10 · 400 · +0.3px · pill</td><td><span class="fee">0.82% total cost · ₹1,140/yr</span></td></tr>
+  </table>
+  <div class="cd">
+    <p class="lb" style="margin-bottom:8px">Type laws</p>
+    <p class="sm" style="line-height:1.8">· Negative tracking scales with size: bigger = tighter. Never positive-track anything except <code>.lb</code> and <code>.fee</code>.<br>· One <code>.big</code> per screen. If two numbers compete, the screen is wrong, not the type.<br>· Weight 650 for display and numbers, 600 for buttons/labels, 500 for emphasis, 400 for body. 700+ is forbidden — the system's premium feel depends on it.<br>· Rupee figures: ₹ symbol always, Indian grouping (₹1,42,000), Cr/L abbreviations at .big scale only.</p>
+  </div>
+</section>
+
+<!-- ================= 5 SPACING ================= -->
+<section id="s5">
+  <p class="lb">6 · Spacing, radius &amp; layout</p>
+  <h3 style="margin-top:14px">6.1 · Spacing scale — 4px base</h3>
+  <table>
+    <tr><th>Token</th><th>px</th><th>Use</th></tr>
+    <tr><td class="mono">--sp-1</td><td class="mono">4</td><td class="sm">icon-to-text gaps, chip stacking</td></tr>
+    <tr><td class="mono">--sp-2</td><td class="mono">8</td><td class="sm">gaps inside chip rails, between paired buttons</td></tr>
+    <tr><td class="mono">--sp-3</td><td class="mono">12</td><td class="sm">element → related element (label to field, text to CTA inside cards)</td></tr>
+    <tr><td class="mono">--sp-4</td><td class="mono">16–18</td><td class="sm">card internal padding (17–18px), card-to-card vertical</td></tr>
+    <tr><td class="mono">--sp-5</td><td class="mono">24</td><td class="sm">screen side padding (fixed 24px), section-to-section</td></tr>
+    <tr><td class="mono">--sp-6</td><td class="mono">32</td><td class="sm">topic breaks inside long screens</td></tr>
+    <tr><td class="mono">--sp-7</td><td class="mono">48–56</td><td class="sm">screen top padding (56px), hero breathing room</td></tr>
+  </table>
+  <h3 style="margin-top:24px">6.2 · Radius scale</h3>
+  <table>
+    <tr><th>Token</th><th>Value</th><th>Applies to</th></tr>
+    <tr><td class="mono">--r-pill · 999px</td><td class="mono">999</td><td class="sm">chips, tags, toasts, fee pills, Arth action buttons</td></tr>
+    <tr><td class="mono">--r-sheet · 26px</td><td class="mono">26 (top only)</td><td class="sm">bottom sheets</td></tr>
+    <tr><td class="mono">--r-card · 20px</td><td class="mono">20</td><td class="sm">cards, vessels</td></tr>
+    <tr><td class="mono">18px</td><td class="mono">18</td><td class="sm">stat tiles (.vt)</td></tr>
+    <tr><td class="mono">--r-btn · 16px</td><td class="mono">16</td><td class="sm">primary/secondary buttons</td></tr>
+    <tr><td class="mono">--r-fld · 15px</td><td class="mono">15</td><td class="sm">input fields, selection chips</td></tr>
+    <tr><td class="mono">14px</td><td class="mono">14</td><td class="sm">segmented control, doc chips, OTP boxes</td></tr>
+  </table>
+  <h3 style="margin-top:24px">6.3 · Layout frame</h3>
+  <p class="sm" style="margin-top:10px;line-height:1.8">· Canvas: 362px phone frame, 36px corner, hairline border, min-height 720px per screen.<br>· Screen padding: 56px top · 24px sides · 20px bottom.<br>· Ambient light: two radial gradients (sage from bottom-left, violet from top-right) at ≤ 8% opacity; "stormy" variant swaps to blush/amber for CRITICAL contexts. Never stronger.<br>· Hairlines: <code>rgba(255,255,255,.07)</code> for structure, <code>.045</code> for row dividers. Borders do separation; shadows are reserved for the frame and sheets only.</p>
+</section>
+
+<!-- ================= 6 ICONOGRAPHY ================= -->
+<section id="s12">
+  <p class="lb">7 · Iconography</p>
+  <h2 style="margin-top:12px">One custom icon. Everything else is borrowed, quietly.</h2>
+  <p class="mut" style="margin-top:10px;max-width:640px">Nett’s icon system is deliberately two-tier: the Arth horizon glyph is the only drawn, owned icon in the product — everything functional comes from one open library, styled into silence. Icons here are wayfinding, not decoration; the numbers and words do the talking.</p>
+
+  <h3 style="margin-top:26px">7.1 · The system icon set</h3>
+  <table>
+    <tr><th>Property</th><th>Spec</th></tr>
+    <tr><td class="sm">Library</td><td class="sm"><b>Tabler Icons</b> (outline set) — single source; mixing libraries is a review blocker</td></tr>
+    <tr><td class="sm">Stroke</td><td class="sm mono">2px at 24vb (library default) — never the filled set except the two state icons below</td></tr>
+    <tr><td class="sm">Sizes</td><td class="sm mono">13px inline-label · 16px row/action · 18–19px section &amp; nav · 22px feature — nothing larger; icons never headline</td></tr>
+    <tr><td class="sm">Default color</td><td class="sm"><span class="mono">var(--mut)</span> — icons sit one step quieter than the text they serve. <span class="mono">--dim</span> for tertiary, <span class="mono">--tx</span> only when the icon is the tap target itself</td></tr>
+    <tr><td class="sm">Semantic color</td><td class="sm">Only when the icon carries state: sage = confirmed/positive, amber = attention, blush = critical, bone = fee/disclosure, water = movement of money. Never colored for decoration</td></tr>
+    <tr><td class="sm">Filled exceptions</td><td class="sm mono">ti-circle-check-filled (rail confirmed) · ti-rosette-discount-check-filled (verified/on-record) — the only two filled icons in the product</td></tr>
+    <tr><td class="sm">Alignment</td><td class="sm mono">vertical-align:-1px to -3px optical, matched to line-height — icons align to the text baseline, not the box</td></tr>
+  </table>
+
+    <h3 style="margin-top:26px">7.2 · The full icon family — every icon that ships, its one meaning, and its count</h3>
+  <p class="sm" style="margin-top:8px">Complete inventory from the v3 audit — 48 icons. One icon = one meaning, everywhere; reusing an icon for a second meaning is a defect. Adding an icon means adding a row here first.</p>
+  <table>
+    <tr><th>Icon</th><th>Meaning — always</th><th style="text-align:right">Uses</th></tr>
+    <tr><td class="mono">ti-chevron-left</td><td class="sm">Back — navigation only</td><td class="mono" style="text-align:right">34</td></tr>
+    <tr><td class="mono">ti-chevron-right</td><td class="sm">Drill-in — navigation only</td><td class="mono" style="text-align:right">25</td></tr>
+    <tr><td class="mono">ti-compass</td><td class="sm">Explore tab</td><td class="mono" style="text-align:right">11</td></tr>
+    <tr><td class="mono">ti-user-star</td><td class="sm">Swapnil — human RM, on record</td><td class="mono" style="text-align:right">11</td></tr>
+    <tr><td class="mono">ti-scale</td><td class="sm">Balance sheet — both sides</td><td class="mono" style="text-align:right">10</td></tr>
+    <tr><td class="mono">ti-home</td><td class="sm">Home tab</td><td class="mono" style="text-align:right">9</td></tr>
+    <tr><td class="mono">ti-activity</td><td class="sm">Health / report tab</td><td class="mono" style="text-align:right">9</td></tr>
+    <tr><td class="mono">ti-chart-pie</td><td class="sm">MF Central / folios</td><td class="mono" style="text-align:right">6</td></tr>
+    <tr><td class="mono">ti-download</td><td class="sm">Report leaves the app</td><td class="mono" style="text-align:right">6</td></tr>
+    <tr><td class="mono">ti-building-bank</td><td class="sm">Account Aggregator / banks</td><td class="mono" style="text-align:right">5</td></tr>
+    <tr><td class="mono">ti-file-analytics</td><td class="sm">Credit bureau</td><td class="mono" style="text-align:right">5</td></tr>
+    <tr><td class="mono">ti-circle-check-filled</td><td class="sm">Rail confirmed (filled exception)</td><td class="mono" style="text-align:right">4</td></tr>
+    <tr><td class="mono">ti-arrows-left-right</td><td class="sm">Internal money movement</td><td class="mono" style="text-align:right">3</td></tr>
+    <tr><td class="mono">ti-shield</td><td class="sm">Safety / regulated rail</td><td class="mono" style="text-align:right">3</td></tr>
+    <tr><td class="mono">ti-check</td><td class="sm">Selection confirmed</td><td class="mono" style="text-align:right">3</td></tr>
+    <tr><td class="mono">ti-face-id</td><td class="sm">Biometric — Face</td><td class="mono" style="text-align:right">2</td></tr>
+    <tr><td class="mono">ti-alert-triangle</td><td class="sm">Attention state — amber only</td><td class="mono" style="text-align:right">2</td></tr>
+    <tr><td class="mono">ti-microphone</td><td class="sm">Voice = same as text</td><td class="mono" style="text-align:right">2</td></tr>
+    <tr><td class="mono">ti-search</td><td class="sm">Search</td><td class="mono" style="text-align:right">2</td></tr>
+    <tr><td class="mono">ti-receipt-tax</td><td class="sm">Fees & disclosure</td><td class="mono" style="text-align:right">2</td></tr>
+    <tr><td class="mono">ti-calendar-event</td><td class="sm">Dated action / SIP date</td><td class="mono" style="text-align:right">2</td></tr>
+    <tr><td class="mono">ti-scan</td><td class="sm">The 90-second scan</td><td class="mono" style="text-align:right">2</td></tr>
+    <tr><td class="mono">ti-rosette-discount-check-filled</td><td class="sm">Verified / on-record (filled exception)</td><td class="mono" style="text-align:right">1</td></tr>
+    <tr><td class="mono">ti-message</td><td class="sm">Chat thread</td><td class="mono" style="text-align:right">1</td></tr>
+    <tr><td class="mono">ti-phone</td><td class="sm">Call support</td><td class="mono" style="text-align:right">1</td></tr>
+    <tr><td class="mono">ti-brand-whatsapp</td><td class="sm">WhatsApp share</td><td class="mono" style="text-align:right">1</td></tr>
+    <tr><td class="mono">ti-shield-lock</td><td class="sm">Privacy — user-controlled data</td><td class="mono" style="text-align:right">1</td></tr>
+    <tr><td class="mono">ti-square</td><td class="sm">Unchecked state</td><td class="mono" style="text-align:right">1</td></tr>
+    <tr><td class="mono">ti-arrow-right</td><td class="sm">Pour / move across</td><td class="mono" style="text-align:right">1</td></tr>
+    <tr><td class="mono">ti-fingerprint</td><td class="sm">Biometric — touch</td><td class="mono" style="text-align:right">1</td></tr>
+    <tr><td class="mono" style="color:var(--neg)">ti-loader-2</td><td class="sm" style="color:var(--neg)">Inline spinner — DEPRECATED: replace with N-loader</td><td class="mono" style="text-align:right">1</td></tr>
+    <tr><td class="mono">ti-trending-up</td><td class="sm">Growth / performance</td><td class="mono" style="text-align:right">1</td></tr>
+    <tr><td class="mono">ti-coin</td><td class="sm">Cash / income</td><td class="mono" style="text-align:right">1</td></tr>
+    <tr><td class="mono">ti-droplet</td><td class="sm">Liquidity</td><td class="mono" style="text-align:right">1</td></tr>
+    <tr><td class="mono">ti-diamond</td><td class="sm">Premium / PMS-AIF tier</td><td class="mono" style="text-align:right">1</td></tr>
+    <tr><td class="mono">ti-layers-intersect</td><td class="sm">Overlap / consolidation</td><td class="mono" style="text-align:right">1</td></tr>
+    <tr><td class="mono">ti-chart-candle</td><td class="sm">Market / stocks</td><td class="mono" style="text-align:right">1</td></tr>
+    <tr><td class="mono">ti-lock</td><td class="sm">Locked / private mode on</td><td class="mono" style="text-align:right">1</td></tr>
+    <tr><td class="mono">ti-lock-open</td><td class="sm">Private mode off</td><td class="mono" style="text-align:right">1</td></tr>
+    <tr><td class="mono">ti-file-type-pdf</td><td class="sm">PDF download</td><td class="mono" style="text-align:right">1</td></tr>
+    <tr><td class="mono">ti-send</td><td class="sm">Send message</td><td class="mono" style="text-align:right">1</td></tr>
+    <tr><td class="mono">ti-report-money</td><td class="sm">Money report</td><td class="mono" style="text-align:right">1</td></tr>
+    <tr><td class="mono">ti-file-percent</td><td class="sm">Fee document</td><td class="mono" style="text-align:right">1</td></tr>
+    <tr><td class="mono">ti-bulb</td><td class="sm">Insight — always with Arth glyph nearby</td><td class="mono" style="text-align:right">1</td></tr>
+    <tr><td class="mono">ti-pencil</td><td class="sm">Edit / correct</td><td class="mono" style="text-align:right">1</td></tr>
+    <tr><td class="mono">ti-shield-check</td><td class="sm">Verification passed</td><td class="mono" style="text-align:right">1</td></tr>
+    <tr><td class="mono">ti-eye-off</td><td class="sm">Hidden / masked value</td><td class="mono" style="text-align:right">1</td></tr>
+    <tr><td class="mono">ti-history</td><td class="sm">Past activity</td><td class="mono" style="text-align:right">1</td></tr>
+  </table>
+
+  <h3 style="margin-top:26px">7.3 · The Arth glyph — the one owned icon</h3>
+  <div class="grid2">
+    <div class="cdx" style="text-align:center;padding:26px">
+      <svg width="72" height="72" viewBox="0 0 40 40"><path d="M20 4 A16 16 0 0 1 36 20 H4 A16 16 0 0 1 20 4 Z" fill="#BDB3F6" opacity=".8"/><circle cx="20" cy="20" r="16" fill="none" stroke="#BDB3F6" stroke-width="2.5"/><line x1="2" y1="20" x2="38" y2="20" stroke="#BDB3F6" stroke-width="2.5"/></svg>
+      <p class="sm" style="margin-top:12px">Horizon glyph — circle crossed by the line.<br>Upper half filled (grow), lower clearing (clear).</p>
+    </div>
+    <div class="cdx">
+      <p class="sm" style="line-height:1.9">· Construction: circle stroke 2.5 at 40vb, full-width line through center, upper semicircle filled at .8 opacity.<br>· Color: <span class="mono">var(--lav)</span>, exclusively — the glyph is never bone, water, sage, or blush.<br>· Sizes: 13px inline attribution · 18–19px headers · min 16px in tap targets.<br>· Motion: none, except a single .4s fade-in. The glyph never spins, pulses, or “thinks”.<br>· Placement: wherever Arth computed the content — chat header, insight attributions, pre-filled fields, report annotations. Its presence is the disclosure.<br>· Hard rule: the glyph on a surface Arth didn’t produce, or lavender without the glyph’s context, are both review blockers (§3.2).</p>
+    </div>
+  </div>
+
+  <h3 style="margin-top:26px">7.4 · Icon misuse — hard no’s</h3>
+  <div class="grid2" style="margin-top:6px">
+    <div class="cdx"><span class="badge b-no">Never</span><p class="sm" style="margin-top:8px">Icon-only actions on money surfaces. Every executing control carries words; an icon may accompany, never replace.</p></div>
+    <div class="cdx"><span class="badge b-no">Never</span><p class="sm" style="margin-top:8px">Emoji as iconography, duotone/filled sets beyond the two exceptions, or a second icon library “just for one screen”.</p></div>
+    <div class="cdx"><span class="badge b-no">Never</span><p class="sm" style="margin-top:8px">Coloring an icon for emphasis when the state hasn’t changed — semantic color is earned by state, not attention-seeking.</p></div>
+    <div class="cdx"><span class="badge b-no">Never</span><p class="sm" style="margin-top:8px">Redrawing the Arth glyph, adding a face, eyes, or sparkles to it, or using any “AI sparkle” iconography anywhere in the product.</p></div>
+  </div>
+</section>
+
+<!-- ================= 6 COMPONENTS ================= -->
+<section id="s6">
+  <p class="lb">8 · Components — live spec</p>
+  <p class="mut" style="margin-top:8px">Rendered with production values. Class names match the prototype.</p>
+
+  <div class="cd">
+    <h3>8.1 · Buttons</h3>
+    <div style="max-width:340px;margin-top:14px">
+      <div class="cta">Begin the scan</div>
+      <div class="cta2" style="margin-top:10px">See the full breakdown</div>
+      <div class="ghost">I already have an account</div>
+      <div style="margin-top:10px"><span class="ctaA">Clear card — ₹38,200</span></div>
+    </div>
+    <table>
+      <tr><th>Class</th><th>Rule</th></tr>
+      <tr><td class="mono">.cta</td><td class="sm">One per screen, names the exact outcome with amount where money moves ("Confirm — ₹25,000"). Paper #F2F2F5 on ink.</td></tr>
+      <tr><td class="mono">.cta2</td><td class="sm">Secondary. Outline. Never two .cta on one screen.</td></tr>
+      <tr><td class="mono">.ghost</td><td class="sm">Tertiary escape ("Not now"). Always available on money screens — no trapped flows.</td></tr>
+      <tr><td class="mono">Arth action pill</td><td class="sm">Sage gradient, pill radius — appears only at the end of Arth messages, wired to a real flow.</td></tr>
+    </table>
+  </div>
+
+  <div class="cd">
+    <h3>8.2 · Cards &amp; rows</h3>
+    <div class="cdx" style="margin-top:14px;max-width:420px">
+      <p class="lb">Liquid fund</p>
+      <p style="font-size:19px;font-weight:650;letter-spacing:-.5px;margin-top:4px;font-variant-numeric:tabular-nums">₹3,20,000</p>
+      <div class="rw"><span class="sm">Expense ratio</span><span class="fee">0.18% · ₹576/yr</span></div>
+      <div class="rw"><span class="sm">Exit</span><span style="font-size:12.5px">Any day · no load</span></div>
+    </div>
+    <p class="sm" style="margin-top:12px;line-height:1.8">· Card = <code>.cd</code>: white at 2.2% + hairline + 20px radius + 17/18px padding. No shadows on cards.<br>· Row = <code>.rw</code>: space-between, 11px vertical, .045 divider, last row undivided.<br>· Fee pill appears on every product card — fee display is a brand feature, not a compliance chore. Format: <code>rate% · ₹amount/yr</code>, always both.<br>· Every asset/liability detail page opens with an Action strip (recommended action + Act button) above the fold.</p>
+  </div>
+
+  <div class="cd">
+    <h3>8.3 · Inputs &amp; selection</h3>
+    <div style="max-width:340px;margin-top:14px">
+      <div class="fld"><span>PAN</span>ABCPM1234F</div>
+      <div class="seg"><span>Assets</span><span class="on">Liabilities</span><span>Cover</span></div>
+      <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap"><span class="chip on">₹10,000</span><span class="chip">₹25,000</span><span class="chip">Custom</span></div>
+    </div>
+    <p class="sm" style="margin-top:12px;line-height:1.8">· Field = <code>.fld</code>: 15px radius, micro-label inside (10px, +1.6px tracking). Focus state: border → <code>rgba(189,179,246,.4)</code> only when Arth pre-filled it; else <code>rgba(236,236,241,.35)</code>.<br>· Segmented = <code>.seg</code>: max 4 options; more → chip rail (<code>.sc</code>, horizontal scroll, hidden scrollbar).<br>· Selected chip: border .5 + fill .05 — selection is always border-led, never color-fill-led.</p>
+  </div>
+
+  <div class="cd">
+    <h3>8.4 · Feedback</h3>
+    <div style="margin-top:14px"><span class="toastx">Mandate created · ₹10,000 monthly</span></div>
+    <p class="sm" style="margin-top:12px;line-height:1.8">· Toast: pill, bottom-anchored above nav, auto-dismiss 2.6s, states a fact with a number — never "Success!".<br>· Sheet: <code>.sheet</code> 26px top radius on <code>.modal</code> scrim rgba(3,3,6,.8). All confirmations of money movement happen in sheets, never inline.<br>· Progress bar (<code>.bar</code>): 13px, 7px radius, segments in band colors — used for allocation and state distribution.</p>
+    <div class="bar" style="margin-top:10px"><div style="width:40%;background:#B06868"></div><div style="width:25%;background:#D9B96A"></div><div style="width:15%;background:#3E9D74"></div><div style="width:20%;background:#3ED598"></div></div>
+  </div>
+
+  <div class="cd">
+    <h3>8.5 · Chat (Arth + RM)</h3>
+    <div style="display:flex;flex-direction:column;max-width:440px;margin-top:14px">
+      <div style="display:flex;gap:10px;align-items:flex-start">
+        <div class="av"><svg viewBox="0 0 40 40" width="17"><circle cx="20" cy="20" r="14" fill="none" stroke="#BDB3F6" stroke-width="2.5"/><path d="M6.5 20 a13.5 13.5 0 0 1 27 0 Z" fill="#BDB3F6" opacity=".85"/></svg></div>
+        <div class="msg arth">₹42,000 idle for 63 days at 3.0% while your card revolves at 42%. Clearing it saves ₹1,470 this month.<br><span class="ctaA" style="margin-top:10px">Clear card — ₹38,200</span></div>
+      </div>
+      <div class="msg me">and if I only clear half?</div>
+    </div>
+    <p class="sm" style="margin-top:12px;line-height:1.8">· Arth bubble: 2px lavender left border + lavender tint .08. User bubble: lavender tint .11, right-aligned, mirrored radius.<br>· RM (Swapnil) messages join the same thread with an "RM on record" system divider (dashed lavender, <code>.msg.sys</code>) — the handoff is visible, never silent.<br>· Every Arth reply: number in, action button out. Visible example prompts sit above the composer on empty state.</p>
+  </div>
+</section>
+
+<!-- ================= 7 MODULES ================= -->
+<section id="s7">
+  <p class="lb">9 · Modules — assembled patterns</p>
+  <table>
+    <tr><th>Module</th><th>Composition &amp; rules</th></tr>
+    <tr><td><b>Waterline gauge</b><br><span class="sm">brand signature</span></td><td class="sm">Amber line · depth ticks (+/− in ₹, Dim above, Water-blue below) · user marker (sage dot above / blush dot below) · marker chip states position: "₹1.42 Cr above". Depth wash below line. Marker motion is the reward animation (§10). Lives on: report page header, marketing hero, share cards.</td></tr>
+    <tr><td><b>Report page</b><br><span class="sm">scan landing</span></td><td class="sm">Medical-report structure: score + band + percentile + next milestone → gauge → What's working (sage rows) → Needs action (band rows, each with Act button) → Do's &amp; Don'ts → daily pointer. Island reached only via "see as island" link.</td></tr>
+    <tr><td><b>Action strip</b></td><td class="sm">Top of every asset/liability detail: one-line recommended action + amount + single Act button. Band color keys the strip border.</td></tr>
+    <tr><td><b>Vessels</b><br><span class="sm">cashflow</span></td><td class="sm">Paired 158px vessels, fill animates 1s cubic-bezier(.2,.8,.3,1). Growth fill = sage-deep gradient + sage top edge; liability fill migrates lavender → Water #8FB2EE (see §3.2 flag). Pour control between them.</td></tr>
+    <tr><td><b>What-if cards</b></td><td class="sm">Home scenario cards (market −10%, salary stops 2 months): stormy ambient variant, outcome number first, one action, never fear copy.</td></tr>
+    <tr><td><b>Fee disclosure</b></td><td class="sm">Fee pill on card → tap → sheet with full waterfall (gross, TER, trail, net) — every fee, every time, in the same order.</td></tr>
+    <tr><td><b>Nav</b></td><td class="sm">Bottom bar, 5 items max, 19px icons + 10px labels, active = Paper #F2F2F5. Arth is a persistent entry, not a tab.</td></tr>
+  </table>
+</section>
+
+<!-- ================= 8 MOTION ================= -->
+<section id="s8">
+  <p class="lb">10 · Motion — transitions, loader, wipe</p>
+  <table>
+    <tr><th>Token</th><th>Spec</th><th>Use</th></tr>
+    <tr><td class="mono">enter</td><td class="mono">translateY(12px)+fade · .55s · cubic-bezier(.2,.8,.3,1) · stagger .15–.25s</td><td class="sm">Screen content (.au)</td></tr>
+    <tr><td class="mono">tap</td><td class="mono">scale(.988) + opacity .9 · .12s</td><td class="sm">All tappables</td></tr>
+    <tr><td class="mono">fill</td><td class="mono">height · 1s · cubic-bezier(.2,.8,.3,1)</td><td class="sm">Vessels, gauges</td></tr>
+    <tr><td class="mono">surface</td><td class="mono">marker translateY · 1.2s · same ease · +ripple-free line pulse (opacity .55→1, once)</td><td class="sm">The reward: user's marker rising after a debt action clears. The single most produced animation in the brand.</td></tr>
+    <tr><td class="mono">page</td><td class="mono">incoming screen: fade + translateY(8px) → 0 · .24s · var(--ease)</td><td class="sm">Every screen entry, app-wide. Outgoing screen cuts — the incoming rise is the perceived transition. Shipped as <code>@keyframes pgin</code> on <code>.zs.on</code>.</td></tr>
+    <tr><td class="mono">loader</td><td class="mono">N-loader: letter "N" duplicated · base bone at .32 · fill layer var(--water) · clip-path inset animates 86% ↔ 26% · 1.7s ease-in-out infinite</td><td class="sm">All wait states — the letter fills with water while rails answer. Shipped as <code>.nload</code>. Never a spinner, never three dots.</td></tr>
+    <tr><td class="mono">wipe</td><td class="mono">full-frame water gradient sweeps bottom → top · .9s · var(--ease) · screen swaps at ~52% (fully covered)</td><td class="sm"><b>Reserved for one moment only: scan → report reveal.</b> The report surfaces from under water — the diagnosis is the earned payoff. Using the wipe anywhere else is a review blocker. Shipped as <code>.wipe.run</code>.</td></tr>
+    <tr><td class="mono">sway/rise/sink</td><td class="mono">6s ease-in-out infinite / .9s staggered ease</td><td class="sm">Splash waterline ambience only</td></tr>
+  </table>
+  
+  <h3 style="margin-top:26px">10.1 · Live demos — the spec, running</h3>
+  <div class="grid3">
+    <div class="cdx" style="text-align:center;padding:24px 16px">
+      <div class="dnl" aria-hidden="true"><span class="dnt">N</span><span class="dnw">N</span></div>
+      <p class="sm" style="margin-top:12px"><b>N-loader</b> · 1.7s loop<br>all wait states — never a spinner</p>
+    </div>
+    <div class="cdx" style="text-align:center;padding:24px 16px">
+      <div class="dpg"><div class="dpgc"></div></div>
+      <p class="sm" style="margin-top:12px"><b>Page transition</b> · 240ms<br>fade + 8px rise, every screen entry</p>
+    </div>
+    <div class="cdx" style="text-align:center;padding:24px 16px">
+      <div class="dwp"><div class="dwpw"></div><span class="sm dim" style="position:relative;z-index:1">report</span></div>
+      <p class="sm" style="margin-top:12px"><b>Water-wipe</b> · 0.9s<br>scan → report reveal, nowhere else</p>
+    </div>
+  </div>
+
+  <h3 style="margin-top:24px">10.2 · Lottie assets — shipped with this document</h3>
+  <table>
+    <tr><th>File</th><th>Contents</th><th>Usage</th></tr>
+    <tr><td class="mono">nett-loader.json</td><td class="sm">512×512 · 102 frames @60fps (1.7s) · loop · N base at 32% bone + water fill oscillating 86%↔26% via animated mask</td><td class="sm">Native apps &amp; web wait states — same timing law as the CSS <span class="mono">.nload</span>. Play looped.</td></tr>
+    <tr><td class="mono">nett-logo-mark.json</td><td class="sm">512×512 · 84 frames @60fps (1.4s) · one-shot · ink tile + amber hairline, N in bone, water body rises to the 58% line, submerged slice fades to 55%, amber waterline settles last</td><td class="sm">Splash / app-open on native, video bumpers, deck intros. Play once, hold last frame. Never looped — the water settles, it doesn’t churn.</td></tr>
+  </table>
+  <p class="sm" style="margin-top:10px"><b>Wordmark Lottie — honest constraint:</b> a full "Nett" wordmark animation requires the final typeface’s vector outlines (SF Pro cannot be embedded/redistributed; Inter can). Decision needed on the licensed brand face before that file is cut — logged in §13.4. The mark animation above is final and face-independent.</p>
+
+  <p class="sm" style="margin-top:12px">Laws: one orchestrated moment per screen; ambience never loops on money screens; the wipe fires once per scan, nowhere else; loaders are always the N-loader — spinners are a defect; everything respects <code>prefers-reduced-motion</code> (entrances become fades, marker jumps to position, water sits at rest, sway disabled).</p>
+</section>
+
+<!-- ================= 9 ARTH ================= -->
+<section id="s9">
+  <p class="lb">11 · Arth</p>
+  <div class="grid2">
+    <div class="cdx" style="text-align:center;padding:32px">
+      <svg viewBox="0 0 40 40" width="84" xmlns="http://www.w3.org/2000/svg"><circle cx="20" cy="20" r="14" fill="none" stroke="#BDB3F6" stroke-width="2.5"/><path d="M6.5 20 a13.5 13.5 0 0 1 27 0 Z" fill="#BDB3F6" opacity=".85"/></svg>
+      <p class="sm" style="margin-top:16px">Horizon glyph — circle crossed by the line; upper half filled (grow), lower clearing (clear). Stroke 2.5 at 40vb; min size 16px; always lavender; never animated except a single .4s fade-in.</p>
+    </div>
+    <div class="cdx">
+      <p class="sm" style="line-height:1.8">
+      <b style="color:var(--tx)">Identity:</b> "Arth — your wealth, computed." Sanskrit अर्थ: wealth <i>and</i> meaning.<br>
+      <b style="color:var(--tx)">Color:</b> Lavender, exclusively (§3.2).<br>
+      <b style="color:var(--tx)">Voice:</b> states numbers, quantifies gaps, executes on request, hands off by name — "Arth is bringing Swapnil in." Forbidden verbs: advise, recommend, suggest, "you should". Allowed frames: "X costs you ₹Y/yr", "clearing X saves ₹Y", "the benchmark is X, you're at Y".<br>
+      <b style="color:var(--tx)">Surfaces:</b> chat thread, pre-filled fields (lavender focus ring), report annotations, header entry. Arth never interrupts a money-confirmation sheet.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 10 VOICE ================= -->
+<section id="s10">
+  <p class="lb">12 · Voice, tagline &amp; copy laws</p>
+  <h3 style="margin-top:14px">12.1 · Tagline registers</h3>
+  <table>
+    <tr><th>Register</th><th>Form</th><th>Rules</th></tr>
+    <tr><td>Marketing hero</td><td style="font-weight:650;font-size:14px">Grow what you <span style="color:var(--pos)">own</span>.<br>Clear what you <span style="color:var(--neg)">owe</span>.</td><td class="sm">Two lines, sage/blush on the nouns only. On split-screen heroes, own-clause sits above the waterline, owe-clause below.</td></tr>
+    <tr><td>In-app / splash</td><td style="font-weight:650;font-size:14px">Grow what you own.<br>Clear what you owe.</td><td class="sm">Mono. Centered under the mark, outside its clear space.</td></tr>
+    <tr><td>Legal / partner</td><td class="sm">Nett Wealth — Grow what you own. Clear what you owe.</td><td class="sm">One line, no color, registered name.</td></tr>
+    <tr><td>Campaign / CTA</td><td style="font-weight:650;font-size:14px">Find your line.</td><td class="sm">Scan-context only. Never replaces the tagline.</td></tr>
+  </table>
+  <p class="sm" style="margin-top:10px">Never: shortened ("Grow &amp; clear"), reordered, all-caps, letterspaced, colored on transactional or regulatory screens. Section headline "Everything you own. Everything you owe." remains locked for the balance-sheet section.</p>
+  <h3 style="margin-top:24px">12.2 · Copy laws</h3>
+  <p class="sm" style="margin-top:10px;line-height:1.9">1 · Every line carries a number or ends in an action.<br>2 · Diagnose, never advise — observations, calculations, benchmarks, risk quantification, education, disclosure, routing. Nothing else.<br>3 · Buttons name outcomes with amounts: "Confirm — ₹25,000", never "Submit".<br>4 · An action keeps its name through the flow: "Clear card" button → "Card cleared" toast.<br>5 · Fees in full, same format, every time: rate% · ₹/yr.<br>6 · Depth copy is measured, never moody: "₹6.2L below the line — clearing the card brings you ₹6.2L closer to the surface." Not "drowning in debt".<br>7 · NO DATA states name the missing rail and the fix: "DEMAT not linked · Link now". Never blank.<br>8 · Sentence case everywhere except <code>.lb</code> labels. No exclamation marks. No emoji in product.</p>
+</section>
+
+<!-- ================= 11 DEV ================= -->
+<section id="s11" style="border-bottom:none">
+  <p class="lb">13 · Dev handoff</p>
+  <h3 style="margin-top:14px">13.1 · Token block — paste as-is</h3>
+  <pre>:root{
+  /* surfaces */
+  --bg:#0C0D10; --surface:#121318; --card:rgba(255,255,255,.022);
+  /* text */
+  --tx:#ECECF1; --mut:#8E8E9C; --dim:#6B6B78;
+  /* brand */
+  --bone:#C9C3B2; --amb:#D9B96A;
+  /* money semantics */
+  --pos:#3ED598; --pos-deep:#2E7A5C; --neg:#E08A8A; --neg-deep:#8A4E4E;
+  /* agents & water */
+  --lav:#BDB3F6;            /* Arth ONLY */
+  --water:#8FB2EE; --deep1:#152440; --deep2:#0B1220;
+  /* structure */
+  --hair:rgba(255,255,255,.07); --hair2:rgba(255,255,255,.045);
+  --r-pill:999px; --r-sheet:26px; --r-card:20px; --r-btn:16px; --r-fld:15px;
+  --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:24px; --sp-6:32px; --sp-7:48px;
+  --ease:cubic-bezier(.2,.8,.3,1);
+  --t-tap:.12s; --t-enter:.55s; --t-fill:1s; --t-surface:1.2s;
+}</pre>
+  <h3 style="margin-top:24px">13.2 · Engineering rules</h3>
+  <p class="sm" style="margin-top:10px;line-height:1.9">1 · Tokens only — no raw hex in component code. A hex outside this sheet is a review blocker.<br>2 · Waterline mark ships as SVG components (full + dry variants) with the clip-path construction in §2.1 — never rebuilt in CSS text tricks.<br>3 · <code>font-variant-numeric:tabular-nums</code> on every money element.<br>4 · Click delegation selector must keep covering all tap classes (<code>.tap,.lnk,.seg span,[data-*]…</code>) — new interactive components register a data attribute, they don't invent handlers.<br>5 · One <code>.cta</code> per screen, enforced in review.<br>6 · Lavender outside Arth surfaces is a review blocker. 6b · Themes are token remaps only (§4) — a component that branches on theme beyond tokens is a defect; White/Black do not ship until signed off.<br>7 · <code>prefers-reduced-motion</code> respected on every animation token.<br>8 · NO DATA renders dashed + dim; a filled or colored NO DATA chip is a defect.<br>9 · Ship sequence unchanged: patch with assertions → section-presence check (all 50 screen IDs) → handler reachability → runtime smoke test → outputs.</p>
+    <h3 style="margin-top:24px">13.3 · Shipped motion &amp; identity CSS — copy, don’t rewrite</h3>
+  <pre>/* page transition */
+.zs.on{display:flex;animation:pgin .24s var(--ease) both}
+@keyframes pgin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* N-loader */
+.nload{position:relative;display:inline-block;font-weight:650;font-size:46px;letter-spacing:-1.5px;line-height:1}
+.nload .nt{color:rgba(201,195,178,.32)}
+.nload .nw{position:absolute;left:0;top:0;color:var(--water);animation:nfill 1.7s ease-in-out infinite}
+@keyframes nfill{0%,100%{clip-path:inset(86% 0 0 0)}50%{clip-path:inset(26% 0 0 0)}}
+
+/* water-wipe — scan → report only */
+.wipe{position:absolute;left:0;right:0;height:120%;top:110%;background:linear-gradient(180deg,rgba(143,178,238,.3),var(--deep1) 26%,var(--deep2));z-index:60;pointer-events:none;border-top:2px solid rgba(143,178,238,.6)}
+.wipe.run{animation:wipeup .9s var(--ease) both}
+@keyframes wipeup{0%{top:110%}52%{top:-6%}100%{top:-130%}}
+
+/* waterline wordmark */
+.wmark{position:relative;display:inline-block;font-weight:650;letter-spacing:-1.5px;line-height:1}
+.wmark .wtop{color:var(--bone);clip-path:inset(0 0 38% 0)}
+.wmark .wsub{position:absolute;left:3px;top:3px;color:var(--water);opacity:.55;clip-path:inset(62% 0 0 0)}</pre>
+
+  <h3 style="margin-top:24px">13.4 · Defect register — found in the v3 audit, fixes pending authorization</h3>
+  <table>
+    <tr><th>#</th><th>Defect</th><th>Where</th><th>Fix</th></tr>
+    <tr><td class="mono">D1</td><td class="sm"><b>Legacy Felix-era illustration still ships.</b> The old gold-bars/water artwork (#D6B36A #E4C77F #B99450 #6E4444 #5E7FB8 #0E1524) survives on the intro screen — a direct §2.3 misuse ("never pair with any Felix-era asset"). The splash was rebuilt in v2; the intro copy of the same artwork was missed.</td><td class="mono">s-intro</td><td class="sm">Rebuild intro visual on Waterline identity (gauge or wordmark). Needs Ankit’s go.</td></tr>
+    <tr><td class="mono">D2</td><td class="sm"><b>Lavender in a money chart.</b> Allocation bar segment fills #7A6EBE — lavender family on a non-Arth surface (§3.2 breach).</td><td class="mono">s-wealth allocation bar</td><td class="sm">Segment → <span class="mono">var(--water)</span>.</td></tr>
+    <tr><td class="mono">D3</td><td class="sm"><b>Lavender-family island status.</b> Mineral-pad empty state uses #B9AEDD.</td><td class="mono">island data (JS)</td><td class="sm">→ <span class="mono">var(--water)</span> or <span class="mono">--dim</span>.</td></tr>
+    <tr><td class="mono">D4</td><td class="sm"><b>ti-loader-2 spinner shipped.</b> §10 law says spinners are a defect.</td><td class="mono">1 instance</td><td class="sm">→ N-loader.</td></tr>
+  </table>
+<h3 style="margin-top:24px">13.5 · Open items carried into v3.1</h3>
+  <p class="sm" style="margin-top:8px;line-height:1.8">· White / Black theme token values — sign-off needed before any build.<br>· Brand typeface licensing decision (SF Pro non-embeddable) — blocks the wordmark Lottie.<br>· Defects D1–D4 above — app fixes pending authorization.</p>
+  <p class="sm" style="margin-top:10px;line-height:1.9">· Vessel liability fill lavender → water-blue migration (breaking, needs your go).<br>· Trademark/domain verification on Nett / Nett Wealth — this system assumes the name clears; branding spend before clearance is at risk.<br>· 20-person spell-back test on "Nett" — result decides how hard the double-T is pushed in the icon and ads.<br>· Rename sweep (32 screens, web page, deck, workbook headers, regulatory doc) — separate confirmed step, not started.</p>
+  <p class="mut" style="margin-top:26px">Nett Design System v3.0 · single source of truth — v1/v2 retired · changes require a version bump and a change note.</p>
+</section>
+
+</div>
+</body>
+</html>

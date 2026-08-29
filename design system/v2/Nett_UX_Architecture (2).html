@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Nett — UX Architecture</title>
+<style>
+:root{--bg:#0C0D10;--card:rgba(255,255,255,.03);--hair:rgba(255,255,255,.09);--tx:#ECECF1;--mut:#8E8E9C;--dim:#6B6B78;--bone:#C9C3B2;--gold:#D9B96A;--pos:#3ED598;--neg:#E08A8A;--lav:#BDB3F6}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--tx);font-family:-apple-system,'SF Pro Text',Inter,'Segoe UI',Roboto,sans-serif;line-height:1.6;padding:52px 26px 90px;max-width:900px;margin:0 auto}
+.ser{font-family:'New York','Iowan Old Style',Georgia,serif;letter-spacing:-.5px;font-weight:600}
+h1{font-size:34px;letter-spacing:-.9px;font-weight:650}
+h2{font-size:21px;margin-top:46px;letter-spacing:-.4px}
+p{margin-top:10px;font-size:14.5px}
+.lb{font-size:10px;letter-spacing:1.7px;font-weight:600;color:var(--dim);text-transform:uppercase}
+.mut{color:var(--mut)}.dim{color:var(--dim)}
+.cd{border:1px solid var(--hair);border-radius:18px;background:var(--card);padding:18px 20px;margin-top:16px}
+.pr{border-left:2px solid var(--bone);padding-left:14px;margin-top:14px}
+.flow{font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:12.5px;color:var(--mut);background:rgba(255,255,255,.04);border-radius:12px;padding:12px 14px;margin-top:10px;overflow-x:auto;white-space:pre}
+.arth{border:1px solid rgba(189,179,246,.4);border-radius:16px;background:rgba(189,179,246,.05);padding:14px 16px;margin-top:14px}
+.arth .lb{color:var(--lav)}
+table{width:100%;border-collapse:collapse;margin-top:12px;font-size:13px}
+th{text-align:left;color:var(--dim);font-size:10px;letter-spacing:1.4px;padding:8px 10px;border-bottom:1px solid var(--hair);text-transform:uppercase}
+td{padding:9px 10px;border-bottom:1px solid rgba(255,255,255,.05);vertical-align:top}
+</style>
+</head>
+<body>
+<p class="lb" style="color:var(--gold);">NETT · UX ARCHITECTURE · FOR THE TEAM</p>
+<h1 class="ser">How it behaves,<br>and why.</h1>
+<p class="mut">Design decides how it looks; this decides how it thinks. New pages must obey these principles the way new screens obey the tokens.</p>
+
+<h2 class="ser">1 · The ten principles</h2>
+<div class="cd">
+  <div class="pr"><b>1. Journey-first, never list-first.</b> The system already knows the work — it presents an ordered day, not a database. Lists exist one level down, as reference. (This was learned the hard way: CRM v1 was list-first and got rejected. Rightly.)</div>
+  <div class="pr"><b>2. Arth narrates, humans decide.</b> The AI opens every surface with a made day, a suggested reply, a fit verdict — but the send button, the recommendation, and the responsibility belong to the human. Arth gives facts, fit, and sequencing; never scripts pretending to be advice.</div>
+  <div class="pr"><b>3. One truth, two views.</b> Client and RM see the same numbers, same bands, same report. The CRM never has a "better" version of reality — it has more context around the same reality.</div>
+  <div class="pr"><b>4. Consent is architecture, not a checkbox.</b> Unshared data doesn't exist for the viewer — structurally (no fields on the object), visually (below the waterline), and legally (only the client can action consent, on their own device, channel + timestamp stored). Behaviour signals follow the same switch.</div>
+  <div class="pr"><b>5. Relevance floats.</b> Latest consent, then waiting chat, then timed follow-ups — everywhere: the tide, the list default sort, the relevant-now strip. Recency of intent beats every other ordering.</div>
+  <div class="pr"><b>6. Every line carries a number or ends in an action.</b> The copy law, both surfaces. "Your portfolio needs attention" is banned; "Card at 42% leaks ₹1,840/mo — clear it, save ₹22,080/yr" is the house style.</div>
+  <div class="pr"><b>7. Nothing unexplained.</b> Every dot, pill, band and line is decoded in the Glossary, taught by the first-run tour, and answerable by asking Arth. If a new element needs explaining, its glossary entry ships in the same release.</div>
+  <div class="pr"><b>8. Always a way back.</b> Global history stack — every navigation, from any source (menu, Arth, cards, calendar), is reversible. Terminal states (paid, submitted) protect themselves with explicit exits instead.</div>
+  <div class="pr"><b>9. Honest failure.</b> Never blank, never silent: what failed, when, what you're seeing instead (last-good + timestamp), one Retry, a trace ID. Error ≠ NO DATA.</div>
+  <div class="pr"><b>10. Gates still gate.</b> Personalization (background, family, interests) shapes the conversation and the plan — it is never a shortcut past suitability. Hard gates (PMS ₹50L, AIF ₹1 Cr, waterfall rules) block in the copilot pre-sale and flag to Admin post-sale.</div>
+</div>
+
+<h2 class="ser">2 · Information architecture</h2>
+<div class="cd">
+  <p class="lb">CONSUMER APP — THE CLIENT JOURNEY (63 SCREENS)</p>
+  <div class="flow">splash → intro → entry → scan → otp(6) → consent → scanning
+      → preparing (~5 min honest wait, user released) → notification → REPORT
+report = the landing truth · island = reward surface, one tap away
+home · wealth · explore→listing(matrix-gated filters) · order → KYC gate
+      → kyc1…10 (PAN→personal→email→address→profile→₹1 penny drop→docs→nominee→review→done)
+      → order RESUMES itself → pay → success
+returning: bio (same device) · login+OTP (fresh install) → bioset</div>
+  <p class="lb" style="margin-top:18px;">CRM — THE RM JOURNEY</p>
+  <div class="flow">login (mobile + 6-digit OTP · WhatsApp fallback · QR from app)
+  → desk → water splash → ARTH BOARD
+board = the whole day: narration · ask bar · 6 modules (health/progress/
+  tide ₹/rank/calendar/support) · relevant-now · today's calendar · THE TIDE
+depth on demand: chats(client+team) · clients · pipeline · follow-ups
+  · signals(+funnel) · calendar · leaderboard(+admin RM cards+compliance)
+  · incentives(+sales ledger) · glossary
+client 360: Arth read (talk·potential·value·last-touch msg·angles·support
+  pulse) → tabs: briefing/profile/data/leads/comms/services/source/support</div>
+</div>
+
+<h2 class="ser">3 · Navigation &amp; interaction model</h2>
+<div class="cd">
+  <table>
+    <tr><th>Pattern</th><th>Rule</th></tr>
+    <tr><td><b>History stack</b></td><td>Every navigation pushes; one global Back pops; login resets. Crumbs are secondary wayfinding on deep pages, never the only way out.</td></tr>
+    <tr><td><b>Action vs open</b></td><td>Every card separates the two: the primary button does the work; the Profile chip opens the person. Never make users choose between acting and understanding.</td></tr>
+    <tr><td><b>Ask as navigation</b></td><td>Anything findable by menu must be findable by asking Arth in plain words. Unknown asks return capabilities, never dead ends.</td></tr>
+    <tr><td><b>Dual view</b></td><td>Any surface showing client data has a designed no-consent state — not an empty state: contact/comms/bookings stay workable; numbers sit below the waterline with the consent CTA.</td></tr>
+    <tr><td><b>Roles</b></td><td>Visibility = assignment. Cross-service transparency within a shared client (who else, last talk) — never across clients. Admin sees all, and is read-only where acting would be impersonation (client chat).</td></tr>
+    <tr><td><b>Two-axis status</b></td><td>Deal stage and conversation health are separate axes; the red communication pill always outranks the stage for attention.</td></tr>
+  </table>
+</div>
+
+<h2 class="ser">4 · The change protocol (use this when instructions conflict)</h2>
+<div class="arth">
+  <p class="lb">WHEN A REQUEST ARRIVES — ANY SOURCE, ANY SENIORITY</p>
+  <p style="margin-top:8px;"><b>Step 1 — Understand &amp; restate.</b> Write the request back in one line. If it's ambiguous, ask before anything else.</p>
+  <p><b>Step 2 — Cross-check.</b> Does it conflict with a token, a component, or one of the ten principles? Name the exact rule. "It feels off" is not a citation.</p>
+  <p><b>Step 3 — If clean → build.</b> If it conflicts → <b>STOP and confirm</b>: present the conflict, 2–3 options that honor the system, and the impact (screens touched, flows affected, both surfaces or one). The requester decides with full information — that's respect, not obstruction.</p>
+  <p><b>Step 4 — Ship with discipline.</b> Patch with assertions · run the full audit (full output, never cropped) · bump all three artifacts together (design · flow doc · release note; same version, IST timestamp, latest on top) · disclose every self-caught mistake in the release note.</p>
+  <p><b>Step 5 — Canonize.</b> Anything genuinely new that survived sign-off gets written into the Design System file in the same release. The system only grows through the front door.</p>
+  <p class="dim" style="margin-top:10px;">History says this works: four canon drifts occurred during the CRM build (lavender misuse, emoji icons, invented Arth mark, invented wordmark). All four were caught, fixed, and are now blocked by automated audit. The protocol isn't theory.</p>
+</div>
+
+<h2 class="ser">5 · From design to build — the spec contract</h2>
+<div class="cd">
+  <p class="lb">WHY THIS SECTION EXISTS (ADDED AFTER TEAM REVIEW — CREDIT: PM’S UX-SPEC PROMPT)</p>
+  <p>The first release of these docs had a hole, and the reason is structural: <b>they were written from the prototype, and the prototype only draws read-only values.</b> A box that never accepts input never forces the questions a build must answer — which control, when to validate, what empty looks like, what a partial scan costs. Demo data is always complete and never fails, so five whole categories of decision stayed invisible until the dev team’s spec prompt exposed them. This section canonizes them so web and app design always answer them up front.</p>
+
+  <p class="lb" style="margin-top:18px;">RULE 1 — THE AFFORDANCE COMES FROM THE VALUE, NEVER FROM THE PICTURE</p>
+  <p class="mut">The prototype’s look carries (tokens, cards, type). Its <i>input modes do not exist</i> — every box is a drawing. Decide the control from what the value is:</p>
+  <table>
+    <tr><th>Value</th><th>Control (canon)</th></tr>
+    <tr><td>Date the user recalls (birth, expiry)</td><td>Wheel picker, named month on display (“14 Mar 1988”). A free-text date field with a format hint is <b>never built</b> — it accepts 31/02 and argues about slashes.</td></tr>
+    <tr><td>Date near today (appointment)</td><td>Calendar picker</td></tr>
+    <tr><td>2–5 exclusive options</td><td>Segmented control</td></tr>
+    <tr><td>6–15 options / 15+</td><td>Menu / searchable list</td></tr>
+    <tr><td>Boolean acting at once / submitted with a form</td><td>Switch / checkbox</td></tr>
+    <tr><td>Bounded number nudged in steps</td><td>Stepper (nominee %, SIP date)</td></tr>
+    <tr><td>OTP</td><td>6 OTP boxes — canon digit count, both surfaces</td></tr>
+    <tr><td>Money / phone / PAN</td><td>Text with the correct keyboard, shape-validated</td></tr>
+  </table>
+
+  <p class="lb" style="margin-top:18px;">RULE 2 — EVERY SCREEN SPECS FIVE STATES, OR ARGUES “CANNOT OCCUR”</p>
+  <p class="mut"><b style="color:var(--tx);">EMPTY</b> — copy plus the action that fixes it (blank is not a state, and NO DATA never reads as good) · <b style="color:var(--tx);">LOADING</b> — what’s shown, expected duration, can the user leave · <b style="color:var(--tx);">ERROR</b> — what failed and the exit (retry / continue / notify me) · <b style="color:var(--tx);">PARTIAL</b> — which data is missing, the confidence %, and the ₹ cost of the gap · <b style="color:var(--tx);">DONE</b> — the settled state. The prototype shows only DONE; the other four are where rework is born.</p>
+
+  <p class="lb" style="margin-top:18px;">RULE 3 — RANGE VS RULE: PREVENT THE IMPOSSIBLE, EXPLAIN THE DISALLOWED</p>
+  <p class="mut">A future birth date is impossible — the picker must not reach it. Under-18 is policy — the picker reaches it and the field says “Must be 18 or older.” Never silently stop a range where a rule begins: silent ranges feel broken; explained rules feel fair.</p>
+
+  <p class="lb" style="margin-top:18px;">RULE 4 — VALIDATION TIMING (DEFAULTS, OVERRIDE ONLY WITH REASON)</p>
+  <p class="mut">Text: validate on unfocus, then every keystroke until clean. Pickers and toggles: immediately. Cross-field rules: on submit. Input error copy names the fix, never the failure — “Enter a 10-digit mobile starting 6, 7, 8 or 9”, never “Invalid input.”</p>
+
+  <p class="lb" style="margin-top:18px;">RULE 5 — PREFILL HAS PROVENANCE</p>
+  <p class="mut">A pre-filled value states where it came from (bureau, DigiLocker, AA), is as easy to clear as to accept, and never looks like the user typed it.</p>
+
+  <p class="lb" style="margin-top:18px;">RULE 6 — UNSPECIFIED, NEVER BLANK</p>
+  <p class="mut">In any spec, an unknown is written <code style="font-family:ui-monospace,Menlo,monospace;background:rgba(255,255,255,.05);border-radius:6px;padding:1px 6px;">UNSPECIFIED</code> — a question the build asks before coding. A blank is a licence to assume. Where the build must decide anyway, it decides, ships, and flags: “Affordance chosen, not specified: ‹field› — spec shows X, I used Y because ‹reason›. Overrule me if X was intended.”</p>
+
+  <p class="lb" style="margin-top:18px;">THE FIVE QUESTIONS — 90% OF REWORK DIES HERE</p>
+  <p class="mut">1. How is each value entered — the actual control, not “a field”? · 2. What’s on screen when there’s no data, and what action fixes it? · 3. What happens while it loads, and what’s the exit if it fails? · 4. Where does back go? · 5. Which limits are impossible vs merely disallowed?</p>
+
+  <p style="margin-top:14px;" class="dim"><b style="color:var(--tx);">Reconciliation note:</b> the Design System says “reuse components”; the spec prompt says “never inherit from the prototype.” Both are right at different layers — the <i>visual</i> canon (tokens, shapes, type) always carries; the <i>input affordance</i> is never inherited from a read-only drawing. Look carries; input mode is decided from the value.</p>
+</div>
+
+<p class="dim" style="margin-top:44px;">Nett UX Architecture · companions: Design System · Motion Architecture · behavior source of truth: the flow doc + the code.</p>
+</body>
+</html>
